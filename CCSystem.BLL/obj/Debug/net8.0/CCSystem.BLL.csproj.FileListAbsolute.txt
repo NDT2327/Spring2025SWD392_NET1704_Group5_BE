@@ -1,0 +1,16 @@
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\bin\Debug\net8.0\CCSystem.BLL.deps.json
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\bin\Debug\net8.0\CCSystem.BLL.dll
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\bin\Debug\net8.0\CCSystem.BLL.pdb
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\bin\Debug\net8.0\CCSystem.DAL.dll
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\bin\Debug\net8.0\CCSystem.DAL.pdb
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.csproj.AssemblyReference.cache
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.AssemblyInfoInputs.cache
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.AssemblyInfo.cs
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.csproj.CoreCompileInputs.cache
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.sourcelink.json
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.F679D767.Up2Date
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.dll
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\refint\CCSystem.BLL.dll
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.pdb
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\ref\CCSystem.BLL.dll

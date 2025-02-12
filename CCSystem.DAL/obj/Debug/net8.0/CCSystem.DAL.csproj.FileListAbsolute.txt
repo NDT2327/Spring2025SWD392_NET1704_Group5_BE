@@ -1,0 +1,15 @@
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\bin\Debug\net8.0\CCSystem.DAL.deps.json
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\bin\Debug\net8.0\CCSystem.DAL.runtimeconfig.json
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\bin\Debug\net8.0\CCSystem.DAL.dll
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\bin\Debug\net8.0\CCSystem.DAL.pdb
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.csproj.AssemblyReference.cache
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.AssemblyInfoInputs.cache
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.AssemblyInfo.cs
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.csproj.CoreCompileInputs.cache
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.sourcelink.json
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.dll
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\refint\CCSystem.DAL.dll
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.pdb
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\CCSystem.DAL.genruntimeconfig.cache
+D:\FPTU\S7\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.DAL\obj\Debug\net8.0\ref\CCSystem.DAL.dll
