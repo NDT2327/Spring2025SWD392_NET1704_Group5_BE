@@ -6,6 +6,7 @@ using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,23 @@ namespace CCSystem.BLL.Services.Implementations
         {
             this._unitOfWork = (UnitOfWork)unitOfWork;
             this._mapper = mapper;
+        }
+
+        public async Task<List<GetAccountResponse>> SearchAccountsAsync(AccountSearchRequest searchRequest)
+        {
+            var accounts = await _unitOfWork.AccountRepository.SearchAccountsAsync(
+            searchRequest.AccountId,
+            searchRequest.Email,
+            searchRequest.Role,
+            searchRequest.Address,
+            searchRequest.Phone,
+            searchRequest.FullName,
+            searchRequest.Status,
+            searchRequest.MinCreatedDate,
+            searchRequest.MaxCreatedDate);
+
+            // Map danh sách Account sang AccountResponse
+            return _mapper.Map<List<GetAccountResponse>>(accounts);
         }
 
         public async Task<bool> IsActiveAccountAsync(string email)

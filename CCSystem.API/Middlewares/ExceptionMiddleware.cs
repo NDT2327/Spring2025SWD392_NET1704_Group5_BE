@@ -46,15 +46,45 @@ namespace CCSystem.API.Middlewares
                     break;
             }
 
-            Error error = new Error()
+            //Error error = new Error()
+            //{
+            //    StatusCode = context.Response.StatusCode,
+            //    Message = JsonConvert.DeserializeObject<List<ErrorDetail>>(ex.Message)
+            //};
+            List<ErrorDetail> errorDetails;
+            try
+            {
+                // Cố gắng deserialize ex.Message thành danh sách ErrorDetail
+                errorDetails = JsonConvert.DeserializeObject<List<ErrorDetail>>(ex.Message);
+            }
+            catch
+            {
+                // Nếu không thành công, tạo danh sách mặc định với ex.Message
+                errorDetails = new List<ErrorDetail>
+                {
+                    new ErrorDetail
+                    {
+                    FieldNameError = "Exception",
+                    DescriptionError = new List<string> { ex.Message }
+                    }
+                };
+            }
+
+            // Tạo đối tượng Error với thông tin mã trạng thái và danh sách ErrorDetail
+            var error = new Error
             {
                 StatusCode = context.Response.StatusCode,
-                Message = JsonConvert.DeserializeObject<List<ErrorDetail>>(ex.Message)
+                Message = errorDetails
             };
 
+            // Serialize đối tượng Error thành JSON và gửi về client
+            string json = JsonConvert.SerializeObject(error);
+            await context.Response.WriteAsync(json);
 
 
-            await context.Response.WriteAsync(error.ToString());
+            //await context.Response.WriteAsync(error.ToString());
+
+
         }
     }
 }
