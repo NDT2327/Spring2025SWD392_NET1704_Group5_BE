@@ -1,4 +1,4 @@
-using CCSystem.API.Constants;
+﻿using CCSystem.API.Constants;
 using CCSystem.API.Extentions;
 using CCSystem.API.Middlewares;
 using CCSystem.BLL.DTOs.JWTs;
@@ -14,7 +14,7 @@ builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(opts => opts.SuppressModelStateInvalidFilter = true)
     .AddJsonOptions(options =>
     {
-        // Chuy?n ??i enum th�nh chu?i khi tr? v? JSON
+        // Chuyển đổi enum thành chuỗi khi trả về JSON
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
