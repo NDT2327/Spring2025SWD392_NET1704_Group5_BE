@@ -19,6 +19,52 @@ namespace CCSystem.DAL.Repositories
             this._context = context;
         }
 
+        public async Task<List<Account>> SearchAccountsAsync(
+        int? accountId,
+        string email,
+        string role,
+        string address,
+        string phone,
+        string fullName,
+        string status,
+        DateTime? minCreatedDate,
+        DateTime? maxCreatedDate)
+        {
+            var query = _context.Accounts.AsQueryable();
+
+            if (accountId.HasValue)
+                query = query.Where(a => a.AccountId == accountId.Value);
+
+            if (!string.IsNullOrEmpty(email))
+                query = query.Where(a => a.Email.Contains(email));
+
+            if (!string.IsNullOrEmpty(role))
+                query = query.Where(a => a.Role.Equals(role));
+
+            if (!string.IsNullOrEmpty(address))
+                query = query.Where(a => a.Address.Contains(address));
+
+            if (!string.IsNullOrEmpty(phone))
+                query = query.Where(a => a.Phone.Contains(phone));
+
+            if (!string.IsNullOrEmpty(fullName))
+                query = query.Where(a => a.FullName.Contains(fullName));
+
+            if (!string.IsNullOrEmpty(status))
+                query = query.Where(a => a.Status.Equals(status));
+
+            if (minCreatedDate.HasValue)
+                query = query.Where(a => a.CreatedDate >= minCreatedDate.Value);
+
+            if (maxCreatedDate.HasValue)
+                query = query.Where(a => a.CreatedDate <= maxCreatedDate.Value);
+
+            // Sắp xếp giảm dần theo ngày tạo
+            query = query.OrderByDescending(a => a.CreatedDate);
+
+            return await query.ToListAsync();
+        }
+
         public async Task CreateAccountAsync(Account account)
         {
             try

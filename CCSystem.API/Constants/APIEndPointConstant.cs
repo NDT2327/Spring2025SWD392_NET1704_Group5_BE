@@ -15,5 +15,12 @@
             public const string ReGenerationTokens = AuthenticationEndpoint + "/regeneration-tokens";
             public const string PasswordResetation = AuthenticationEndpoint + "/password-resetation";
         }
+
+        public static class Account
+        {
+            public const string AccountEndpoint = ApiEndpoint + "/accounts";
+            public const string SearchAccountsEndpoint = AccountEndpoint + "/search";
+
+        }
     }
 }
