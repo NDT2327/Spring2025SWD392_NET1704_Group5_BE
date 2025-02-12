@@ -73,6 +73,11 @@
         "IsRequired": false
       },
       {
+        "Name": "Phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "Role",
         "Type": "System.String",
         "IsRequired": false

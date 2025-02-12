@@ -28,6 +28,15 @@ namespace CCSystem.API.Validators.Authentications
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage("{PropertyName} is not null.")
                 .NotEmpty().WithMessage("{PropertyName} is not empty.");
+            RuleFor(ar => ar.Role)
+                .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull().WithMessage("{PropertyName} is not null.")
+                .NotEmpty().WithMessage("{PropertyName} is not empty.");
+            RuleFor(ar => ar.Phone)
+                .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull().WithMessage("{PropertyName} is not null.")
+                .NotEmpty().WithMessage("{PropertyName} is not empty.");
+
         }
     }
 }

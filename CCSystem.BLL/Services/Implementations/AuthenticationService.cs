@@ -55,6 +55,7 @@ namespace CCSystem.BLL.Services.Implementations
                     Role = accountRequest.Role.ToString(),
                     FullName = accountRequest.FullName,
                     Address = accountRequest.Address,
+                    Phone = accountRequest.Phone,
                 };
 
                 // Thêm account mới vào repository
@@ -96,7 +97,11 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     throw new BadRequestException(MessageConstant.LoginMessage.DisabledAccount);
                 }
-                if (existedAccount != null && existedAccount.Password.Equals(accountRequest.Password) == false)
+                //if (existedAccount != null && existedAccount.Password.Equals(accountRequest.Password) == false)
+                //{
+                //    throw new BadRequestException(MessageConstant.LoginMessage.InvalidEmailOrPassword);
+                //}
+                if (!PasswordUtil.VerifyPassword(accountRequest.Password, existedAccount.Password))
                 {
                     throw new BadRequestException(MessageConstant.LoginMessage.InvalidEmailOrPassword);
                 }
