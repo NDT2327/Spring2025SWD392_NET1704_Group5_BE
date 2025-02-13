@@ -4,6 +4,7 @@ using CCSystem.BLL.DTOs.Accounts;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
@@ -18,6 +19,7 @@ namespace CCSystem.BLL.Services.Implementations
 {
     public class AccountService : IAccountService
     {
+
         private UnitOfWork _unitOfWork;
         private IMapper _mapper;
         public AccountService(IUnitOfWork unitOfWork, IMapper mapper)
@@ -95,6 +97,34 @@ namespace CCSystem.BLL.Services.Implementations
                 string error = ErrorUtil.GetErrorString("Exception", ex.Message);
                 throw new Exception(error);
             }
+        }
+        public async Task<bool> LockAccount(int accountId)
+        {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
+            if (account == null)
+            {
+                throw new NotFoundException($"Account with ID {accountId} not found.");
+            }
+
+            account.Status = nameof(AccountEnums.Status.INACTIVE);
+            await _unitOfWork.AccountRepository.UpdateAsync(account);
+            await _unitOfWork.CommitAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UnlockAccount(int accountId)
+        {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
+            if (account == null)
+            {
+                throw new NotFoundException($"Account with ID {accountId} not found.");
+            }
+
+            account.Status = nameof(AccountEnums.Status.ACTIVE);
+            await _unitOfWork.AccountRepository.UpdateAsync(account);
+            await _unitOfWork.CommitAsync();
+            return true;
         }
     }
 }

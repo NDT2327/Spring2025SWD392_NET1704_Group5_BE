@@ -75,5 +75,40 @@ namespace CCSystem.API.Controllers
         }
         #endregion
 
+        #region Lock Account
+        /// <summary>
+        /// Lock an account by accountId
+        /// </summary>
+        /// <param name="accountId">Account ID to lock</param>
+        /// <returns>Success message if locked</returns>
+        [HttpPost("api/accounts/{accountId}/lock")]
+        public async Task<IActionResult> LockAccount(int accountId)
+        {
+            var result = await _accountService.LockAccount(accountId);
+            if (!result)
+            {
+                return NotFound(new { message = "Account not found" });
+            }
+            return Ok(new { message = "Account locked successfully" });
+        }
+        #endregion
+
+        #region Unlock Account
+        /// <summary>
+        /// Unlock an account by accountId
+        /// </summary>
+        /// <param name="accountId">Account ID to unlock</param>
+        /// <returns>Success message if unlocked</returns>
+        [HttpPost("api/accounts/{accountId}/unlock")]
+        public async Task<IActionResult> UnlockAccount(int accountId)
+        {
+            var result = await _accountService.UnlockAccount(accountId);
+            if (!result)
+            {
+                return NotFound(new { message = "Account not found" });
+            }
+            return Ok(new { message = "Account unlocked successfully" });
+        }
+        #endregion
     }
 }
