@@ -32,5 +32,15 @@ namespace CCSystem.BLL.Constants
             public const string AccountIdNotBelongYourAccount = "Account id does not belong to your account.";
             public const string AccountNoLongerActive = "Your account is no longer active.";
         }
+
+        public static class ReGenerationMessage
+        {
+            public const string InvalidAccessToken = "Access token is invalid.";
+            public const string NotExpiredAccessToken = "Access token has not yet expired.";
+            public const string NotExistAuthenticationToken = "You do not have the authentication tokens in the system.";
+            public const string NotExistRefreshToken = "Refresh token does not exist in the system.";
+            public const string NotMatchAccessToken = "Your access token does not match the registered access token.";
+            public const string ExpiredRefreshToken = "Refresh token expired.";
+        }
     }
 }
