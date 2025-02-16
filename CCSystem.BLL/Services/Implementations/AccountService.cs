@@ -112,7 +112,7 @@ namespace CCSystem.BLL.Services.Implementations
 
             return true;
         }
-
+        //unlock
         public async Task<bool> UnlockAccount(int accountId)
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
@@ -125,6 +125,7 @@ namespace CCSystem.BLL.Services.Implementations
             await _unitOfWork.AccountRepository.UpdateAsync(account);
             await _unitOfWork.CommitAsync();
             return true;
+
         }
     }
 }
