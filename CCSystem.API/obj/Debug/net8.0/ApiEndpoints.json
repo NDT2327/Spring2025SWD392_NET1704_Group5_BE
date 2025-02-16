@@ -1,6 +1,38 @@
 [
   {
     "ContainingType": "CCSystem.API.Controllers.AccountsController",
+    "Method": "LockAccount",
+    "RelativePath": "api/accounts/{accountId}/lock",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CCSystem.API.Controllers.AccountsController",
+    "Method": "UnlockAccount",
+    "RelativePath": "api/accounts/{accountId}/unlock",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CCSystem.API.Controllers.AccountsController",
     "Method": "SearchAccountsAsync",
     "RelativePath": "api/v1/accounts/search",
     "HttpMethod": "GET",

@@ -140,5 +140,30 @@ namespace CCSystem.DAL.Repositories
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<Account> GetByIdAsync(int accountId)
+        {
+            try
+            {
+                return await _context.Accounts
+                    .SingleOrDefaultAsync(a => a.AccountId == accountId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task UpdateAsync(Account account)
+        {
+            try
+            {
+                _context.Accounts.Update(account);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
