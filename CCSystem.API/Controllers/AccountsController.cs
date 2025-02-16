@@ -82,6 +82,7 @@ namespace CCSystem.API.Controllers
         /// <param name="accountId">Account ID to lock</param>
         /// <returns>Success message if locked</returns>
         [HttpPost("api/accounts/{accountId}/lock")]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         public async Task<IActionResult> LockAccount(int accountId)
         {
             var result = await _accountService.LockAccount(accountId);
@@ -100,6 +101,7 @@ namespace CCSystem.API.Controllers
         /// <param name="accountId">Account ID to unlock</param>
         /// <returns>Success message if unlocked</returns>
         [HttpPost("api/accounts/{accountId}/unlock")]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         public async Task<IActionResult> UnlockAccount(int accountId)
         {
             var result = await _accountService.UnlockAccount(accountId);
