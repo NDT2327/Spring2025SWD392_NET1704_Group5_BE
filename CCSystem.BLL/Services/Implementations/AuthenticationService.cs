@@ -174,7 +174,12 @@ namespace CCSystem.BLL.Services.Implementations
 
                 //Check 4: Check refresh token exist in Redis Db
                 string accountId = tokenVerification.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sid).Value;
-                AccountToken accountTokenRedisModel = await this._unitOfWork.AccountTokenRedisRepository.GetAccountToken(accountId);
+                if (!int.TryParse(accountId, out int accountIdInt))
+                {
+                    throw new BadRequestException("Invalid account ID in token.");
+                }
+
+                AccountToken accountTokenRedisModel = await this._unitOfWork.AccountTokenRedisRepository.GetAccountToken(accountIdInt);
                 if (accountTokenRedisModel == null)
                 {
                     throw new NotFoundException(MessageConstant.ReGenerationMessage.NotExistAuthenticationToken);
