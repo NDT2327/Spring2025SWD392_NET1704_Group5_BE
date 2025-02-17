@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {}
+    "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {}
   },
   "projects": {
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {
+    "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
+        "projectUniqueName": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
         "projectName": "CCSystem.BLL",
-        "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\obj\\",
+        "projectPath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
+        "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
+        "outputPath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -29,8 +29,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
-                "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj"
+              "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
+                "projectPath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj"
               }
             }
           }
@@ -91,21 +91,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
+    "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
+        "projectUniqueName": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
         "projectName": "CCSystem.DAL",
-        "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\obj\\",
+        "projectPath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
+        "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
+        "outputPath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -188,7 +188,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
