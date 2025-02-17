@@ -127,5 +127,55 @@ namespace CCSystem.BLL.Services.Implementations
             return true;
 
         }
+
+        public async Task<List<GetAccountResponse>> GetAccountsListAsync(AccountsListRequest accountsListRequest)
+        {
+            var accounts = await _unitOfWork.AccountRepository.GetAccountsListAsync(
+            accountsListRequest.PageIndex,
+            accountsListRequest.PageSize,
+            accountsListRequest.SearchByName,
+            accountsListRequest.Sort);
+            return _mapper.Map<List<GetAccountResponse>>(accounts);
+        }
+
+        public async Task<GetAccountResponse> UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims)
+        {
+
+            try
+            {
+                Claim registeredEmailClaim = claims.First(x => x.Type == ClaimTypes.Email);
+                string email = registeredEmailClaim.Value;
+                Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(idAccount);
+                if (existedAccount is null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
+                }
+                if (existedAccount.Email.Equals(email) == false)
+                {
+                    throw new BadRequestException(MessageConstant.AccountMessage.AccountIdNotBelongYourAccount);
+                }
+                existedAccount = this._mapper.Map(updateAccountRequest, existedAccount);
+                existedAccount.UpdatedDate = DateTime.Now;
+                this._unitOfWork.AccountRepository.UpdateAccount(existedAccount);
+                await this._unitOfWork.CommitAsync();
+                GetAccountResponse getAccountResponse = this._mapper.Map<GetAccountResponse>(existedAccount);
+                return getAccountResponse;
+            }
+            catch (NotFoundException ex)
+            {
+                string error = ErrorUtil.GetErrorString("Account id", ex.Message);
+                throw new NotFoundException(error);
+            }
+            catch (BadRequestException ex)
+            {
+                string error = ErrorUtil.GetErrorString("Account id", ex.Message);
+                throw new BadRequestException(error);
+            }
+            catch (Exception ex)
+            {
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
+            }
+        }
     }
 }

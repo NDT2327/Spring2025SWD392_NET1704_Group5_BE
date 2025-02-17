@@ -165,5 +165,58 @@ namespace CCSystem.DAL.Repositories
                 throw new Exception(ex.Message);
             }
         }
+
+        //get account list (GetAccountsListAsync)
+        public async Task<List<Account>> GetAccountsListAsync(int pageIndex, int pageSize, string searchByName, string sort)
+        {
+            var query = _context.Accounts.AsQueryable();
+            if (!string.IsNullOrEmpty(searchByName))
+            {
+                query = query.Where(a => a.Email.Contains(searchByName) || a.FullName.Contains(searchByName));
+            }
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch (sort)
+                {
+                    case "email":
+                        query = query.OrderBy(a => a.Email);
+                        break;
+                    case "email_desc":
+                        query = query.OrderByDescending(a => a.Email);
+                        break;
+                    case "fullName":
+                        query = query.OrderBy(a => a.FullName);
+                        break;
+                    case "fullName_desc":
+                        query = query.OrderByDescending(a => a.FullName);
+                        break;
+                    case "createddate":
+                        query = query.OrderBy(a => a.CreatedDate);
+                        break;
+                    case "createddate_desc":
+                        query = query.OrderByDescending(a => a.CreatedDate);
+                        break;
+                    case "editeddate":
+                        query = query.OrderBy(a => a.UpdatedDate);
+                        break;
+                    case "editeddate_desc":
+                        query = query.OrderByDescending(a => a.UpdatedDate);
+                        break;
+                    case "status":
+                        query = query.OrderBy(a => a.Status);
+                        break;
+                    
+                    default:
+                        query = query.OrderByDescending(a => a.CreatedDate);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderByDescending(a => a.CreatedDate);
+            }
+            return await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
     }
 }
