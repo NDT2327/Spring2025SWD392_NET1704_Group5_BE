@@ -10652,24 +10652,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Peter\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\USER\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FPTU\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
+      "projectUniqueName": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
       "projectName": "CCSystem.BLL",
-      "projectPath": "D:\\FPTU\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
-      "packagesPath": "C:\\Users\\Peter\\.nuget\\packages\\",
-      "outputPath": "D:\\FPTU\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\obj\\",
+      "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
+      "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+      "outputPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Peter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10684,8 +10679,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\FPTU\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
-              "projectPath": "D:\\FPTU\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj"
+            "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
+              "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj"
             }
           }
         }
@@ -10699,8 +10694,7 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -10747,7 +10741,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
