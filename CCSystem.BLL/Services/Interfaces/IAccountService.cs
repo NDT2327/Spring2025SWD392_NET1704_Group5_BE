@@ -13,6 +13,8 @@ namespace CCSystem.BLL.Services.Interfaces
         public Task<bool> IsActiveAccountAsync(string email);
         public Task<GetAccountResponse> GetAccountAsync(int idAccount, IEnumerable<Claim> claims);
         public Task<List<GetAccountResponse>> SearchAccountsAsync(AccountSearchRequest searchRequest);
+        public Task<List<GetAccountResponse>>GetAccountsListAsync(AccountsListRequest accountsListRequest);
+        public Task<GetAccountResponse>UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims);
         //public Task UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims);
         Task<bool> LockAccount(int idAccount);
         Task<bool> UnlockAccount(int idAccount);

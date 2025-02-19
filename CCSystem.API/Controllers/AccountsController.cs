@@ -7,6 +7,7 @@ using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -110,6 +111,67 @@ namespace CCSystem.API.Controllers
                 return NotFound(new { message = "Account not found" });
             }
             return Ok(new { message = "Account unlocked successfully" });
+        }
+        #endregion
+
+        #region Get Account Profile
+        /// <summary>
+        /// Get account profile by accountId
+        /// 
+
+        [ProducesResponseType(typeof(List<AccountResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Authorize]
+        [HttpGet("api/accounts/profiles/{accountId}")]
+        public async Task<IActionResult> GetAccountProfile(int accountId)
+        {
+            var claims = User.Claims;
+            var result = await _accountService.GetAccountAsync(accountId, claims);
+            if (result == null)
+            {
+                return NotFound(new { message = "Account not found" });
+            }
+            return Ok(result);
+        }
+        #endregion
+
+        #region View List of Accounts
+        /// <summary>
+        /// Retrieve a list of accounts
+        /// Actor must have Admin permission
+        /// 
+        [ProducesResponseType(typeof(List<AccountResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [HttpGet("api/accounts")]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+
+        public async Task<IActionResult> GetAccounts([FromQuery] AccountsListRequest accountsListRequest)
+        {
+            var accounts = await _accountService.GetAccountsListAsync(accountsListRequest);
+            return Ok(accounts);
+        }
+
+        #endregion
+
+        #region Update Account
+        /// <summary>
+        /// 
+
+        [ProducesResponseType(typeof(List<AccountResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Authorize]
+        [HttpPut("api/accounts/update/{accountId}")]
+        public async Task<IActionResult> UpdateAccount(int accountId, [FromBody] UpdateAccountRequest updateAccountRequest)
+        {
+            var claims = User.Claims;
+            await _accountService.UpdateAccountAsync(accountId, updateAccountRequest, claims);
+            return Ok();
         }
         #endregion
     }
