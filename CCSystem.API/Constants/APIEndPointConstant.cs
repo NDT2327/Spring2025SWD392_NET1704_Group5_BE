@@ -14,6 +14,8 @@
             public const string Register = AuthenticationEndpoint + "/register";
             public const string ReGenerationTokens = AuthenticationEndpoint + "/regeneration-tokens";
             public const string PasswordResetation = AuthenticationEndpoint + "/password-resetation";
+            public const string EmailVerificationEndpoint = AuthenticationEndpoint + "/email-verification";
+            public const string OTPVerificationEndpoint = AuthenticationEndpoint + "/otp-verification";
         }
 
         public static class Account

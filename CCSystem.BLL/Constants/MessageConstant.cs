@@ -16,6 +16,11 @@ namespace CCSystem.BLL.Constants
             public const string NotExistAccountId = "Account id does not exist in the system.";
         }
 
+        public static class AuthenticationMessage
+        {
+            public const string ResetPasswordSuccessfully = "Reset Password Successfully.";
+        }
+
         public static class RegisterMessage
         {
             public const string FailRegister = "Register Failed";
@@ -41,6 +46,21 @@ namespace CCSystem.BLL.Constants
             public const string NotExistRefreshToken = "Refresh token does not exist in the system.";
             public const string NotMatchAccessToken = "Your access token does not match the registered access token.";
             public const string ExpiredRefreshToken = "Refresh token expired.";
+        }
+
+        public static class VerificationMessage
+        {
+            public const string SentEmailConfirmationSuccessfully = "Sent Email Confirmation Successfully.";
+            public const string ConfirmedOTPCodeSuccessfully = "Confirmed OTP Code Successfully.";
+            public const string NotAuthenticatedEmailBefore = "Email has not been previously authenticated.";
+            public const string ExpiredOTPCode = "OTP code has expired.";
+            public const string NotMatchOTPCode = "Your OTP code does not match the previously sent OTP code.";
+        }
+
+        public static class ChangePasswordMessage
+        {
+            public const string NotAuthenticatedEmail = "Email has not been previously authenticated.";
+            public const string NotVerifiedEmail = "Email is not yet authenticated with the previously sent OTP code.";
         }
     }
 }

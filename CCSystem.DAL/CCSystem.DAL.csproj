@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="FirebaseStorages\" />
-    <Folder Include="SMTPs\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 

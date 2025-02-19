@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using CCSystem.DAL.SMTPs.Repositories;
 
 namespace CCSystem.BLL.Services.Implementations
 {
@@ -284,6 +285,122 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 rng.GetBytes(random);
                 return Convert.ToBase64String(random);
+            }
+        }
+
+        public async Task VerifyEmailToResetPasswordAsync(EmailVerificationRequest emailVerificationRequest)
+        {
+            try
+            {
+                Account account = await this._unitOfWork.AccountRepository.GetAccountAsync(emailVerificationRequest.Email);
+                if (account == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistEmail);
+                }
+                EmailVerification emailVerificationRedisModel = this._unitOfWork.EmailRepository.SendEmailToResetPassword(emailVerificationRequest.Email);
+                await this._unitOfWork.EmailVerificationRedisRepository.AddEmailVerificationAsync(emailVerificationRedisModel);
+            }
+            catch (NotFoundException ex)
+            {
+                string error = ErrorUtil.GetErrorString("Email", ex.Message);
+                throw new NotFoundException(error);
+            }
+            catch (Exception ex)
+            {
+                string error = ErrorUtil.GetErrorString("Excception", ex.Message);
+                throw new Exception(error);
+            }
+        }
+
+        public async Task ConfirmOTPCodeToResetPasswordAsync(OTPCodeVerificationRequest otpCodeVerificationRequest)
+        {
+            try
+            {
+                Account account = await this._unitOfWork.AccountRepository.GetAccountAsync(otpCodeVerificationRequest.Email);
+                if (account == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistEmail);
+                }
+                EmailVerification emailVerificationRedisModel = await this._unitOfWork.EmailVerificationRedisRepository.GetEmailVerificationAsync(otpCodeVerificationRequest.Email);
+                if (emailVerificationRedisModel == null)
+                {
+                    throw new BadRequestException(MessageConstant.VerificationMessage.NotAuthenticatedEmailBefore);
+                }
+                if (emailVerificationRedisModel.CreatedDate.AddMinutes(10) <= DateTime.Now)
+                {
+                    throw new BadRequestException(MessageConstant.VerificationMessage.ExpiredOTPCode);
+                }
+                if (emailVerificationRedisModel.OTPCode.Equals(otpCodeVerificationRequest.OTPCode) == false)
+                {
+                    throw new BadRequestException(MessageConstant.VerificationMessage.NotMatchOTPCode);
+                }
+                emailVerificationRedisModel.IsVerified = Convert.ToBoolean((int)EmailVerificationEnum.Status.VERIFIED);
+                await this._unitOfWork.EmailVerificationRedisRepository.UpdateEmailVerificationAsync(emailVerificationRedisModel);
+            }
+            catch (NotFoundException ex)
+            {
+                string error = ErrorUtil.GetErrorString("Email", ex.Message);
+                throw new NotFoundException(error);
+            }
+            catch (BadRequestException ex)
+            {
+                string fieldName = "";
+                if (ex.Message.Equals(MessageConstant.VerificationMessage.NotAuthenticatedEmailBefore))
+                {
+                    fieldName = "Email";
+                }
+                else if (ex.Message.Equals(MessageConstant.VerificationMessage.ExpiredOTPCode)
+                    || ex.Message.Equals(MessageConstant.VerificationMessage.NotMatchOTPCode))
+                {
+                    fieldName = "OTP code";
+                }
+                string error = ErrorUtil.GetErrorString(fieldName, ex.Message);
+                throw new BadRequestException(error);
+            }
+            catch (Exception ex)
+            {
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
+            }
+        }
+
+        public async Task ChangePasswordAsync(DTOs.Accounts.ResetPasswordRequest resetPassword)
+        {
+            try
+            {
+                Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(resetPassword.Email);
+                if (existedAccount == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistEmail);
+                }
+                EmailVerification emailVerificationRedisModel = await this._unitOfWork.EmailVerificationRedisRepository.GetEmailVerificationAsync(resetPassword.Email);
+                if (emailVerificationRedisModel == null)
+                {
+                    throw new BadRequestException(MessageConstant.ChangePasswordMessage.NotAuthenticatedEmail);
+                }
+                if (emailVerificationRedisModel.IsVerified == Convert.ToBoolean((int)EmailVerificationEnum.Status.NOT_VERIFIRED))
+                {
+                    throw new BadRequestException(MessageConstant.ChangePasswordMessage.NotVerifiedEmail);
+                }
+                existedAccount.Password = PasswordUtil.HashPassword(resetPassword.NewPassword);
+                this._unitOfWork.AccountRepository.UpdateAccount(existedAccount);
+                await this._unitOfWork.CommitAsync();
+                await this._unitOfWork.EmailVerificationRedisRepository.DeleteEmailVerificationAsync(emailVerificationRedisModel);
+            }
+            catch (NotFoundException ex)
+            {
+                string error = ErrorUtil.GetErrorString("Email", ex.Message);
+                throw new NotFoundException(error);
+            }
+            catch (BadRequestException ex)
+            {
+                string error = ErrorUtil.GetErrorString("Email", ex.Message);
+                throw new BadRequestException(error);
+            }
+            catch (Exception ex)
+            {
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
             }
         }
     }
