@@ -15,7 +15,9 @@ namespace CCSystem.BLL.Services.Interfaces
         public Task<AccountResponse> RegisterAsync(AccountRegisterRequest accountRequest, JWTAuth jwtAuth);
         public Task<AccountResponse> LoginAsync(AccountLoginRequest accountRequest, JWTAuth jwtAuth);
         public Task<AccountTokenResponse> ReGenerateTokensAsync(AccountTokenRequest accountTokenRequest, JWTAuth jwtAuth);
-
+        public Task VerifyEmailToResetPasswordAsync(EmailVerificationRequest emailVerificationRequest);
+        public Task ConfirmOTPCodeToResetPasswordAsync(OTPCodeVerificationRequest otpCodeVerificationRequest);
+        public Task ChangePasswordAsync(DTOs.Accounts.ResetPasswordRequest resetPassword);
 
     }
 }

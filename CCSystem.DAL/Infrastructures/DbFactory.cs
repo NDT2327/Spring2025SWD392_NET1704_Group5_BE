@@ -38,7 +38,7 @@ namespace CCSystem.DAL.Infrastructures
                 IConfigurationRoot configuration = builder.Build();
                 this._redisConnectionProvider = new RedisConnectionProvider(configuration.GetConnectionString("RedisDbStore"));
                 await this._redisConnectionProvider.Connection.CreateIndexAsync(typeof(AccountToken));
-                //await this._redisConnectionProvider.Connection.CreateIndexAsync(typeof(EmailVerification));
+                await this._redisConnectionProvider.Connection.CreateIndexAsync(typeof(EmailVerification));
             }
             return this._redisConnectionProvider;
         }

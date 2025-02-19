@@ -297,6 +297,44 @@
   },
   {
     "ContainingType": "CCSystem.API.Controllers.AuthenticationsController",
+    "Method": "PostVerifyEmail",
+    "RelativePath": "api/v1/authentications/email-verification",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "emailVerificationRequest",
+        "Type": "CCSystem.BLL.DTOs.Accounts.EmailVerificationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "CCSystem.API.Controllers.AuthenticationsController",
     "Method": "PostLoginAsync",
     "RelativePath": "api/v1/authentications/login",
     "HttpMethod": "POST",
@@ -330,6 +368,134 @@
           "application/json"
         ],
         "StatusCode": 404
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "CCSystem.API.Controllers.AuthenticationsController",
+    "Method": "PostConfirmOTPCode",
+    "RelativePath": "api/v1/authentications/otp-verification",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otpCodeVerificationRequest",
+        "Type": "CCSystem.BLL.DTOs.Accounts.OTPCodeVerificationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "CCSystem.API.Controllers.AuthenticationsController",
+    "Method": "PutResetPasswordAsync",
+    "RelativePath": "api/v1/authentications/password-resetation",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "resetPassword",
+        "Type": "CCSystem.BLL.DTOs.Accounts.ResetPasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "CCSystem.API.Controllers.AuthenticationsController",
+    "Method": "PostReGenerateTokensAsync",
+    "RelativePath": "api/v1/authentications/regeneration-tokens",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountToken",
+        "Type": "CCSystem.BLL.DTOs.AccountTokens.AccountTokenRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "CCSystem.BLL.DTOs.AccountTokens.AccountTokenResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "CCSystem.BLL.Errors.Error",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
       },
       {
         "Type": "CCSystem.BLL.Errors.Error",

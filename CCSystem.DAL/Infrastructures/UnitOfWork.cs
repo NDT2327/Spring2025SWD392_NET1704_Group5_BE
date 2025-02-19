@@ -1,6 +1,7 @@
 ﻿using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Redis.Repositories;
 using CCSystem.DAL.Repositories;
+using CCSystem.DAL.SMTPs.Repositories;
 using Redis.OM;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ namespace CCSystem.DAL.Infrastructures
         private AccountRepository _accountRepository;
         private RedisConnectionProvider _redisConnectionProvider;
         private AccountTokenRedisRepository _accountTokenRedisRepository;
+        private EmailVerificationRedisRepository _emailVerificationRedisRepository;
+        private EmailRepository _emailRepository;
+
 
         public UnitOfWork(IDbFactory dbFactory)
         {
@@ -36,6 +40,34 @@ namespace CCSystem.DAL.Infrastructures
                     this._accountRepository = new AccountRepository(this._dbContext);
                 }
                 return this._accountRepository;
+            }
+        }
+
+        public EmailRepository EmailRepository
+        {
+            get
+            {
+                if (this._emailRepository == null)
+                {
+                    this._emailRepository = new EmailRepository();
+                }
+                return this._emailRepository;
+            }
+        }
+
+        public EmailVerificationRedisRepository EmailVerificationRedisRepository
+        {
+            get
+            {
+                if (this._redisConnectionProvider == null)
+                {
+                    this._redisConnectionProvider = this._dbFactory.InitRedisConnectionProvider().Result;
+                }
+                if (this._emailVerificationRedisRepository == null)
+                {
+                    this._emailVerificationRedisRepository = new EmailVerificationRedisRepository(this._redisConnectionProvider);
+                }
+                return this._emailVerificationRedisRepository;
             }
         }
 
