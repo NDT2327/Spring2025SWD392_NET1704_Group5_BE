@@ -69,11 +69,11 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
-        [Consumes(MediaTypeConstant.MultipartFormData)]
+        [Consumes(MediaTypeConstant.ApplicationJson)]
         [Produces(MediaTypeConstant.ApplicationJson)]
         [HttpPost(APIEndPointConstant.Authentication.Register)]
         //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
-        public async Task<IActionResult> PostRegisterAsync([FromForm] AccountRegisterRequest account)
+        public async Task<IActionResult> PostRegisterAsync([FromBody] AccountRegisterRequest account)
         {
             // Validate the incoming request using the dedicated validator for Register
             ValidationResult validationResult = await this._accountRegisterRequestValidator.ValidateAsync(account);
