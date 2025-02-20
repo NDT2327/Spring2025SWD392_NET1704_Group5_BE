@@ -1,6 +1,6 @@
 # Ignore Visual Studio files  
 .vs/
 
-/CCSystem.API/obj/
-/CCSystem.BLL/obj/
-/CCSystem.DAL/obj/
+CCSystem.API/obj/
+CCSystem.BLL/obj/
+CCSystem.DAL/obj/
