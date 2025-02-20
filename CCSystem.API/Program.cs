@@ -2,6 +2,7 @@
 using CCSystem.API.Extentions;
 using CCSystem.API.Middlewares;
 using CCSystem.BLL.DTOs.JWTs;
+using CCSystem.BLL.Service;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.DBContext;
@@ -42,6 +43,7 @@ builder.Services.Configure<JWTAuth>(builder.Configuration.GetSection("JWTAuth"))
 builder.Services.AddDbFactory();
 builder.Services.AddUnitOfWork();
 builder.Services.AddServices();
+builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddExceptionMiddleware();

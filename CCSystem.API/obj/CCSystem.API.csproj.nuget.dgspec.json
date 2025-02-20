@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj": {}
+    "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj": {}
   },
   "projects": {
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj": {
+    "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj",
+        "projectUniqueName": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj",
         "projectName": "CCSystem.API",
-        "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\obj\\",
+        "projectPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,15 +26,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {
-                "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj"
+              "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {
+                "projectPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj"
               }
             }
           }
@@ -44,7 +47,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -84,21 +88,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {
+    "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
+        "projectUniqueName": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
         "projectName": "CCSystem.BLL",
-        "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\obj\\",
+        "projectPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -106,15 +114,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
-                "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj"
+              "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
+                "projectPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj"
               }
             }
           }
@@ -128,7 +135,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -175,21 +183,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
+    "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
+        "projectUniqueName": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
         "projectName": "CCSystem.DAL",
-        "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\obj\\",
+        "projectPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "E:\\1_SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -197,7 +209,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -215,7 +226,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -272,7 +284,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

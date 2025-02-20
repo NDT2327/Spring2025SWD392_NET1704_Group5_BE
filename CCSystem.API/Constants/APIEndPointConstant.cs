@@ -22,6 +22,8 @@
         {
             public const string AccountEndpoint = ApiEndpoint + "/accounts";
             public const string SearchAccountsEndpoint = AccountEndpoint + "/search";
+            public const string LockAccountEndpoint = AccountEndpoint + "/{id}" + "/lock";
+            public const string UnlockAccountEndpoint = AccountEndpoint + "/{id}" + "/unlock";
 
         }
     }
