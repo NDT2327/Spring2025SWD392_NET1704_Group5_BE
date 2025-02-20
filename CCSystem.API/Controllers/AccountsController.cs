@@ -82,11 +82,11 @@ namespace CCSystem.API.Controllers
         /// </summary>
         /// <param name="accountId">Account ID to lock</param>
         /// <returns>Success message if locked</returns>
-        [HttpPost("api/accounts/{accountId}/lock")]
+        [HttpPost(APIEndPointConstant.Account.LockAccountEndpoint)]
         [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
-        public async Task<IActionResult> LockAccount(int accountId)
+        public async Task<IActionResult> LockAccount([FromRoute] AccountIdRequest accountId)
         {
-            var result = await _accountService.LockAccount(accountId);
+            var result = await _accountService.LockAccount(accountId.Id);
             if (!result)
             {
                 return NotFound(new { message = "Account not found" });
@@ -101,11 +101,11 @@ namespace CCSystem.API.Controllers
         /// </summary>
         /// <param name="accountId">Account ID to unlock</param>
         /// <returns>Success message if unlocked</returns>
-        [HttpPost("api/accounts/{accountId}/unlock")]
+        [HttpPost(APIEndPointConstant.Account.UnlockAccountEndpoint)]
         [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
-        public async Task<IActionResult> UnlockAccount(int accountId)
+        public async Task<IActionResult> UnlockAccount([FromRoute] AccountIdRequest accountId)
         {
-            var result = await _accountService.UnlockAccount(accountId);
+            var result = await _accountService.UnlockAccount(accountId.Id);
             if (!result)
             {
                 return NotFound(new { message = "Account not found" });
