@@ -1,4 +1,5 @@
 ﻿using CCSystem.DAL.DBContext;
+using CCSystem.DAL.FirebaseStorages.Repositories;
 using CCSystem.DAL.Redis.Repositories;
 using CCSystem.DAL.Repositories;
 using CCSystem.DAL.SMTPs.Repositories;
@@ -20,6 +21,7 @@ namespace CCSystem.DAL.Infrastructures
         private AccountTokenRedisRepository _accountTokenRedisRepository;
         private EmailVerificationRedisRepository _emailVerificationRedisRepository;
         private EmailRepository _emailRepository;
+        private FirebaseStorageRepository _firebaseStorageRepository;
 
 
         public UnitOfWork(IDbFactory dbFactory)
@@ -28,6 +30,18 @@ namespace CCSystem.DAL.Infrastructures
             if (this._dbContext == null)
             {
                 this._dbContext = dbFactory.InitDbContext();
+            }
+        }
+
+        public FirebaseStorageRepository FirebaseStorageRepository
+        {
+            get
+            {
+                if (this._firebaseStorageRepository == null)
+                {
+                    this._firebaseStorageRepository = new FirebaseStorageRepository();
+                }
+                return this._firebaseStorageRepository;
             }
         }
 
