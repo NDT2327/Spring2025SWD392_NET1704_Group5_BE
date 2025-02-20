@@ -1,4 +1,5 @@
-﻿using CCSystem.BLL.DTOs.Accounts;
+﻿using CCSystem.API.Constants;
+using CCSystem.BLL.DTOs.Accounts;
 using CCSystem.BLL.Services;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Models;
@@ -9,28 +10,27 @@ using Microsoft.EntityFrameworkCore;
 namespace CCSystem.API.Controllers
 {
     /// <summary>
-    /// Controller quản lý danh mục dịch vụ.
+    /// Controller for managing categories.
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
         private readonly CategoryRepository _categoryRepository;
 
         /// <summary>
-        /// Khởi tạo CategoryController với CategoryRepository.
+        /// Initializes a new instance of the <see cref="CategoryController"/> class.
         /// </summary>
-        /// <param name="categoryRepository">Repository danh mục.</param>
+        /// <param name="categoryRepository">The category repository.</param>
         public CategoryController(CategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
 
         /// <summary>
-        /// Lấy tất cả danh mục.
+        /// Get all categories
         /// </summary>
-        /// <returns>Danh sách danh mục.</returns>
-        [HttpGet("getallcategories")]
+        /// <returns>List of categories</returns>
+        [HttpGet(APIEndPointConstant.Category.GetAllCategoriesEndpoint)]
         public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories()
         {
             var categories = await _categoryRepository.GetAllCategoriesAsync();
@@ -38,11 +38,11 @@ namespace CCSystem.API.Controllers
         }
 
         /// <summary>
-        /// Lấy danh mục theo ID.
+        /// Get category by Id
         /// </summary>
-        /// <param name="id">ID danh mục.</param>
-        /// <returns>Thông tin danh mục.</returns>
-        [HttpGet("getcategorybyid/{id}")]
+        /// <param name="id">Category Id</param>
+        /// <returns>Category</returns>
+        [HttpGet(APIEndPointConstant.Category.GetCategoryByIdEndpoint)]
         public async Task<ActionResult<Category>> GetCategoryById(int id)
         {
             var category = await _categoryRepository.GetCategoryByIdAsync(id);
@@ -54,11 +54,11 @@ namespace CCSystem.API.Controllers
         }
 
         /// <summary>
-        /// Tạo danh mục mới.
+        /// Create a new category
         /// </summary>
-        /// <param name="dto">Dữ liệu tạo danh mục.</param>
-        /// <returns>Danh mục vừa tạo.</returns>
-        [HttpPost("createcategory")]
+        /// <param name="dto">Category data transfer object</param>
+        /// <returns>Created category</returns>
+        [HttpPost(APIEndPointConstant.Category.CreateCategoryEndpoint)]
         public async Task<ActionResult> CreateCategory([FromBody] CreateCategory dto)
         {
             var category = new Category
@@ -76,11 +76,36 @@ namespace CCSystem.API.Controllers
         }
 
         /// <summary>
-        /// Xóa danh mục theo ID.
+        /// Update a category
         /// </summary>
-        /// <param name="id">ID danh mục cần xóa.</param>
-        /// <returns>Kết quả xóa.</returns>
-        [HttpDelete("deletecategory/{id}")]
+        /// <param name="id">Category Id</param>
+        /// <param name="category">Updated category data</param>
+        /// <returns>No content</returns>
+        [HttpPut(APIEndPointConstant.Category.UpdateCategoryEndpoint)]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+        {
+            if (id != category.CategoryId)
+            {
+                return BadRequest();
+            }
+
+            var existingCategory = await _categoryRepository.GetCategoryByIdAsync(id);
+            if (existingCategory == null)
+            {
+                return NotFound();
+            }
+
+            await _categoryRepository.UpdateCategoryAsync(category);
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Delete a category
+        /// </summary>
+        /// <param name="id">Category Id</param>
+        /// <returns>No content</returns>
+        [HttpDelete(APIEndPointConstant.Category.DeleteCategoryEndpoint)]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _categoryRepository.GetCategoryByIdAsync(id);

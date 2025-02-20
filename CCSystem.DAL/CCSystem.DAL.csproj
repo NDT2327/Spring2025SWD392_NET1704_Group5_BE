@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FirebaseStorages\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 
