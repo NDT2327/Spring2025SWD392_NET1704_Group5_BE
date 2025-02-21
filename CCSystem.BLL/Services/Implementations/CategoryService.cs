@@ -4,12 +4,15 @@ using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Models;
 using System;
 using CCSystem.DAL.DBContext;
+
 using AutoMapper;
 using CCSystem.DAL.Infrastructures;
+
 namespace CCSystem.BLL.Service
 {
     public class CategoryService
     {
+
         //private readonly SP25_SWD392_CozyCareContext _context;
         private UnitOfWork _unitOfWork;
         private IMapper _mapper;
@@ -22,7 +25,9 @@ namespace CCSystem.BLL.Service
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
+
             return await _unitOfWork.CategoryRepository.GetAllCategoriesAsync();
+
         }
 
         public async Task<Category?> GetCategoryByIdAsync(int id)
@@ -44,13 +49,15 @@ namespace CCSystem.BLL.Service
 
         public async Task<bool> DeleteCategoryAsync(int id)
         {
+
             var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
+
             if (category == null)
             {
                 return false;
             }
-
             await _unitOfWork.CategoryRepository.DeleteCategoryAsync(id);
+
             return true;
         }
     }
