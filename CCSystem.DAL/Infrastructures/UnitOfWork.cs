@@ -17,6 +17,7 @@ namespace CCSystem.DAL.Infrastructures
         private IDbFactory _dbFactory;
         private SP25_SWD392_CozyCareContext _dbContext;
         private AccountRepository _accountRepository;
+        private CategoryRepository _categoryRepository;
         private RedisConnectionProvider _redisConnectionProvider;
         private AccountTokenRedisRepository _accountTokenRedisRepository;
         private EmailVerificationRedisRepository _emailVerificationRedisRepository;
@@ -30,6 +31,18 @@ namespace CCSystem.DAL.Infrastructures
             if (this._dbContext == null)
             {
                 this._dbContext = dbFactory.InitDbContext();
+            }
+        }
+
+        public CategoryRepository CategoryRepository
+        {
+            get
+            {
+                if (this._categoryRepository == null)
+                {
+                    this._categoryRepository = new CategoryRepository(this._dbContext);
+                }
+                return this._categoryRepository;
             }
         }
 
