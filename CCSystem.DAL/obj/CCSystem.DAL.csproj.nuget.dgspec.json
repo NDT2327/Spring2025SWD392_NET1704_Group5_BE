@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {}
+    "D:\\SP25\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {}
   },
   "projects": {
-    "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
+    "D:\\SP25\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
+        "projectUniqueName": "D:\\SP25\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
         "projectName": "CCSystem.DAL",
-        "projectPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\FPTU\\S7\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\obj\\",
+        "projectPath": "D:\\SP25\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj",
+        "packagesPath": "C:\\Users\\code.nganpd\\.nuget\\packages\\",
+        "outputPath": "D:\\SP25\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\code.nganpd\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,7 +44,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -97,7 +102,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.103/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
