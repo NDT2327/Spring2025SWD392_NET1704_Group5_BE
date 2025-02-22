@@ -2,14 +2,29 @@
 using CCSystem.API.Extentions;
 using CCSystem.API.Middlewares;
 using CCSystem.BLL.DTOs.JWTs;
+using CCSystem.BLL.Services.Implementations;
+using CCSystem.BLL.Services.Interfaces;
+using CCSystem.DAL.DBContext;
+using CCSystem.DAL.Infrastructures;
+using CCSystem.DAL.Repositories;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddScoped<AccountRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddDbContext<SP25_SWD392_CozyCareContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbStore"));
+});
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDbFactory, DbFactory>();
+builder.Services.AddScoped<AccountRepository>();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(opts => opts.SuppressModelStateInvalidFilter = true)
     .AddJsonOptions(options =>

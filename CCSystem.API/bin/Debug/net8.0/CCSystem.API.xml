@@ -5,6 +5,20 @@
     </assembly>
     <members>
         <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.SearchAccountsAsync(CCSystem.BLL.DTOs.Accounts.AccountSearchRequest)" -->
+        <member name="M:CCSystem.API.Controllers.AccountsController.LockAccount(System.Int32)">
+            <summary>
+            Lock an account by accountId
+            </summary>
+            <param name="accountId">Account ID to lock</param>
+            <returns>Success message if locked</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AccountsController.UnlockAccount(System.Int32)">
+            <summary>
+            Unlock an account by accountId
+            </summary>
+            <param name="accountId">Account ID to unlock</param>
+            <returns>Success message if unlocked</returns>
+        </member>
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.
