@@ -33,6 +33,7 @@ namespace CCSystem.API.Extentions
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IServiceHomeService, ServiceHomeService>();
 
             return services;
         }

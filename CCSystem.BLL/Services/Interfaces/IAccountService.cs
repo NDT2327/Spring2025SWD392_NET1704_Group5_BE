@@ -18,5 +18,6 @@ namespace CCSystem.BLL.Services.Interfaces
         //public Task UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims);
         Task<bool> LockAccount(int idAccount);
         Task<bool> UnlockAccount(int idAccount);
+
     }
 }
