@@ -1,121 +1,100 @@
 ﻿using CCSystem.API.Constants;
 using CCSystem.BLL.DTOs.Accounts;
-using CCSystem.BLL.Services;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Models;
-using CCSystem.DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CCSystem.BLL.DTOs.Category;
+
 
 namespace CCSystem.API.Controllers
 {
     /// <summary>
-    /// Controller for managing categories.
+    /// API controller for managing categories.
     /// </summary>
     [ApiController]
+    [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryService _categoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoryController"/> class.
         /// </summary>
-        /// <param name="categoryRepository">The category repository.</param>
-        public CategoryController(CategoryRepository categoryRepository)
+        /// <param name="categoryService">The category service.</param>
+        public CategoryController(ICategoryService categoryService)
         {
-            _categoryRepository = categoryRepository;
+            _categoryService = categoryService;
         }
 
         /// <summary>
-        /// Get all categories
+        /// Get all categories.
         /// </summary>
-        /// <returns>List of categories</returns>
-        [HttpGet(APIEndPointConstant.Category.GetAllCategoriesEndpoint)]
-        public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories()
+        /// <returns>List of category responses.</returns>
+        [HttpGet("get-all")]
+        public async Task<ActionResult<IEnumerable<CategoryResponse>>> GetAllCategories()
         {
-            var categories = await _categoryRepository.GetAllCategoriesAsync();
+            var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
 
         /// <summary>
-        /// Get category by Id
+        /// Get category by ID.
         /// </summary>
-        /// <param name="id">Category Id</param>
-        /// <returns>Category</returns>
-        [HttpGet(APIEndPointConstant.Category.GetCategoryByIdEndpoint)]
-        public async Task<ActionResult<Category>> GetCategoryById(int id)
+        /// <param name="id">Category ID.</param>
+        /// <returns>Category response.</returns>
+        [HttpGet("get/{id}")]
+        public async Task<ActionResult<CategoryResponse>> GetCategoryById(int id)
         {
-            var category = await _categoryRepository.GetCategoryByIdAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            var category = await _categoryService.GetCategoryByIdAsync(id);
+            if (category == null) return NotFound();
             return Ok(category);
         }
 
         /// <summary>
-        /// Create a new category
+        /// Create a new category.
         /// </summary>
-        /// <param name="dto">Category data transfer object</param>
-        /// <returns>Created category</returns>
-        [HttpPost(APIEndPointConstant.Category.CreateCategoryEndpoint)]
-        public async Task<ActionResult> CreateCategory([FromBody] CreateCategory dto)
+        /// <param name="request">Category request DTO.</param>
+        /// <returns>Created category response.</returns>
+        [HttpPost("create")]
+        public async Task<ActionResult<CategoryResponse>> CreateCategory([FromBody] CategoryRequest request)
         {
-            var category = new Category
+            try
             {
-                CategoryName = dto.Name,
-                Description = dto.Description,
-                Image = "",
-                IsActive = true,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedDate = DateTime.UtcNow
-            };
-
-            await _categoryRepository.CreateCategoryAsync(category);
-            return CreatedAtAction(nameof(GetCategoryById), new { id = category.CategoryId }, category);
+                var category = await _categoryService.CreateCategoryAsync(request);
+                return CreatedAtAction(nameof(GetCategoryById), new { id = category.CategoryId }, category);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.InnerException?.Message ?? ex.Message });
+            }
         }
 
         /// <summary>
-        /// Update a category
+        /// Update a category.
         /// </summary>
-        /// <param name="id">Category Id</param>
-        /// <param name="category">Updated category data</param>
-        /// <returns>No content</returns>
-        [HttpPut(APIEndPointConstant.Category.UpdateCategoryEndpoint)]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+        /// <param name="id">Category ID.</param>
+        /// <param name="request">Updated category request DTO.</param>
+        /// <returns>No content.</returns>
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryRequest request)
         {
-            if (id != category.CategoryId)
-            {
-                return BadRequest();
-            }
-
-            var existingCategory = await _categoryRepository.GetCategoryByIdAsync(id);
-            if (existingCategory == null)
-            {
-                return NotFound();
-            }
-
-            await _categoryRepository.UpdateCategoryAsync(category);
-
+            await _categoryService.UpdateCategoryAsync(id, request);
             return NoContent();
         }
 
         /// <summary>
-        /// Delete a category
+        /// Delete a category.
         /// </summary>
-        /// <param name="id">Category Id</param>
-        /// <returns>No content</returns>
-        [HttpDelete(APIEndPointConstant.Category.DeleteCategoryEndpoint)]
+        /// <param name="id">Category ID.</param>
+        /// <returns>No content if successful, NotFound otherwise.</returns>
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _categoryRepository.GetCategoryByIdAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            await _categoryRepository.DeleteCategoryAsync(id);
-
+            var deleted = await _categoryService.DeleteCategoryAsync(id);
+            if (!deleted) return NotFound();
             return NoContent();
         }
     }

@@ -12,6 +12,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using CCSystem.BLL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,10 @@ builder.Services.Configure<JWTAuth>(builder.Configuration.GetSection("JWTAuth"))
 builder.Services.AddDbFactory();
 builder.Services.AddUnitOfWork();
 builder.Services.AddServices();
+builder.Services.AddScoped<UnitOfWork>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddAutoMapper(typeof(CategoryProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddExceptionMiddleware();

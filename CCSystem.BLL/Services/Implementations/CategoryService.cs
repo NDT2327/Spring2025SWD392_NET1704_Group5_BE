@@ -1,56 +1,66 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using CCSystem.BLL.DTOs.Category;
 using CCSystem.BLL.Services.Interfaces;
-using CCSystem.DAL.Models;
-using System;
-using CCSystem.DAL.DBContext;
-using AutoMapper;
 using CCSystem.DAL.Infrastructures;
+using CCSystem.DAL.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace CCSystem.BLL.Service
 {
-    public class CategoryService
+    public class CategoryService : ICategoryService
     {
-        //private readonly SP25_SWD392_CozyCareContext _context;
-        private UnitOfWork _unitOfWork;
-        private IMapper _mapper;
+        private readonly UnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CategoryService(UnitOfWork unitOfWork, IMapper mapper)
         {
-            this._unitOfWork = (UnitOfWork)unitOfWork;
-            this._mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync()
         {
-            return await _unitOfWork.CategoryRepository.GetAllCategoriesAsync();
+            var categories = await _unitOfWork.CategoryRepository.GetAllCategoriesAsync();
+            return _mapper.Map<IEnumerable<CategoryResponse>>(categories);
         }
 
-        public async Task<Category?> GetCategoryByIdAsync(int id)
+        public async Task<CategoryResponse?> GetCategoryByIdAsync(int id)
         {
-            return await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
+            var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
+            return category == null ? null : _mapper.Map<CategoryResponse>(category);
         }
 
-        public async Task<Category> CreateCategoryAsync(Category category)
+        public async Task<CategoryResponse> CreateCategoryAsync(CategoryRequest request)
         {
+            var category = _mapper.Map<Category>(request);
+
             await _unitOfWork.CategoryRepository.CreateCategoryAsync(category);
             await _unitOfWork.CommitAsync();
-            return category;
+
+            // 💡 Tải lại category từ DB để đảm bảo có ID đúng
+            var savedCategory = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(category.CategoryId);
+
+            return _mapper.Map<CategoryResponse>(savedCategory);
         }
-        public async Task UpdateCategoryAsync(Category category)
+
+        public async Task UpdateCategoryAsync(int id, CategoryRequest request)
         {
-            await _unitOfWork.CategoryRepository.UpdateCategoryAsync(category);
-            await _unitOfWork.CommitAsync();
+            var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
+            if (category == null) throw new KeyNotFoundException("Category not found");
+
+            _mapper.Map(request, category);
+            _unitOfWork.CategoryRepository.UpdateCategory(category); 
+            await _unitOfWork.CommitAsync(); 
         }
 
         public async Task<bool> DeleteCategoryAsync(int id)
         {
             var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
-            if (category == null)
-            {
-                return false;
-            }
+            if (category == null) return false;
 
-            await _unitOfWork.CategoryRepository.DeleteCategoryAsync(id);
+            _unitOfWork.CategoryRepository.DeleteCategory(category); 
+            await _unitOfWork.CommitAsync(); 
             return true;
         }
     }

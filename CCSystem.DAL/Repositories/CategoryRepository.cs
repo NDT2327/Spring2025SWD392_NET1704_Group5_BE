@@ -20,6 +20,7 @@ namespace CCSystem.DAL.Repositories
         {
             return await _context.Categories.ToListAsync();
         }
+
         public async Task<Category?> GetCategoryByIdAsync(int id)
         {
             return await _context.Categories.FindAsync(id);
@@ -27,24 +28,22 @@ namespace CCSystem.DAL.Repositories
 
         public async Task CreateCategoryAsync(Category category)
         {
+            if (category == null)
+            {
+                throw new ArgumentNullException(nameof(category), "🚨 Lỗi: category bị null!");
+            }
+
             await _context.Categories.AddAsync(category);
-            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCategoryAsync(Category category)
+        public void UpdateCategory(Category category)
         {
             _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCategoryAsync(int id)
+        public void DeleteCategory(Category category)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
-            }
+            _context.Categories.Remove(category);
         }
     }
 }
