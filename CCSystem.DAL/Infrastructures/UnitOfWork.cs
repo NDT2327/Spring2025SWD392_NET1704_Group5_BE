@@ -23,6 +23,7 @@ namespace CCSystem.DAL.Infrastructures
         private EmailVerificationRedisRepository _emailVerificationRedisRepository;
         private EmailRepository _emailRepository;
         private FirebaseStorageRepository _firebaseStorageRepository;
+        private ServiceRepository _serviceRepository;
 
 
         public UnitOfWork(IDbFactory dbFactory)
@@ -31,6 +32,18 @@ namespace CCSystem.DAL.Infrastructures
             if (this._dbContext == null)
             {
                 this._dbContext = dbFactory.InitDbContext();
+            }
+        }
+
+        public ServiceRepository ServiceRepository
+        {
+            get
+            {
+                if (this._serviceRepository == null)
+                {
+                    this._serviceRepository = new ServiceRepository(this._dbContext);
+                }
+                return this._serviceRepository;
             }
         }
 

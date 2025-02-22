@@ -35,5 +35,11 @@
             public const string UpdateCategoryEndpoint = CategoryEndpoint + "/updatecategory/{id}";
             public const string DeleteCategoryEndpoint = CategoryEndpoint + "/deletecategory/{id}";
         }
+
+        public static class Service
+        {
+            public const string ServiceEndpoint = ApiEndpoint + "/services";
+
+        }
     }
 }

@@ -13,8 +13,8 @@ namespace CCSystem.BLL.Profiles.Accounts
     {
         public AccountProfile()
         {
-            CreateMap<Account, AccountResponse>();
-            CreateMap<Account, GetAccountResponse>();
+            CreateMap<Account, AccountResponse>().ReverseMap();
+            CreateMap<Account, GetAccountResponse>().ReverseMap();
         }
     }
 }
