@@ -124,11 +124,11 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
         [Authorize]
-        [HttpGet("api/accounts/profiles/{accountId}")]
-        public async Task<IActionResult> GetAccountProfile(int accountId)
+        [HttpGet(APIEndPointConstant.Account.GetAccountByIdEndpoint)]
+        public async Task<IActionResult> GetAccountProfile([FromRoute] AccountIdRequest idRequest)
         {
             var claims = User.Claims;
-            var result = await _accountService.GetAccountAsync(accountId, claims);
+            var result = await _accountService.GetAccountAsync(idRequest.Id, claims);
             if (result == null)
             {
                 return NotFound(new { message = "Account not found" });
@@ -146,7 +146,7 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
-        [HttpGet("api/accounts")]
+        [HttpGet(APIEndPointConstant.Account.AccountEndpoint)]
         [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
 
         public async Task<IActionResult> GetAccounts([FromQuery] AccountsListRequest accountsListRequest)
@@ -165,12 +165,11 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
-        [Authorize]
-        [HttpPut("api/accounts/update/{accountId}")]
-        public async Task<IActionResult> UpdateAccount(int accountId, [FromBody] UpdateAccountRequest updateAccountRequest)
+        [HttpPut(APIEndPointConstant.Account.UpdateAccountEndpoint)]
+        public async Task<IActionResult> UpdateAccount([FromRoute] AccountIdRequest idRequest, [FromBody] UpdateAccountRequest updateAccountRequest)
         {
             var claims = User.Claims;
-            await _accountService.UpdateAccountAsync(accountId, updateAccountRequest, claims);
+            await _accountService.UpdateAccountAsync(idRequest.Id, updateAccountRequest, claims);
             return Ok();
         }
         #endregion

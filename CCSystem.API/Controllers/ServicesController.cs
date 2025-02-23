@@ -19,13 +19,15 @@ namespace CCSystem.API.Controllers
         private IServiceHomeService _serviceHomeService;
         private IValidator<PostServiceRequest> _postServiceValidator;
         private IValidator<SearchServiceRequest> _searchServiceValidator;
+        private IValidator<ServiceIdRequest> _serviceIdValidator;
 
         public ServicesController(IServiceHomeService serviceHomeService, IValidator<PostServiceRequest> postServiceValidator,
-            IValidator<SearchServiceRequest> searchServiceValidator)
+            IValidator<SearchServiceRequest> searchServiceValidator, IValidator<ServiceIdRequest> serviceIdValidator)
         {
             this._serviceHomeService = serviceHomeService;
             this._postServiceValidator = postServiceValidator;
             this._searchServiceValidator = searchServiceValidator;
+            this._serviceIdValidator = serviceIdValidator;
         }
 
         #region Create Service
@@ -127,6 +129,62 @@ namespace CCSystem.API.Controllers
             var services = await _serviceHomeService.SearchServiceAsync(searchServiceRequest);
 
             return Ok(services);
+        }
+        #endregion
+
+        #region Get List Services
+        /// <summary>
+        /// Retrieves the list of services.
+        /// </summary>
+        /// <returns>
+        /// A list of services.
+        /// </returns>
+        /// <response code="200">Services retrieved successfully.</response>
+        /// <response code="500">An error occurred in the system.</response>
+        /// <exception cref="Exception">Throws a system exception if an error occurs.</exception>
+        [ProducesResponseType(typeof(List<ServiceResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        [HttpGet(APIEndPointConstant.Service.ServiceEndpoint)]
+        public async Task<IActionResult> GetListServicesAsync()
+        {
+
+            var services = await _serviceHomeService.GetListServicesAsync();
+            return Ok(services);
+        }
+        #endregion
+
+        #region Get Service By Id
+        /// <summary>
+        /// Retrieves detailed information of a service by its Id.
+        /// </summary>
+        /// <param name="id">The Id of the service to retrieve.</param>
+        /// <returns>
+        /// Detailed information of the service.
+        /// </returns>
+        /// <response code="200">Service information retrieved successfully.</response>
+        /// <response code="404">No service found with the provided Id.</response>
+        /// <response code="500">An error occurred in the system.</response>
+        /// <exception cref="NotFoundException">Thrown when no service exists with the provided Id.</exception>
+        /// <exception cref="Exception">Throws a system exception if an error occurs.</exception>
+        [ProducesResponseType(typeof(ServiceResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        [HttpGet(APIEndPointConstant.Service.GetServiceByIdEndpoint)]
+        public async Task<IActionResult> GetServiceByIdAsync([FromRoute] ServiceIdRequest serviceId)
+        {
+            ValidationResult validationResult = await _serviceIdValidator.ValidateAsync(serviceId);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            var service = await _serviceHomeService.GetServiceById(serviceId.Id);
+            return Ok(service);
         }
         #endregion
 
