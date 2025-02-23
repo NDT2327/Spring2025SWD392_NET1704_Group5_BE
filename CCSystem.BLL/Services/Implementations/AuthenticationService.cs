@@ -43,7 +43,7 @@ namespace CCSystem.BLL.Services.Implementations
                 Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(accountRequest.Email);
                 if (existedAccount != null)
                 {
-                    throw new BadRequestException("Email đã tồn tại.");
+                    throw new BadRequestException(MessageConstant.CommonMessage.AlreadyExistEmail);
                 }
 
                 // Tạo mới đối tượng Account và hash mật khẩu

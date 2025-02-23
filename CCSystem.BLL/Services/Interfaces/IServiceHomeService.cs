@@ -10,5 +10,7 @@ namespace CCSystem.BLL.Services.Interfaces
     public interface IServiceHomeService
     {
         public Task CreateServiceAsync(PostServiceRequest request);
+
+        public Task<List<ServiceResponse>> SearchServiceAsync(SearchServiceRequest request);   
     }
 }

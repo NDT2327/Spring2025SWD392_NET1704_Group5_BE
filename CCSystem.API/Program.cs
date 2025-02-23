@@ -22,7 +22,8 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddDbContext<SP25_SWD392_CozyCareContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbStore"));
-});
+
+}, ServiceLifetime.Scoped);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbFactory, DbFactory>();
 builder.Services.AddScoped<AccountRepository>();

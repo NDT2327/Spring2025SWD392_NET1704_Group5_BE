@@ -18,11 +18,14 @@ namespace CCSystem.API.Controllers
     {
         private IServiceHomeService _serviceHomeService;
         private IValidator<PostServiceRequest> _postServiceValidator;
+        private IValidator<SearchServiceRequest> _searchServiceValidator;
 
-        public ServicesController(IServiceHomeService serviceHomeService, IValidator<PostServiceRequest> postServiceValidator)
+        public ServicesController(IServiceHomeService serviceHomeService, IValidator<PostServiceRequest> postServiceValidator,
+            IValidator<SearchServiceRequest> searchServiceValidator)
         {
             this._serviceHomeService = serviceHomeService;
             this._postServiceValidator = postServiceValidator;
+            this._searchServiceValidator = searchServiceValidator;
         }
 
         #region Create Service
@@ -78,6 +81,55 @@ namespace CCSystem.API.Controllers
             });
         }
         #endregion
+
+        #region Search Service
+        /// <summary>
+        /// Search services based on given criteria.
+        /// </summary>
+        /// <param name="searchServiceRequest">
+        /// An object containing search criteria for services.
+        /// </param>
+        /// <returns>
+        /// A list of services matching the search criteria.
+        /// </returns>
+        /// <remarks>
+        ///     Sample request:
+        ///
+        ///         GET
+        ///         CategoryName = MyCategory
+        ///         ServiceName = MyService
+        ///         Description = Service description
+        ///         Price = 100.0
+        ///         Duration = 60
+        ///         IsActive = true
+        /// </remarks>
+        /// <response code="200">Return a list of services matching the criteria.</response>
+        /// <response code="400">Invalid search criteria or business logic error.</response>
+        /// <response code="500">Unexpected system error.</response>
+        /// <exception cref="BadRequestException">Throw error if search criteria are invalid.</exception>
+        /// <exception cref="NotFoundException">Throw error if related data are not found.</exception>
+        /// <exception cref="Exception">Throw error for unexpected system issues.</exception>
+        [ProducesResponseType(typeof(IEnumerable<ServiceResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        [HttpGet(APIEndPointConstant.Service.SearchServiceEndpoint)]
+        public async Task<IActionResult> GetSearchServiceAsync([FromQuery] SearchServiceRequest searchServiceRequest)
+        {
+            ValidationResult validationResult = await _searchServiceValidator.ValidateAsync(searchServiceRequest);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            var services = await _serviceHomeService.SearchServiceAsync(searchServiceRequest);
+
+            return Ok(services);
+        }
+        #endregion
+
 
     }
 }

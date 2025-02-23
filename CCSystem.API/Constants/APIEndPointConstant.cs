@@ -39,6 +39,7 @@
         public static class Service
         {
             public const string ServiceEndpoint = ApiEndpoint + "/services";
+            public const string SearchServiceEndpoint = ServiceEndpoint + "/search";
 
         }
     }

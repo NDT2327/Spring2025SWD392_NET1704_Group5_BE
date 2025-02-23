@@ -5,6 +5,7 @@ using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Infrastructures;
+using CCSystem.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +96,35 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
-        
+        public async Task<List<ServiceResponse>> SearchServiceAsync(SearchServiceRequest request)
+        {
+            try
+            {
+                
 
+                var category = await _unitOfWork.CategoryRepository.GetCategoryByName(request.CategoryName);
+                //if (category == null)
+                //{
+                //    throw new NotFoundException(MessageConstant.CommonMessage.NotExistCategoryName);
+                //}
+                // Sửa lỗi truyền categoryId null an toàn
+                var categoryId = category?.CategoryId;
+
+                var services = await _unitOfWork.ServiceRepository.SearchServiceAsync(
+                    request.ServiceName,
+                    request.Description,
+                    request.Price,
+                    request.Duration,
+                    request.IsActive,
+                    categoryId);
+
+                var servicesReponse = _mapper.Map<List<ServiceResponse>>(services);
+                return servicesReponse;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
