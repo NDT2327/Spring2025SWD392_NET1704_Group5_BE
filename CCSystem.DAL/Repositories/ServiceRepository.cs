@@ -1,5 +1,6 @@
 ﻿using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,53 @@ namespace CCSystem.DAL.Repositories
         {
             _context = context;
         }
+
+        public async Task<List<Service>> SearchServiceAsync(
+            string serviceName,
+            string description,
+            decimal? price,
+            int? duration,
+            bool? isActive,
+            int? categoryId)
+        {
+            try
+            {
+                IQueryable<Service> query = _context.Services
+                                    .AsNoTracking()
+                                    .Include(s => s.Category);
+
+                // Nếu tất cả các tham số đều null hoặc rỗng, trả về toàn bộ danh sách
+                if (string.IsNullOrWhiteSpace(serviceName) &&
+                    string.IsNullOrWhiteSpace(description) &&
+                    price == null &&
+                    duration == null &&
+                    isActive == null &&
+                    categoryId == null)
+                {
+                    return await query.OrderByDescending(s => s.ServiceId).ToListAsync();
+                }
+
+
+                // Áp dụng bộ lọc khi các giá trị không null hoặc không rỗng
+                query = query.Where(s =>
+                    (categoryId == null || s.CategoryId == categoryId) &&
+                    (string.IsNullOrWhiteSpace(serviceName) || s.ServiceName.Contains(serviceName)) &&
+                    (string.IsNullOrWhiteSpace(description) || s.Description.Contains(description)) &&
+                    (price == null || s.Price == price) &&
+                    (duration == null || s.Duration == duration) &&
+                    (isActive == null || s.IsActive == isActive)
+                );
+
+                query = query.OrderByDescending(s => s.ServiceId);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while searching for services.", ex);
+            }
+        }
+
 
         public async Task CreateServiceAsync(Service service)
         {

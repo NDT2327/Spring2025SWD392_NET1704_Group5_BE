@@ -13,7 +13,9 @@ namespace CCSystem.BLL.Profiles.Services
     {
         public ServiceProfile()
         {
-            //CreateMap<CCSystem.DAL.Models.Service, >();
+            CreateMap<CCSystem.DAL.Models.Service, ServiceResponse>()
+                .ForMember(dest => dest.CategoryName,
+                    opt => opt.MapFrom(src => src.Category.CategoryName));
         }
     }
 }
