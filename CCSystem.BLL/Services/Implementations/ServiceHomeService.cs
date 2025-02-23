@@ -96,12 +96,40 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
+        public async Task<List<ServiceResponse>> GetListServicesAsync()
+        {
+            try
+            {
+                var services = await _unitOfWork.ServiceRepository.GetListServicesAsync();
+                return _mapper.Map<List<ServiceResponse>>(services);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<ServiceResponse> GetServiceById(int id)
+        {
+            try
+            {
+                var service = await _unitOfWork.ServiceRepository.GetServiceAsync(id);
+                if (service == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistServiceId);
+                }
+                return _mapper.Map<ServiceResponse>(service);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<ServiceResponse>> SearchServiceAsync(SearchServiceRequest request)
         {
             try
             {
-                
-
                 var category = await _unitOfWork.CategoryRepository.GetCategoryByName(request.CategoryName);
                 //if (category == null)
                 //{

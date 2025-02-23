@@ -24,6 +24,8 @@
             public const string SearchAccountsEndpoint = AccountEndpoint + "/search";
             public const string LockAccountEndpoint = AccountEndpoint + "/{id}" + "/lock";
             public const string UnlockAccountEndpoint = AccountEndpoint + "/{id}" + "/unlock";
+            public const string UpdateAccountEndpoint = AccountEndpoint + "/update" + "/{id}";
+            public const string GetAccountByIdEndpoint = AccountEndpoint + "/{id}";
 
         }
         public static class Category
@@ -40,6 +42,8 @@
         {
             public const string ServiceEndpoint = ApiEndpoint + "/services";
             public const string SearchServiceEndpoint = ServiceEndpoint + "/search";
+            public const string GetServiceByIdEndpoint = ServiceEndpoint + "/{id}";
+
 
         }
     }
