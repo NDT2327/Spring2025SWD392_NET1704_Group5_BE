@@ -30,7 +30,7 @@ namespace CCSystem.DAL.Repositories
         {
             if (category == null)
             {
-                throw new ArgumentNullException(nameof(category), "🚨 Lỗi: category bị null!");
+                throw new ArgumentNullException(nameof(category));
             }
 
             await _context.Categories.AddAsync(category);
