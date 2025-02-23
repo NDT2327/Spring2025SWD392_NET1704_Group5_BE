@@ -1,4 +1,11 @@
-﻿using AutoMapper;
+﻿
+using Microsoft.EntityFrameworkCore;
+using CCSystem.BLL.Services.Interfaces;
+using CCSystem.DAL.Models;
+using System;
+using CCSystem.DAL.DBContext;
+
+using AutoMapper;
 using CCSystem.BLL.DTOs.Category;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Infrastructures;
@@ -23,6 +30,7 @@ namespace CCSystem.BLL.Service
         {
             var categories = await _unitOfWork.CategoryRepository.GetAllCategoriesAsync();
             return _mapper.Map<IEnumerable<CategoryResponse>>(categories);
+
         }
 
         public async Task<CategoryResponse?> GetCategoryByIdAsync(int id)
@@ -56,6 +64,7 @@ namespace CCSystem.BLL.Service
 
         public async Task<bool> DeleteCategoryAsync(int id)
         {
+
             var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
             if (category == null) return false;
 
