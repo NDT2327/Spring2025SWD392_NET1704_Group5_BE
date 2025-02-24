@@ -155,39 +155,5 @@ namespace CCSystem.API.Controllers
         }
         #endregion
 
-        #region Get Service By Id
-        /// <summary>
-        /// Retrieves detailed information of a service by its Id.
-        /// </summary>
-        /// <param name="id">The Id of the service to retrieve.</param>
-        /// <returns>
-        /// Detailed information of the service.
-        /// </returns>
-        /// <response code="200">Service information retrieved successfully.</response>
-        /// <response code="404">No service found with the provided Id.</response>
-        /// <response code="500">An error occurred in the system.</response>
-        /// <exception cref="NotFoundException">Thrown when no service exists with the provided Id.</exception>
-        /// <exception cref="Exception">Throws a system exception if an error occurs.</exception>
-        [ProducesResponseType(typeof(ServiceResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
-        [Produces(MediaTypeConstant.ApplicationJson)]
-        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
-        [HttpGet(APIEndPointConstant.Service.GetServiceByIdEndpoint)]
-        public async Task<IActionResult> GetServiceByIdAsync([FromRoute] ServiceIdRequest serviceId)
-        {
-            ValidationResult validationResult = await _serviceIdValidator.ValidateAsync(serviceId);
-            if (!validationResult.IsValid)
-            {
-                string errors = ErrorUtil.GetErrorsString(validationResult);
-                throw new BadRequestException(errors);
-            }
-
-            var service = await _serviceHomeService.GetServiceById(serviceId.Id);
-            return Ok(service);
-        }
-        #endregion
-
-
     }
 }

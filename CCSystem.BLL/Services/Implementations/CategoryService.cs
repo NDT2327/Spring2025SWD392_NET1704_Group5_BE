@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using CCSystem.BLL.Services.Interfaces;
+using CCSystem.BLL.DTOs.Category;
 using CCSystem.DAL.Models;
 using System;
 using CCSystem.DAL.DBContext;
@@ -60,5 +61,24 @@ namespace CCSystem.BLL.Service
 
             return true;
         }
+
+        public async Task<List<CategoryResponse>> SearchCategoryAsync(string categoryName, bool? isActive)
+        {
+            try
+            {
+                var categories = await _unitOfWork.CategoryRepository.SearchCategoryAsync(categoryName, isActive);
+
+                // Map the Category entities to CategoryResponse DTOs
+                var categoryResponses = _mapper.Map<List<CategoryResponse>>(categories);
+
+                return categoryResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
     }
 }
