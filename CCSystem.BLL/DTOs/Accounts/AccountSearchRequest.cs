@@ -18,4 +18,6 @@ namespace CCSystem.BLL.DTOs.Accounts
         public DateTime? MinCreatedDate { get; set; }
         public DateTime? MaxCreatedDate { get; set; }
     }
+
+
 }
