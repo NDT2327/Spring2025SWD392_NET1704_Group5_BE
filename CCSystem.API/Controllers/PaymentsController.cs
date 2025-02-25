@@ -6,11 +6,11 @@ using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Models;
-using CCSystem.DAL.VNPays;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Text;
 using VNPAY.NET;
 using VNPAY.NET.Enums;
 using VNPAY.NET.Models;
@@ -28,6 +28,7 @@ namespace CCSystem.API.Controllers
         private readonly IConfiguration _configuration;
         private IBookingService _bookingService;
 
+
         public PaymentController(IPaymentService paymentService, IVnpay vnPayservice, IConfiguration configuration, IBookingService bookingService)
         {
             this._paymentService = paymentService;
@@ -38,6 +39,7 @@ namespace CCSystem.API.Controllers
             this._bookingService = bookingService;
         }
 
+        #region Create Payment Url
         /// <summary>
         /// Tạo url thanh toán
         /// </summary>
@@ -53,10 +55,10 @@ namespace CCSystem.API.Controllers
                 var booking = await _bookingService.GetBooking(request.BookingId);
                 if (booking == null)
                     return NotFound("Booking không tồn tại.");
-                if (booking.PaymentStatus.Contains("Paid"))
-                {
-                    throw new BadRequestException(MessageConstant.BookingMessage.BookingIsPaid);
-                }
+                //if (booking.PaymentStatus.Contains("Paid"))
+                //{
+                //    throw new BadRequestException(MessageConstant.BookingMessage.BookingIsPaid);
+                //}
 
                 // Tạo Payment mới liên kết với Booking
                 var payment = new Payment
@@ -69,7 +71,7 @@ namespace CCSystem.API.Controllers
                     CreatedDate = DateTime.UtcNow,
                     TransactionId = Guid.NewGuid().ToString(),
                 };
-
+                
 
                 // Tạo request để lấy URL thanh toán
                 var paymentRequest = new PaymentRequest
@@ -92,8 +94,9 @@ namespace CCSystem.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-
+        #region Ipn Action
         /// <summary>
         /// Thực hiện hành động sau khi thanh toán. URL này cần được khai báo với VNPAY để API này hoạt đồng (ví dụ: http://localhost:1234/api/Vnpay/IpnAction)
         /// </summary>
@@ -148,7 +151,9 @@ namespace CCSystem.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
+        #region Payment Callback Vnpay
         /// <summary>
         /// Trả kết quả thanh toán về cho người dùng
         /// </summary>
@@ -190,7 +195,7 @@ namespace CCSystem.API.Controllers
                 await _paymentService.UpdatePaymentAsync(payment);
                 Console.WriteLine("Cập nhật thanh toán thành công!");
 
-                return Ok(paymentResult);
+                return Ok(payment);
             }
             catch (Exception ex)
             {
@@ -198,7 +203,11 @@ namespace CCSystem.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        #endregion
     }
 
+
+
 }
+
+
