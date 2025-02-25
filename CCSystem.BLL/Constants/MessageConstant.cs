@@ -17,6 +17,10 @@ namespace CCSystem.BLL.Constants
             public const string NotExistCategoryName = "Category name does not exist in the system";
             public const string NotExistFile = "No file is provided";
             public const string NotExistServiceId = "Service id does not exist in the system";
+            public const string NotExistPaymentId = "Payment id does not exist in the system";
+            public const string NotExistBookingId = "Booking id does not exist in the system";
+
+
         }
 
         public static class AuthenticationMessage
@@ -69,6 +73,12 @@ namespace CCSystem.BLL.Constants
         public static class ServiceMessage
         {
             public const string CreatedNewServiceSuccessfully = "Create a new service Successfully";
+
+        }
+
+        public static class BookingMessage
+        {
+            public const string BookingIsPaid = "Booking is paid";
 
         }
 
