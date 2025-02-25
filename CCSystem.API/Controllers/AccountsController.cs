@@ -124,8 +124,8 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
         [Authorize]
-        [HttpGet(APIEndPointConstant.Account.GetAccountByIdEndpoint)]
-        public async Task<IActionResult> GetAccountProfile([FromRoute] AccountIdRequest idRequest)
+        [HttpGet(APIEndPointConstant.Account.GetAccountProfileEndpoint)]
+        public async Task<IActionResult> GetAccountProfile([FromBody] AccountIdRequest idRequest)
         {
             var claims = User.Claims;
             var result = await _accountService.GetAccountAsync(idRequest.Id, claims);
