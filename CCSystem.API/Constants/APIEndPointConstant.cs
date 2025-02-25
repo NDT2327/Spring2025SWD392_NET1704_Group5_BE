@@ -36,6 +36,7 @@
             public const string CreateCategoryEndpoint = CategoryEndpoint + "/createcategory";
             public const string UpdateCategoryEndpoint = CategoryEndpoint + "/updatecategory/{id}";
             public const string DeleteCategoryEndpoint = CategoryEndpoint + "/deletecategory/{id}";
+            public const string SearchCategoryEndpoint = CategoryEndpoint + "/search";
         }
 
         public static class Service
