@@ -171,12 +171,37 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
         [HttpPut(APIEndPointConstant.Account.UpdateAccountEndpoint)]
-        public async Task<IActionResult> UpdateAccount([FromRoute] AccountIdRequest idRequest, [FromBody] UpdateAccountRequest updateAccountRequest)
+        public async Task<IActionResult> UpdateAccount(int id, [FromBody] UpdateAccountRequest updateRequest)
         {
-            var claims = User.Claims;
-            await _accountService.UpdateAccountAsync(idRequest.Id, updateAccountRequest, claims);
-            return Ok();
+            if (updateRequest == null)
+            {
+                return BadRequest(new { message = "Invalid request data." });
+            }
+
+            try
+            {
+                var updatedAccount = await _accountService.UpdateAccountAsync(id, updateRequest);
+
+                return Ok(new
+                {
+                    message = "Account updated successfully.",
+                    data = updatedAccount
+                });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating the account.", error = ex.Message });
+            }
         }
+
         #endregion
     }
 }

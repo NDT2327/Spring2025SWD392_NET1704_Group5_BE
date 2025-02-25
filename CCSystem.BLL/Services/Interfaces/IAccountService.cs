@@ -15,7 +15,7 @@ namespace CCSystem.BLL.Services.Interfaces
         public Task<List<GetAccountResponse>> SearchAccountsAsync(AccountSearchRequest searchRequest);
         public Task<List<GetAccountResponse>>GetAccountsListAsync(AccountsListRequest accountsListRequest);
         public Task<GetAccountResponse> GetAccountByIdAsync(int idAccount);
-        public Task<GetAccountResponse>UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims);
+        public Task<GetAccountResponse>UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest);
         //public Task UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims);
         Task<bool> LockAccount(int idAccount);
         Task<bool> UnlockAccount(int idAccount);
