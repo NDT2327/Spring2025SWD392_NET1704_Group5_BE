@@ -26,7 +26,7 @@
             public const string UnlockAccountEndpoint = AccountEndpoint + "/{id}" + "/unlock";
             public const string UpdateAccountEndpoint = AccountEndpoint + "/update" + "/{id}";
             public const string GetAccountByIdEndpoint = AccountEndpoint + "/{id}";
-            public const string GetAccountProfileEndpoint = AccountEndpoint + "{id}/profile";
+            public const string GetAccountProfileEndpoint = AccountEndpoint + "/profile";
 
         }
         public static class Category

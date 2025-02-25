@@ -123,12 +123,17 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
-        [Authorize]
         [HttpGet(APIEndPointConstant.Account.GetAccountProfileEndpoint)]
-        public async Task<IActionResult> GetAccountProfile([FromBody] AccountIdRequest idRequest)
+        public async Task<IActionResult> GetAccountProfile([FromQuery] string accountId)
         {
+            if (string.IsNullOrWhiteSpace(accountId))
+            {
+                return BadRequest(new { message = "Account ID is required" });
+            }
+
             var claims = User.Claims;
-            var result = await _accountService.GetAccountAsync(idRequest.Id, claims);
+            int id = int.Parse(accountId);
+            var result = await _accountService.GetAccountByIdAsync(id);
             if (result == null)
             {
                 return NotFound(new { message = "Account not found" });

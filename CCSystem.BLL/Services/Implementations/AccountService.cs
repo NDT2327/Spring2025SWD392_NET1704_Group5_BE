@@ -138,6 +138,17 @@ namespace CCSystem.BLL.Services.Implementations
             return _mapper.Map<List<GetAccountResponse>>(accounts);
         }
 
+        public async Task<GetAccountResponse> GetAccountByIdAsync(int idAccount)
+        {
+            Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(idAccount);
+            if (existedAccount is null)
+            {
+                throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
+            }
+            GetAccountResponse getAccountResponse = this._mapper.Map<GetAccountResponse>(existedAccount);
+            return getAccountResponse;
+        }
+
         public async Task<GetAccountResponse> UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims)
         {
             try
@@ -175,6 +186,8 @@ namespace CCSystem.BLL.Services.Implementations
                 string error = ErrorUtil.GetErrorString("Exception", ex.Message);
                 throw new Exception(error);
             }
+
+
         }
     }
 }
