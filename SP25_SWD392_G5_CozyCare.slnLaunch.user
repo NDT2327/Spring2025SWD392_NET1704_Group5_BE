@@ -1,19 +1,6 @@
 [
   {
     "Name": "New Profile",
-    "Projects": [
-      {
-        "Path": "CCSystem.DAL\\CCSystem.DAL.csproj",
-        "Action": "StartWithoutDebugging"
-      },
-      {
-        "Path": "CCSystem.BLL\\CCSystem.BLL.csproj",
-        "Action": "StartWithoutDebugging"
-      },
-      {
-        "Path": "CCSystem.API\\CCSystem.API.csproj",
-        "Action": "StartWithoutDebugging"
-      }
-    ]
+    "Projects": []
   }
 ]
