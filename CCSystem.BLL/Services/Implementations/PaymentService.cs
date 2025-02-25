@@ -5,9 +5,13 @@ using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,11 +22,13 @@ namespace CCSystem.BLL.Services.Implementations
         private UnitOfWork _unitOfWork;
         private IMapper _mapper;
 
+
         public PaymentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._unitOfWork = (UnitOfWork)unitOfWork;
             this._mapper = mapper;
         }
+
 
         public async Task CreatePaymentAsync(Payment payment)
         {

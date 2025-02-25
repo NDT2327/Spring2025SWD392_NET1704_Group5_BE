@@ -204,8 +204,6 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
         {
             entity.HasKey(e => e.PaymentId).HasName("PK__Payments__A0D9EFC6454F04A1");
 
-            entity.HasIndex(e => e.TransactionId, "UQ__Payments__55433A6A76CB8DE4").IsUnique();
-
             entity.Property(e => e.PaymentId).HasColumnName("paymentId");
             entity.Property(e => e.Amount)
                 .HasColumnType("decimal(10, 2)")
@@ -231,9 +229,7 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnName("status");
-            entity.Property(e => e.TransactionId)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.TransactionId).HasMaxLength(50);
             entity.Property(e => e.UpdatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updatedDate");
