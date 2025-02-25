@@ -13,7 +13,7 @@ namespace CCSystem.DAL.FirebaseStorages.Repositories
 {
     public class FirebaseStorageRepository
     {
-        
+
         public FirebaseStorageRepository()
         {
         }
@@ -53,7 +53,9 @@ namespace CCSystem.DAL.FirebaseStorages.Repositories
 
                 string objectName = $"{folder}/{Path.GetFileNameWithoutExtension(localImagePath)}_{timestamp}.jpg"; // Create unique name
 
-                var stream = File.Open(localImagePath, FileMode.Open);
+                //var stream = File.Open(localImagePath, FileMode.Open);
+                await using var stream = new FileStream(localImagePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+
                 var firebaseStorage = new FirebaseStorage(
                     firebaseStorageModel.Bucket,
                     new FirebaseStorageOptions
@@ -78,16 +80,22 @@ namespace CCSystem.DAL.FirebaseStorages.Repositories
             }
         }
 
+
+
         public async Task<bool> DeleteImageFromFirebase(string imageUrl)
         {
             try
             {
-                var auth = await AuthenticateFirebaseAsync(); // Authenticate first
+                var auth = await AuthenticateFirebaseAsync(); // Ensure valid Firebase token
                 var firebaseStorageModel = GetFirebaseStorageProperties();
 
-                // Parse the file path from the image URL
+                // Parse and decode the object name correctly
                 Uri imageUri = new Uri(imageUrl);
-                string objectName = imageUri.AbsolutePath.Substring(1); // Remove the leading '/'
+
+                // Extract path after "/o/" and decode the path
+                string objectName = Uri.UnescapeDataString(imageUri.AbsolutePath.Split(new[] { "/o/" }, StringSplitOptions.None)[1]);
+
+                Console.WriteLine($"Extracted object name: {objectName}");
 
                 var firebaseStorage = new FirebaseStorage(
                     firebaseStorageModel.Bucket,
@@ -97,20 +105,19 @@ namespace CCSystem.DAL.FirebaseStorages.Repositories
                         ThrowOnCancel = true
                     });
 
-                // Delete the file from Firebase
-                await firebaseStorage
-                    .Child(objectName)
-                    .DeleteAsync();
+                // Delete the file from Firebase Storage
+                await firebaseStorage.Child(objectName).DeleteAsync();
 
-                // Optionally, remove the image reference from the database here if necessary
-
+                Console.WriteLine($"Successfully deleted: {objectName}");
                 return true;
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error deleting image: {ex}");
                 throw new Exception($"Error deleting image: {ex.Message}", ex);
             }
         }
+
 
         public async Task<string> DownloadImageFromFirebaseAsync(string imageUrl, string localSavePath)
         {

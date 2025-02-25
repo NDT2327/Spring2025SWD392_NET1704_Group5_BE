@@ -45,5 +45,17 @@ namespace CCSystem.DAL.Repositories
         {
             _context.Categories.Remove(category);
         }
+
+        public async Task<Category> GetCategoryByName(string name)
+        {
+            try
+            {
+                return await _context.Categories.FirstOrDefaultAsync(s => s.CategoryName == name);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
