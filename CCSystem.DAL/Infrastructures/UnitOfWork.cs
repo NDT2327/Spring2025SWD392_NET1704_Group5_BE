@@ -24,6 +24,8 @@ namespace CCSystem.DAL.Infrastructures
         private EmailRepository _emailRepository;
         private FirebaseStorageRepository _firebaseStorageRepository;
         private ServiceRepository _serviceRepository;
+        private PaymentRepository _paymentRepository;
+        private BookingRepository _bookingRepository;
 
 
         public UnitOfWork(IDbFactory dbFactory)
@@ -32,6 +34,30 @@ namespace CCSystem.DAL.Infrastructures
             if (this._dbContext == null)
             {
                 this._dbContext = dbFactory.InitDbContext();
+            }
+        }
+
+        public BookingRepository BookingRepository
+        {
+            get
+            {
+                if (this._bookingRepository == null)
+                {
+                    this._bookingRepository = new BookingRepository(this._dbContext);
+                }
+                return this._bookingRepository;
+            }
+        }
+
+        public PaymentRepository PaymentRepository
+        {
+            get
+            {
+                if (this._paymentRepository == null)
+                {
+                    this._paymentRepository = new PaymentRepository(this._dbContext);
+                }
+                return this._paymentRepository;
             }
         }
 

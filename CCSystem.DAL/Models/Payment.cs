@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace CCSystem.DAL.Models;
 
@@ -27,6 +28,9 @@ public partial class Payment
 
     public string Notes { get; set; }
 
+    public string TransactionId { get; set; }
+
+    [JsonIgnore]
     public virtual Booking Booking { get; set; }
 
     public virtual Account Customer { get; set; }

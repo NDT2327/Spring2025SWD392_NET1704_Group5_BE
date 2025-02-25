@@ -46,5 +46,14 @@
 
 
         }
+
+        public static class Payment
+        {
+            public const string PaymentEndpoint = ApiEndpoint + "/payments";
+            public const string PaymentCallbackVnpay = PaymentEndpoint + "/PaymentCallbackVnpay";
+            public const string PaymentIpnAction = ApiEndpoint + "/IpnAction";
+            public const string PaymentRefund = ApiEndpoint + "/refund";
+
+        }
     }
 }

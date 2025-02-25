@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
+using VNPAY.NET;
 
 namespace CCSystem.API.Extentions
 {
@@ -34,6 +35,9 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IServiceHomeService, ServiceHomeService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IVnpay, Vnpay>();
+            services.AddScoped<IBookingService, BookingService>();
 
             return services;
         }
