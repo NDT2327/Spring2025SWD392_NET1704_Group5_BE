@@ -10,13 +10,17 @@ namespace CCSystem.BLL.Constants
     {
         public static class CommonMessage
         {
-
             public const string NotExistEmail = "Email does not exist in the system.";
             public const string AlreadyExistEmail = "Email already exists in the system.";
             public const string NotExistAccountId = "Account id does not exist in the system.";
             public const string NotExistCategoryId = "Category id does not exist in the system";
             public const string NotExistCategoryName = "Category name does not exist in the system";
             public const string NotExistFile = "No file is provided";
+            public const string NotExistServiceId = "Service id does not exist in the system";
+            public const string NotExistPaymentId = "Payment id does not exist in the system";
+            public const string NotExistBookingId = "Booking id does not exist in the system";
+
+
         }
 
         public static class AuthenticationMessage
@@ -69,6 +73,12 @@ namespace CCSystem.BLL.Constants
         public static class ServiceMessage
         {
             public const string CreatedNewServiceSuccessfully = "Create a new service Successfully";
+
+        }
+
+        public static class BookingMessage
+        {
+            public const string BookingIsPaid = "Booking is paid";
 
         }
 

@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using CCSystem.BLL.Services.Interfaces;
+using CCSystem.BLL.DTOs.Category;
 using CCSystem.DAL.Models;
 using System;
 using CCSystem.DAL.DBContext;
@@ -12,6 +13,8 @@ using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CCSystem.BLL.Exceptions;
+using CCSystem.DAL.Repositories;
 
 namespace CCSystem.BLL.Service
 {
@@ -62,15 +65,37 @@ namespace CCSystem.BLL.Service
             await _unitOfWork.CommitAsync(); 
         }
 
-        public async Task<bool> DeleteCategoryAsync(int id)
+        public async Task DeleteCategoryAsync(int id)
         {
-
             var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
-            if (category == null) return false;
+            if (category == null)
+            {
+                throw new NotFoundException("Category not found.");
+            }
 
-            _unitOfWork.CategoryRepository.DeleteCategory(category); 
-            await _unitOfWork.CommitAsync(); 
-            return true;
+            // Chuyển trạng thái sang INACTIVE
+            category.IsActive = false;
+            _unitOfWork.CategoryRepository.UpdateCategory(category);
+            await _unitOfWork.CommitAsync();
         }
+
+        public async Task<List<CategoryResponse>> SearchCategoryAsync(string categoryName, bool? isActive)
+        {
+            try
+            {
+                var categories = await _unitOfWork.CategoryRepository.SearchCategoryAsync(categoryName, isActive);
+
+                // Map the Category entities to CategoryResponse DTOs
+                var categoryResponses = _mapper.Map<List<CategoryResponse>>(categories);
+
+                return categoryResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
     }
 }

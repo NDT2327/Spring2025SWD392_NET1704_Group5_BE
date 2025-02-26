@@ -24,6 +24,8 @@
             public const string SearchAccountsEndpoint = AccountEndpoint + "/search";
             public const string LockAccountEndpoint = AccountEndpoint + "/{id}" + "/lock";
             public const string UnlockAccountEndpoint = AccountEndpoint + "/{id}" + "/unlock";
+            public const string UpdateAccountEndpoint = AccountEndpoint + "/update" + "/{id}";
+            public const string GetAccountByIdEndpoint = AccountEndpoint + "/{id}";
 
         }
         public static class Category
@@ -34,12 +36,24 @@
             public const string CreateCategoryEndpoint = CategoryEndpoint + "/createcategory";
             public const string UpdateCategoryEndpoint = CategoryEndpoint + "/updatecategory/{id}";
             public const string DeleteCategoryEndpoint = CategoryEndpoint + "/deletecategory/{id}";
+            public const string SearchCategoryEndpoint = CategoryEndpoint + "/search";
         }
 
         public static class Service
         {
             public const string ServiceEndpoint = ApiEndpoint + "/services";
             public const string SearchServiceEndpoint = ServiceEndpoint + "/search";
+            public const string GetServiceByIdEndpoint = ServiceEndpoint + "/{id}";
+
+
+        }
+
+        public static class Payment
+        {
+            public const string PaymentEndpoint = ApiEndpoint + "/payments";
+            public const string PaymentCallbackVnpay = PaymentEndpoint + "/PaymentCallbackVnpay";
+            public const string PaymentIpnAction = ApiEndpoint + "/IpnAction";
+            public const string PaymentRefund = ApiEndpoint + "/refund";
 
         }
     }

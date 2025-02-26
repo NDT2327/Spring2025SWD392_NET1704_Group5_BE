@@ -1,6 +1,7 @@
 ﻿using CCSystem.API.Constants;
 using CCSystem.API.Middlewares;
 using CCSystem.BLL.Errors;
+using CCSystem.BLL.Service;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
@@ -12,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
+using VNPAY.NET;
 
 namespace CCSystem.API.Extentions
 {
@@ -31,9 +33,13 @@ namespace CCSystem.API.Extentions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IServiceHomeService, ServiceHomeService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IVnpay, Vnpay>();
+            services.AddScoped<IBookingService, BookingService>();
 
             return services;
         }

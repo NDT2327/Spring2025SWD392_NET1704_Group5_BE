@@ -11,6 +11,10 @@ namespace CCSystem.BLL.Services.Interfaces
     {
         public Task CreateServiceAsync(PostServiceRequest request);
 
-        public Task<List<ServiceResponse>> SearchServiceAsync(SearchServiceRequest request);   
+        public Task<List<ServiceResponse>> SearchServiceAsync(SearchServiceRequest request);
+
+        public Task<List<ServiceResponse>> GetListServicesAsync();
+
+        public Task<ServiceResponse> GetServiceById(int id);
     }
 }
