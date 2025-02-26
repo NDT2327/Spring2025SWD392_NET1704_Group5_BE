@@ -55,10 +55,10 @@ namespace CCSystem.API.Controllers
                 var booking = await _bookingService.GetBooking(request.BookingId);
                 if (booking == null)
                     return NotFound("Booking không tồn tại.");
-                //if (booking.PaymentStatus.Contains("Paid"))
-                //{
-                //    throw new BadRequestException(MessageConstant.BookingMessage.BookingIsPaid);
-                //}
+                if (booking.PaymentStatus == "Paid")
+                {
+                    throw new BadRequestException(MessageConstant.BookingMessage.BookingIsPaid);
+                }
 
                 // Tạo Payment mới liên kết với Booking
                 var payment = new Payment
@@ -206,8 +206,4 @@ namespace CCSystem.API.Controllers
         #endregion
     }
 
-
-
 }
-
-
