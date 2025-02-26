@@ -158,9 +158,19 @@ namespace CCSystem.DAL.Infrastructures
             this._dbContext.SaveChanges();
         }
 
+
         public async Task CommitAsync()
         {
-            await this._dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"🔥 Error: {ex.InnerException?.Message ?? ex.Message}");
+                throw;
+            }
         }
     }
 }
+

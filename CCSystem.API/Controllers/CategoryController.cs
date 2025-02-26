@@ -16,6 +16,11 @@ using CCSystem.BLL.Utils;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CCSystem.BLL.Services.Interfaces;
+using CCSystem.BLL.DTOs.Category;
+using CCSystem.API.Constants;
 
 namespace CCSystem.API.Controllers
 {
@@ -25,99 +30,60 @@ namespace CCSystem.API.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryRepository _categoryRepository;
-        private ICategoryService _categoryHomeService;
+        private ICategoryService _categoryService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CategoryController"/> class.
-        /// </summary>
-        /// <param name="categoryRepository">The category repository.</param>
-        public CategoryController(CategoryRepository categoryRepository)
-        {
-            _categoryRepository = categoryRepository;
-        }
+    public CategoryController(ICategoryService categoryService)
+    {
+        _categoryService = categoryService;
+    }
 
-        #region Get All categories
-        /// <summary>
-        /// Get all categories
-        /// </summary>
-        /// <returns>List of categories</returns>
-        [HttpGet(APIEndPointConstant.Category.GetAllCategoriesEndpoint)]
-        public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories()
-        {
-            var categories = await _categoryRepository.GetAllCategoriesAsync();
-            return Ok(categories);
-        }
-        #endregion
+    /// <summary>
+    /// Get all categories.
+    /// </summary>
+    [HttpGet(APIEndPointConstant.Category.GetAllCategoriesEndpoint)]
+    public async Task<IActionResult> GetAllCategories()
+    {
+        IEnumerable<CategoryResponse> categories = await _categoryService.GetAllCategoriesAsync();
+        return Ok(categories);
+    }
 
-        #region Get Category By Id
-        /// <summary>
-        /// Get category by Id
-        /// </summary>
-        /// <param name="id">Category Id</param>
-        /// <returns>Category</returns>
-        [HttpGet(APIEndPointConstant.Category.GetCategoryByIdEndpoint)]
-        public async Task<ActionResult<Category>> GetCategoryById(int id)
+    /// <summary>
+    /// Get category by ID.
+    /// </summary>
+    [HttpGet(APIEndPointConstant.Category.GetCategoryByIdEndpoint)]
+    public async Task<IActionResult> GetCategoryById(int id)
+    {
+        CategoryResponse? category = await _categoryService.GetCategoryByIdAsync(id);
+        if (category == null) return NotFound(new { Message = "Category not found." });
+        return Ok(category);
+    }
+
+    /// <summary>
+    /// Create a new category.
+    /// </summary>
+    [HttpPost(APIEndPointConstant.Category.CreateCategoryEndpoint)]
+        public async Task<ActionResult<CategoryResponse>> CreateCategory([FromBody] CategoryRequest request)
         {
-            var category = await _categoryRepository.GetCategoryByIdAsync(id);
-            if (category == null)
+            try
             {
-                return NotFound();
+                var category = await _categoryService.CreateCategoryAsync(request);
+                return CreatedAtAction(nameof(GetCategoryById), new { id = category.CategoryId }, category);
             }
-            return Ok(category);
-        }
-        #endregion
-
-        #region Create Category
-        /// <summary>
-        /// Create a new category
-        /// </summary>
-        /// <param name="dto">Category data transfer object</param>
-        /// <returns>Created category</returns>
-        [HttpPost(APIEndPointConstant.Category.CreateCategoryEndpoint)]
-        public async Task<ActionResult> CreateCategory([FromBody] CreateCategory dto)
-        {
-            var category = new Category
+            catch (Exception ex)
             {
-                CategoryName = dto.Name,
-                Description = dto.Description,
-                Image = "",
-                IsActive = true,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedDate = DateTime.UtcNow
-            };
-
-            await _categoryRepository.CreateCategoryAsync(category);
-            return CreatedAtAction(nameof(GetCategoryById), new { id = category.CategoryId }, category);
+                return StatusCode(500, new { message = ex.InnerException?.Message ?? ex.Message });
+            }
         }
-        #endregion
 
-        #region Update Category
         /// <summary>
-        /// Update a category
+        /// Update a category.
         /// </summary>
-        /// <param name="id">Category Id</param>
-        /// <param name="category">Updated category data</param>
-        /// <returns>No content</returns>
         [HttpPut(APIEndPointConstant.Category.UpdateCategoryEndpoint)]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
-        {
-            if (id != category.CategoryId)
-            {
-                return BadRequest();
-            }
-
-            var existingCategory = await _categoryRepository.GetCategoryByIdAsync(id);
-            if (existingCategory == null)
-            {
-                return NotFound();
-            }
-
-            await _categoryRepository.UpdateCategoryAsync(category);
-
-            return NoContent();
-        }
-        #endregion
+    public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryRequest request)
+    {
+        await _categoryService.UpdateCategoryAsync(id, request);
+        return Ok(new { Message = "Category updated successfully." });
+    }
 
         #region Delete Category
         /// <summary>
@@ -128,13 +94,13 @@ namespace CCSystem.API.Controllers
         [HttpDelete(APIEndPointConstant.Category.DeleteCategoryEndpoint)]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+            var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            await _categoryRepository.DeleteCategoryAsync(id);
+            await _categoryService.DeleteCategoryAsync(id);
 
             return NoContent();
         }
@@ -160,7 +126,7 @@ namespace CCSystem.API.Controllers
         {
             string categoryName = searchCategoryRequest.CategoryName;
             bool? isActive = searchCategoryRequest.IsActive;
-            var categories = await _categoryHomeService.SearchCategoryAsync(categoryName, isActive);
+            var categories = await _categoryService.SearchCategoryAsync(categoryName, isActive);
             return Ok(categories);
         }
         #endregion

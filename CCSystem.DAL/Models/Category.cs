@@ -2,18 +2,22 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace CCSystem.DAL.Models;
 
 public partial class Category
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
     public int CategoryId { get; set; }
+    [Required]
+    public string CategoryName { get; set; } = string.Empty;
 
-    public string CategoryName { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public string Description { get; set; }
-
-    public string Image { get; set; }
+    public string Image { get; set; } = string.Empty;
 
     public bool? IsActive { get; set; }
 

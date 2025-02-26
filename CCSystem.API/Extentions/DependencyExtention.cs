@@ -1,6 +1,7 @@
 ﻿using CCSystem.API.Constants;
 using CCSystem.API.Middlewares;
 using CCSystem.BLL.Errors;
+using CCSystem.BLL.Service;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
@@ -32,6 +33,7 @@ namespace CCSystem.API.Extentions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IServiceHomeService, ServiceHomeService>();
