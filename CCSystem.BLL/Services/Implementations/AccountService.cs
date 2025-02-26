@@ -140,7 +140,6 @@ namespace CCSystem.BLL.Services.Implementations
 
         public async Task<GetAccountResponse> UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims)
         {
-
             try
             {
                 Claim registeredEmailClaim = claims.First(x => x.Type == ClaimTypes.Email);

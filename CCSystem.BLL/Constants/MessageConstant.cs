@@ -10,10 +10,13 @@ namespace CCSystem.BLL.Constants
     {
         public static class CommonMessage
         {
-
             public const string NotExistEmail = "Email does not exist in the system.";
             public const string AlreadyExistEmail = "Email already exists in the system.";
             public const string NotExistAccountId = "Account id does not exist in the system.";
+            public const string NotExistCategoryId = "Category id does not exist in the system";
+            public const string NotExistCategoryName = "Category name does not exist in the system";
+            public const string NotExistFile = "No file is provided";
+            public const string NotExistServiceId = "Service id does not exist in the system";
         }
 
         public static class AuthenticationMessage
@@ -62,5 +65,12 @@ namespace CCSystem.BLL.Constants
             public const string NotAuthenticatedEmail = "Email has not been previously authenticated.";
             public const string NotVerifiedEmail = "Email is not yet authenticated with the previously sent OTP code.";
         }
+
+        public static class ServiceMessage
+        {
+            public const string CreatedNewServiceSuccessfully = "Create a new service Successfully";
+
+        }
+
     }
 }
