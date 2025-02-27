@@ -79,6 +79,10 @@
             "Redis.OM": {
               "target": "Package",
               "version": "[0.7.6, )"
+            },
+            "VNPAY.NET": {
+              "target": "Package",
+              "version": "[8.5.0, )"
             }
           },
           "imports": [

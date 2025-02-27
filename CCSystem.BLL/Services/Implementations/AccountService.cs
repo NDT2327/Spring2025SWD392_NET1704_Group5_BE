@@ -130,44 +130,32 @@ namespace CCSystem.BLL.Services.Implementations
 
         public async Task<List<GetAccountResponse>> GetAccountsListAsync(AccountsListRequest accountsListRequest)
         {
-            var accounts = await _unitOfWork.AccountRepository.GetAccountsListAsync(
-            accountsListRequest.PageIndex,
-            accountsListRequest.PageSize,
-            accountsListRequest.SearchByName,
-            accountsListRequest.Sort);
-            return _mapper.Map<List<GetAccountResponse>>(accounts);
-        }
-
-        public async Task<GetAccountResponse> UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest, IEnumerable<Claim> claims)
-        {
             try
             {
-                Claim registeredEmailClaim = claims.First(x => x.Type == ClaimTypes.Email);
-                string email = registeredEmailClaim.Value;
-                Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(idAccount);
-                if (existedAccount is null)
+                // Validate input
+                if (accountsListRequest is null)
                 {
-                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
+                    throw new BadRequestException("Invalid request data.");
                 }
-                if (existedAccount.Email.Equals(email) == false)
-                {
-                    throw new BadRequestException(MessageConstant.AccountMessage.AccountIdNotBelongYourAccount);
-                }
-                existedAccount = this._mapper.Map(updateAccountRequest, existedAccount);
-                existedAccount.UpdatedDate = DateTime.Now;
-                this._unitOfWork.AccountRepository.UpdateAccount(existedAccount);
-                await this._unitOfWork.CommitAsync();
-                GetAccountResponse getAccountResponse = this._mapper.Map<GetAccountResponse>(existedAccount);
-                return getAccountResponse;
+
+                // Fetch accounts list from repository
+                var accounts = await _unitOfWork.AccountRepository.GetAccountsListAsync(
+                    accountsListRequest.PageIndex,
+                    accountsListRequest.PageSize,
+                    accountsListRequest.SearchByName,
+                    accountsListRequest.Sort);
+
+                // Return mapped account list
+                return _mapper.Map<List<GetAccountResponse>>(accounts);
             }
             catch (NotFoundException ex)
             {
-                string error = ErrorUtil.GetErrorString("Account id", ex.Message);
+                string error = ErrorUtil.GetErrorString("Accounts List", ex.Message);
                 throw new NotFoundException(error);
             }
             catch (BadRequestException ex)
             {
-                string error = ErrorUtil.GetErrorString("Account id", ex.Message);
+                string error = ErrorUtil.GetErrorString("Invalid Request", ex.Message);
                 throw new BadRequestException(error);
             }
             catch (Exception ex)
@@ -176,5 +164,67 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(error);
             }
         }
+
+
+        public async Task<GetAccountResponse> GetAccountByIdAsync(int idAccount)
+        {
+            Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(idAccount);
+            if (existedAccount is null)
+            {
+                throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
+            }
+            GetAccountResponse getAccountResponse = this._mapper.Map<GetAccountResponse>(existedAccount);
+            return getAccountResponse;
+        }
+
+        public async Task<GetAccountResponse> UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest)
+        {
+            try
+            {
+                // Fetch the account from the database
+                var existingAccount = await _unitOfWork.AccountRepository.GetAccountAsync(idAccount);
+
+                if (existingAccount == null)
+                {
+                    throw new NotFoundException($"Account with ID {idAccount} not found.");
+                }
+
+                // Update only the provided fields (null checks)
+                if (!string.IsNullOrEmpty(updateAccountRequest.Address))
+                {
+                    existingAccount.Address = updateAccountRequest.Address;
+                }
+
+                if (!string.IsNullOrEmpty(updateAccountRequest.Phone))
+                {
+                    existingAccount.Phone = updateAccountRequest.Phone;
+                }
+
+                if (!string.IsNullOrEmpty(updateAccountRequest.FullName))
+                {
+                    existingAccount.FullName = updateAccountRequest.FullName;
+                }
+
+
+                // Update the modification timestamp
+                existingAccount.UpdatedDate = DateTime.UtcNow;
+
+                // Save changes to the database
+                _unitOfWork.AccountRepository.UpdateAccount(existingAccount);
+                await _unitOfWork.CommitAsync();
+
+                // Map and return the updated account
+                return _mapper.Map<GetAccountResponse>(existingAccount);
+            }
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException($"Update failed: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An unexpected error occurred: {ex.Message}");
+            }
+        }
+
     }
 }

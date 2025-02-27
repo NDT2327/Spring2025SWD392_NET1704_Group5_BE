@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Cqrf+AyPfTE=",
+  "dgSpecHash": "X/1kXJRcXhQ=",
   "success": true,
   "projectFilePath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.API\\CCSystem.API.csproj",
   "expectedPackageFiles": [
@@ -231,7 +231,8 @@
     "C:\\Users\\nguye\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\nguye\\.nuget\\packages\\ulid\\1.2.6\\ulid.1.2.6.nupkg.sha512"
+    "C:\\Users\\nguye\\.nuget\\packages\\ulid\\1.2.6\\ulid.1.2.6.nupkg.sha512",
+    "C:\\Users\\nguye\\.nuget\\packages\\vnpay.net\\8.5.0\\vnpay.net.8.5.0.nupkg.sha512"
   ],
   "logs": []
 }

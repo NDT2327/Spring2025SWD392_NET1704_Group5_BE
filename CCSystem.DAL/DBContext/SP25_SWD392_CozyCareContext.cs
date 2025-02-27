@@ -229,6 +229,7 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnName("status");
+            entity.Property(e => e.TransactionId).HasMaxLength(50);
             entity.Property(e => e.UpdatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updatedDate");

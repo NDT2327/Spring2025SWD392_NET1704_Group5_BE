@@ -208,3 +208,4 @@ D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.API\obj\De
 D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.API\obj\Debug\net8.0\CCSystem.API.pdb
 D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.API\obj\Debug\net8.0\CCSystem.API.genruntimeconfig.cache
 D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.API\obj\Debug\net8.0\ref\CCSystem.API.dll
+D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.API\bin\Debug\net8.0\VNPAY.NET.dll

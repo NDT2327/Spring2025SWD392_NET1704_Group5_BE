@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
+using VNPAY.NET;
 
 namespace CCSystem.API.Extentions
 {
@@ -34,6 +35,9 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IServiceHomeService, ServiceHomeService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IVnpay, Vnpay>();
+            services.AddScoped<IBookingService, BookingService>();
 
             return services;
         }
@@ -97,7 +101,7 @@ namespace CCSystem.API.Extentions
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
+                    Scheme = "Bearer ",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
@@ -112,7 +116,7 @@ namespace CCSystem.API.Extentions
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
                             }
-                        },
+                        },  
                         new string[]{}
                     }
                 });

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "TCm0f3K5bUo=",
+  "dgSpecHash": "dSMYPZEUEec=",
   "success": true,
   "projectFilePath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.BLL\\CCSystem.BLL.csproj",
   "expectedPackageFiles": [
@@ -218,7 +218,8 @@
     "C:\\Users\\nguye\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\system.xml.xpath\\4.3.0\\system.xml.xpath.4.3.0.nupkg.sha512",
     "C:\\Users\\nguye\\.nuget\\packages\\system.xml.xpath.xdocument\\4.3.0\\system.xml.xpath.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\nguye\\.nuget\\packages\\ulid\\1.2.6\\ulid.1.2.6.nupkg.sha512"
+    "C:\\Users\\nguye\\.nuget\\packages\\ulid\\1.2.6\\ulid.1.2.6.nupkg.sha512",
+    "C:\\Users\\nguye\\.nuget\\packages\\vnpay.net\\8.5.0\\vnpay.net.8.5.0.nupkg.sha512"
   ],
   "logs": []
 }

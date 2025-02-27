@@ -19,9 +19,9 @@
             <param name="accountId">Account ID to unlock</param>
             <returns>Success message if unlocked</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(System.String)" -->
         <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccounts(CCSystem.BLL.DTOs.Accounts.AccountsListRequest)" -->
-        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.UpdateAccount(CCSystem.BLL.DTOs.Accounts.AccountIdRequest,CCSystem.BLL.DTOs.Accounts.UpdateAccountRequest)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.UpdateAccount(System.Int32,CCSystem.BLL.DTOs.Accounts.UpdateAccountRequest)" -->
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.
@@ -228,6 +228,38 @@
             </summary>
             <param name="id">Category Id</param>
             <returns>No content</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.GetSearchCategoryAsync(CCSystem.BLL.DTOs.Category.SearchCategoryRequest)">
+            <summary>
+            Search categories
+            </summary>
+            <returns>List of categories</returns>
+            <response code="200">Return a list of services matching the criteria.</response>
+            <response code="400">Invalid search criteria or business logic error.</response>
+            <response code="500">Unexpected system error.</response>
+            <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw error if search criteria are invalid.</exception>
+            <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw error if related data are not found.</exception>
+            <exception cref="T:System.Exception">Throw error for unexpected system issues.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.CreatePaymentUrl(CCSystem.BLL.DTOs.Payments.CreatePaymentRequest)">
+            <summary>
+            Tạo url thanh toán
+            </summary>
+            <param name="money">Số tiền phải thanh toán</param>
+            <param name="description">Mô tả giao dịch</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.IpnAction">
+            <summary>
+            Thực hiện hành động sau khi thanh toán. URL này cần được khai báo với VNPAY để API này hoạt đồng (ví dụ: http://localhost:1234/api/Vnpay/IpnAction)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.Callback">
+            <summary>
+            Trả kết quả thanh toán về cho người dùng
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:CCSystem.API.Controllers.ServicesController.PostCreateServiceAsync(CCSystem.BLL.DTOs.Services.PostServiceRequest)">
             <summary>
