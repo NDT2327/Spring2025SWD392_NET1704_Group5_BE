@@ -62,6 +62,7 @@ namespace CCSystem.API.Controllers
     /// Create a new category.
     /// </summary>
     [HttpPost(APIEndPointConstant.Category.CreateCategoryEndpoint)]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         public async Task<ActionResult<CategoryResponse>> CreateCategory([FromBody] CategoryRequest request)
         {
             try
@@ -79,7 +80,8 @@ namespace CCSystem.API.Controllers
         /// Update a category.
         /// </summary>
         [HttpPut(APIEndPointConstant.Category.UpdateCategoryEndpoint)]
-    public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryRequest request)
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryRequest request)
     {
         await _categoryService.UpdateCategoryAsync(id, request);
         return Ok(new { Message = "Category updated successfully." });
@@ -92,6 +94,7 @@ namespace CCSystem.API.Controllers
         /// <param name="id">Category Id</param>
         /// <returns>No content</returns>
         [HttpDelete(APIEndPointConstant.Category.DeleteCategoryEndpoint)]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
