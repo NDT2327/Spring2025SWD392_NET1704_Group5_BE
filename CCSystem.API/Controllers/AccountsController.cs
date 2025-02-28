@@ -82,7 +82,7 @@ namespace CCSystem.API.Controllers
         /// </summary>
         /// <param name="accountId">Account ID to lock</param>
         /// <returns>Success message if locked</returns>
-        [HttpPost(APIEndPointConstant.Account.LockAccountEndpoint)]
+        [HttpPut(APIEndPointConstant.Account.LockAccountEndpoint)]
         [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         public async Task<IActionResult > LockAccount([FromRoute] AccountIdRequest accountId)
         {
@@ -101,7 +101,7 @@ namespace CCSystem.API.Controllers
         /// </summary>
         /// <param name="accountId">Account ID to unlock</param>
         /// <returns>Success message if unlocked</returns>
-        [HttpPost(APIEndPointConstant.Account.UnlockAccountEndpoint)]
+        [HttpPut(APIEndPointConstant.Account.UnlockAccountEndpoint)]
         [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         public async Task<IActionResult> UnlockAccount([FromRoute] AccountIdRequest accountId)
         {

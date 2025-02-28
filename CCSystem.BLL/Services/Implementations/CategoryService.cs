@@ -7,14 +7,12 @@ using System;
 using CCSystem.DAL.DBContext;
 
 using AutoMapper;
-using CCSystem.BLL.DTOs.Category;
-using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Infrastructures;
-using CCSystem.DAL.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CCSystem.BLL.Exceptions;
 using CCSystem.DAL.Repositories;
+using CCSystem.BLL.Utils;
 
 namespace CCSystem.BLL.Service
 {
@@ -28,31 +26,103 @@ namespace CCSystem.BLL.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
         public async Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync()
         {
             var categories = await _unitOfWork.CategoryRepository.GetAllCategoriesAsync();
-            return _mapper.Map<IEnumerable<CategoryResponse>>(categories);
 
+            var response = categories.Select(category => new CategoryResponse
+            {
+                CategoryId = category.CategoryId,
+                CategoryName = category.CategoryName,
+                Description = category.Description,
+                ImageUrl = category.Image,  // 🔴 Sửa ở đây!  
+                IsActive = category.IsActive ?? false,
+                CreatedDate = category.CreatedDate ?? DateTime.UtcNow,
+                UpdatedDate = category.UpdatedDate ?? DateTime.UtcNow
+            });
+
+            return response;
         }
 
         public async Task<CategoryResponse?> GetCategoryByIdAsync(int id)
         {
             var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
-            return category == null ? null : _mapper.Map<CategoryResponse>(category);
+            if (category == null)
+            {
+                return null;
+            }
+
+            // Ánh xạ thủ công, đảm bảo Image được gán đúng
+            var response = new CategoryResponse
+            {
+                CategoryId = category.CategoryId,
+                CategoryName = category.CategoryName,
+                Description = category.Description,
+                ImageUrl = category.Image, // Gán đúng ảnh
+                IsActive = category.IsActive ?? false,
+                CreatedDate = category.CreatedDate ?? DateTime.UtcNow,
+                UpdatedDate = category.UpdatedDate ?? DateTime.UtcNow
+            };
+
+            return response;
         }
 
         public async Task<CategoryResponse> CreateCategoryAsync(CategoryRequest request)
         {
-            var category = _mapper.Map<Category>(request);
+            string folderName = "category_images";
+            bool isUpload = false;
+            string imageUrl = "";
+            string tempFilePath = "";
 
-            await _unitOfWork.CategoryRepository.CreateCategoryAsync(category);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                if (request.Image != null && request.Image.Length > 0)
+                {
+                    // Tạo đường dẫn file tạm
+                    tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName));
 
-            // 💡 Tải lại category từ DB để đảm bảo có ID đúng
-            var savedCategory = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(category.CategoryId);
+                    // Lưu file tạm thời
+                    await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        await request.Image.CopyToAsync(stream);
+                    }
 
-            return _mapper.Map<CategoryResponse>(savedCategory);
+                    // Tải lên Firebase
+                    imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        isUpload = true;
+                    }
+                }
+
+                // Tạo đối tượng Category
+                var category = new Category
+                {
+                    CategoryName = request.CategoryName,
+                    Description = request.Description,
+                    IsActive = request.IsActive,
+                    Image = imageUrl
+                };
+
+                await _unitOfWork.CategoryRepository.CreateCategoryAsync(category);
+                await _unitOfWork.CommitAsync();
+
+                var savedCategory = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(category.CategoryId);
+
+                return _mapper.Map<CategoryResponse>(savedCategory);
+            }
+            catch (Exception ex)
+            {
+                if (isUpload)
+                {
+                    await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(imageUrl);
+                }
+                throw new Exception("Failed to create category: " + ex.Message);
+            }
+            finally
+            {
+                await FileUtils.SafeDeleteFileAsync(tempFilePath);
+            }
         }
 
         public async Task UpdateCategoryAsync(int id, CategoryRequest request)

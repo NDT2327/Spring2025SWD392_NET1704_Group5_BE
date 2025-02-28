@@ -41,49 +41,57 @@ namespace CCSystem.API.Controllers
     /// Get all categories.
     /// </summary>
     [HttpGet(APIEndPointConstant.Category.GetAllCategoriesEndpoint)]
-    public async Task<IActionResult> GetAllCategories()
-    {
-        IEnumerable<CategoryResponse> categories = await _categoryService.GetAllCategoriesAsync();
-        return Ok(categories);
-    }
-
-    /// <summary>
-    /// Get category by ID.
-    /// </summary>
-    [HttpGet(APIEndPointConstant.Category.GetCategoryByIdEndpoint)]
-    public async Task<IActionResult> GetCategoryById(int id)
-    {
-        CategoryResponse? category = await _categoryService.GetCategoryByIdAsync(id);
-        if (category == null) return NotFound(new { Message = "Category not found." });
-        return Ok(category);
-    }
-
-    /// <summary>
-    /// Create a new category.
-    /// </summary>
-    [HttpPost(APIEndPointConstant.Category.CreateCategoryEndpoint)]
-        public async Task<ActionResult<CategoryResponse>> CreateCategory([FromBody] CategoryRequest request)
+        public async Task<IActionResult> GetAllCategories()
         {
-            try
+            var categories = await _categoryService.GetAllCategoriesAsync();
+
+            foreach (var category in categories)
             {
-                var category = await _categoryService.CreateCategoryAsync(request);
-                return CreatedAtAction(nameof(GetCategoryById), new { id = category.CategoryId }, category);
+                Console.WriteLine($"Category: {category.CategoryName}, Image: {category.ImageUrl}");
             }
-            catch (Exception ex)
+
+            return Ok(new { Message = "Success", Data = categories });
+        }
+
+        /// <summary>
+        /// Get category by ID.
+        /// </summary>
+        [HttpGet(APIEndPointConstant.Category.GetCategoryByIdEndpoint)]
+        public async Task<IActionResult> GetCategoryById(int id)
+        {
+            var category = await _categoryService.GetCategoryByIdAsync(id);
+
+            if (category == null)
             {
-                return StatusCode(500, new { message = ex.InnerException?.Message ?? ex.Message });
+                return NotFound(new { Message = "Category not found." });
             }
+
+            Console.WriteLine($"[DEBUG] Fetched Category: {category.CategoryName}, ImageUrl: {category.ImageUrl}");
+
+            return Ok(new { Message = "Success", Data = category });
+        }
+
+        /// <summary>
+        /// Create a new category.
+        /// </summary>
+        [HttpPost(APIEndPointConstant.Category.CreateCategoryEndpoint)]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        public async Task<IActionResult> CreateCategory([FromForm] CategoryRequest request)
+        {
+            await _categoryService.CreateCategoryAsync(request);
+            return Ok(new { Message = "Category created successfully." });
         }
 
         /// <summary>
         /// Update a category.
         /// </summary>
         [HttpPut(APIEndPointConstant.Category.UpdateCategoryEndpoint)]
-    public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryRequest request)
-    {
-        await _categoryService.UpdateCategoryAsync(id, request);
-        return Ok(new { Message = "Category updated successfully." });
-    }
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        public async Task<IActionResult> UpdateCategory(int id, [FromForm] CategoryRequest request)
+        {
+            await _categoryService.UpdateCategoryAsync(id, request);
+            return Ok(new { Message = "Category updated successfully." });
+        }
 
         #region Delete Category
         /// <summary>
@@ -91,7 +99,8 @@ namespace CCSystem.API.Controllers
         /// </summary>
         /// <param name="id">Category Id</param>
         /// <returns>No content</returns>
-        [HttpDelete(APIEndPointConstant.Category.DeleteCategoryEndpoint)]
+        [HttpPut(APIEndPointConstant.Category.DeleteCategoryEndpoint)]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
