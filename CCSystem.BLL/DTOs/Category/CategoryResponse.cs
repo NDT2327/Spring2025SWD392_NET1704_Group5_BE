@@ -9,17 +9,13 @@ namespace CCSystem.BLL.DTOs.Category
     public class CategoryResponse
     {
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Image { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
 
-        public string CategoryName { get; set; }
 
-        public string Description { get; set; }
-
-        public string Image { get; set; }
-
-        public bool? IsActive { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
-
-        public DateTime? UpdatedDate { get; set; }
     }
 }

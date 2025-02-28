@@ -188,39 +188,25 @@
             Controller for managing categories.
             </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.CategoryController.#ctor(CCSystem.DAL.Repositories.CategoryRepository)">
-            <summary>
-            Initializes a new instance of the <see cref="T:CCSystem.API.Controllers.CategoryController"/> class.
-            </summary>
-            <param name="categoryRepository">The category repository.</param>
-        </member>
         <member name="M:CCSystem.API.Controllers.CategoryController.GetAllCategories">
             <summary>
-            Get all categories
+            Get all categories.
             </summary>
-            <returns>List of categories</returns>
         </member>
         <member name="M:CCSystem.API.Controllers.CategoryController.GetCategoryById(System.Int32)">
             <summary>
-            Get category by Id
+            Get category by ID.
             </summary>
-            <param name="id">Category Id</param>
-            <returns>Category</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.CategoryController.CreateCategory(CCSystem.BLL.DTOs.Accounts.CreateCategory)">
+        <member name="M:CCSystem.API.Controllers.CategoryController.CreateCategory(CCSystem.BLL.DTOs.Category.CategoryRequest)">
             <summary>
-            Create a new category
+            Create a new category.
             </summary>
-            <param name="dto">Category data transfer object</param>
-            <returns>Created category</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.CategoryController.UpdateCategory(System.Int32,CCSystem.DAL.Models.Category)">
+        <member name="M:CCSystem.API.Controllers.CategoryController.UpdateCategory(System.Int32,CCSystem.BLL.DTOs.Category.CategoryRequest)">
             <summary>
-            Update a category
+            Update a category.
             </summary>
-            <param name="id">Category Id</param>
-            <param name="category">Updated category data</param>
-            <returns>No content</returns>
         </member>
         <member name="M:CCSystem.API.Controllers.CategoryController.DeleteCategory(System.Int32)">
             <summary>

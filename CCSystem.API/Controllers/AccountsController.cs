@@ -84,7 +84,7 @@ namespace CCSystem.API.Controllers
         /// <returns>Success message if locked</returns>
         [HttpPost(APIEndPointConstant.Account.LockAccountEndpoint)]
         [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
-        public async Task<IActionResult> LockAccount([FromRoute] AccountIdRequest accountId)
+        public async Task<IActionResult > LockAccount([FromRoute] AccountIdRequest accountId)
         {
             var result = await _accountService.LockAccount(accountId.Id);
             if (!result)
