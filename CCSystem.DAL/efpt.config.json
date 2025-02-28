@@ -51,6 +51,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ServiceDetails]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Services]",
          "ObjectType": 0
       }
