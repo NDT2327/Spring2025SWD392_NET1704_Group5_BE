@@ -17,5 +17,8 @@ public class CategoryProfile : Profile
         // Map từ CategoryRequest sang Category
         CreateMap<CategoryRequest, Category>()
             .ForMember(dest => dest.CategoryId, opt => opt.Ignore()); // Không map ID vì DB tự tạo
+        CreateMap<Category, CategoryResponse>()
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Image));
+
     }
 }
