@@ -72,5 +72,11 @@
             public const string DeleteServiceDetailEndPoint = ServiceDetailEndPoint + "/delete/{id}";
         }
         #endregion
+
+        public static class Booking
+        {
+            public const string BookingEndpoint = ApiEndpoint + "/bookings";
+
+        }
     }
 }

@@ -39,15 +39,19 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistServiceId);
                 }
-                // để phương thức kiểm tra serviceDetail ở đây
-                //
+                var serviceDetail = await _unitOfWork.ServiceDetailRepository.GetByIdAsync(postBookingDetailRequest.ServiceDetailId);
+                if (serviceDetail == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistServiceDetailId);
+                }
+
                 var bookingDetail = new BookingDetail()
                 {
                     BookingId = postBookingDetailRequest.BookingId,
                     Quantity = postBookingDetailRequest.Quantity,
                     ScheduleDate = postBookingDetailRequest.ScheduleDate,
                     ScheduleTime = postBookingDetailRequest.ScheduleTime,
-                    UnitPrice = 100,//postBookingDetailRequest.Quantity*serviceDetail.basePrice
+                    UnitPrice = postBookingDetailRequest.Quantity * serviceDetail.BasePrice.Value,
                     ServiceId = postBookingDetailRequest.ServiceId,
                     ServiceDetailId = postBookingDetailRequest.ServiceDetailId,
                 };

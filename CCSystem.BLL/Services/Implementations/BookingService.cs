@@ -5,6 +5,7 @@ using CCSystem.BLL.DTOs.Bookings;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using System;
@@ -30,10 +31,10 @@ namespace CCSystem.BLL.Services.Implementations
 
         public async Task CreateBookingWithDetailsAsync(PostBookingRequest postBookingRequest)
         {
-            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            //using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var customer = await _unitOfWork.AccountRepository.GetAccountAsync(postBookingRequest.CustomerId);
+                var customer = await _unitOfWork.AccountRepository.GetByIdAsync(postBookingRequest.CustomerId);
                 if (customer == null)
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
@@ -42,10 +43,10 @@ namespace CCSystem.BLL.Services.Implementations
                 var booking = new Booking
                 {
                     CustomerId = postBookingRequest.CustomerId,
-                    PromotionCode = postBookingRequest.PromotionCode,
-                    BookingDate = postBookingRequest.BookingDate,
-                    BookingStatus = postBookingRequest.BookingStatus,
-                    PaymentStatus = postBookingRequest.PaymentStatus,
+                    PromotionCode = postBookingRequest.PromotionCode?? null,
+                    BookingDate = DateTime.UtcNow,
+                    BookingStatus = BookingEnums.BookingStatus.PENDING.ToString(),
+                    PaymentStatus = BookingEnums.PaymentStatus.PENDING.ToString(),
                     Notes = postBookingRequest.Notes,
                     PaymentMethod = postBookingRequest.PaymentMethod,
                     Address = postBookingRequest.Address,
@@ -91,7 +92,7 @@ namespace CCSystem.BLL.Services.Implementations
                 await _unitOfWork.CommitAsync();
 
                 // Xác nhận transaction
-                await transaction.CommitAsync();
+                //await transaction.CommitAsync();
 
             }
             catch (BadRequestException ex)
@@ -107,7 +108,7 @@ namespace CCSystem.BLL.Services.Implementations
             catch (Exception ex)
             {
                 // Hoàn tác tất cả thay đổi nếu có lỗi
-                await transaction.RollbackAsync();
+                //await transaction.RollbackAsync();
                 throw new Exception($"Lỗi khi tạo booking và booking details: {ex.Message}");
             }
         }
