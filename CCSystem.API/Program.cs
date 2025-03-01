@@ -16,18 +16,12 @@ using CCSystem.BLL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddScoped<AccountRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddDbContext<SP25_SWD392_CozyCareContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbStore"));
 
 }, ServiceLifetime.Scoped);
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IDbFactory, DbFactory>();
-builder.Services.AddScoped<AccountRepository>();
+
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(opts => opts.SuppressModelStateInvalidFilter = true)
     .AddJsonOptions(options =>
@@ -45,10 +39,6 @@ builder.Services.Configure<JWTAuth>(builder.Configuration.GetSection("JWTAuth"))
 builder.Services.AddDbFactory();
 builder.Services.AddUnitOfWork();
 builder.Services.AddServices();
-builder.Services.AddScoped<UnitOfWork>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddAutoMapper(typeof(CategoryProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddExceptionMiddleware();

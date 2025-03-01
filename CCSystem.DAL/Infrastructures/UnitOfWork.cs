@@ -3,6 +3,8 @@ using CCSystem.DAL.FirebaseStorages.Repositories;
 using CCSystem.DAL.Redis.Repositories;
 using CCSystem.DAL.Repositories;
 using CCSystem.DAL.SMTPs.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
 using Redis.OM;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,9 @@ namespace CCSystem.DAL.Infrastructures
         private ServiceRepository _serviceRepository;
         private PaymentRepository _paymentRepository;
         private BookingRepository _bookingRepository;
+        private BookingDetailRepository _bookingDetailRepository;
         private ServiceDetailRepository _serviceDetailRepository;
+
 
 
         public UnitOfWork(IDbFactory dbFactory)
@@ -35,6 +39,24 @@ namespace CCSystem.DAL.Infrastructures
             if (this._dbContext == null)
             {
                 this._dbContext = dbFactory.InitDbContext();
+            }
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _dbContext.Database.BeginTransactionAsync();
+        }
+
+
+        public BookingDetailRepository BookingDetailRepository
+        {
+            get
+            {
+                if (this._bookingDetailRepository == null)
+                {
+                    this._bookingDetailRepository = new BookingDetailRepository(this._dbContext);
+                }
+                return this._bookingDetailRepository;
             }
         }
 
