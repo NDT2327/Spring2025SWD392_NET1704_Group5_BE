@@ -57,5 +57,20 @@
             public const string PaymentRefund = ApiEndpoint + "/refund";
 
         }
+
+        #region Service Detail
+        /// <summary>
+        /// Endpoint for managing service details.
+        /// </summary>
+        /// 
+        public static class  ServiceDetail
+        {
+            public const string ServiceDetailEndPoint = ApiEndpoint + "/serviceDetail";
+            public const string ServiceDetailByIdEndPoint = ServiceDetailEndPoint + "/{id}";
+            public const string CreateServiceDetailEndPoint = ServiceDetailEndPoint + "/create";
+            public const string UpdateServiceDetailEndPoint = ServiceDetailEndPoint + "/update";
+            public const string DeleteServiceDetailEndPoint = ServiceDetailEndPoint + "/delete/{id}";
+        }
+        #endregion
     }
 }
