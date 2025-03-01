@@ -20,7 +20,7 @@ builder.Services.AddDbContext<SP25_SWD392_CozyCareContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbStore"));
 
-}, ServiceLifetime.Scoped);
+});
 
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(opts => opts.SuppressModelStateInvalidFilter = true)
@@ -28,6 +28,9 @@ builder.Services.AddControllers()
     {
         // Chuyển đổi enum thành chuỗi khi trả về JSON
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        //Chuyển đổi DateOnly và TimeOnly
+        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+        options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
     });
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
@@ -58,6 +61,7 @@ builder.Services.AddCors(cors => cors.AddPolicy(
 
 //Middlewares
 var app = builder.Build();
+app.MapControllers();
 app.AddApplicationConfig();
 app.Run();
 
