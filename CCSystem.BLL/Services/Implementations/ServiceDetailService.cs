@@ -23,6 +23,7 @@ namespace CCSystem.BLL.Services.Implementations
             this._unitOfWork = (UnitOfWork)unitOfWork;
             this._mapper = mapper;
         }
+        #region Get ServiceDetail by ID
         public async Task<GetServiceDetailResponse> GetServiceDetailByIdAsync(int id)
         {
             var serviceDetail =await _unitOfWork.ServiceDetailRepository.GetByIdAsync(id);
@@ -36,6 +37,7 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception("Service Detail not found");
             }
         }
+        #endregion
 
         #region CreateServiceDetailAsync
         public async Task<PostServiceDetailResponse> CreateServiceDetailAsync(PostServiceDetailRequest request)
@@ -68,6 +70,8 @@ namespace CCSystem.BLL.Services.Implementations
 
         #endregion
 
+        #region UpdateServiceDetailAsync
+
         public async Task<bool> UpdateServiceDetailAsync(PutServiceDetailRequest request)
         {
             // Check if ServiceDetail exists
@@ -96,7 +100,9 @@ namespace CCSystem.BLL.Services.Implementations
 
             return await _unitOfWork.ServiceDetailRepository.UpdateAsync(serviceDetail);
         }
+        #endregion
 
+        #region DeleteServiceDetailAsync
         public async Task<bool> DeleteServiceDetailAsync(int id)
         {
             bool isDeleted = await _unitOfWork.ServiceDetailRepository.DeleteAsync(id);
@@ -107,5 +113,6 @@ namespace CCSystem.BLL.Services.Implementations
 
             return true;
         }
+        #endregion
     }
 }
