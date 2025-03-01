@@ -26,6 +26,7 @@ namespace CCSystem.DAL.Infrastructures
         private ServiceRepository _serviceRepository;
         private PaymentRepository _paymentRepository;
         private BookingRepository _bookingRepository;
+        private ServiceDetailRepository _serviceDetailRepository;
 
 
         public UnitOfWork(IDbFactory dbFactory)
@@ -152,6 +153,20 @@ namespace CCSystem.DAL.Infrastructures
                 return this._accountTokenRedisRepository;
             }
         }
+
+        #region ServiceDetailRepository
+        public ServiceDetailRepository ServiceDetailRepository
+        {
+            get
+            {
+                if (this._serviceDetailRepository == null)
+                {
+                    this._serviceDetailRepository = new ServiceDetailRepository(this._dbContext);
+                }
+                return this._serviceDetailRepository;
+            }
+        }
+        #endregion
 
         public void Commit()
         {
