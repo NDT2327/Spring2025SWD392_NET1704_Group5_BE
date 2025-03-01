@@ -1,0 +1,368 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CCSystem.API</name>
+    </assembly>
+    <members>
+        <member name="T:CCSystem.API.Constants.APIEndPointConstant.ServiceDetail">
+            <summary>
+            Endpoint for managing service details.
+            </summary>
+            
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.SearchAccountsAsync(CCSystem.BLL.DTOs.Accounts.AccountSearchRequest)" -->
+        <member name="M:CCSystem.API.Controllers.AccountsController.LockAccount(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+            <summary>
+            Lock an account by accountId
+            </summary>
+            <param name="accountId">Account ID to lock</param>
+            <returns>Success message if locked</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AccountsController.UnlockAccount(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+            <summary>
+            Unlock an account by accountId
+            </summary>
+            <param name="accountId">Account ID to unlock</param>
+            <returns>Success message if unlocked</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccounts(CCSystem.BLL.DTOs.Accounts.AccountsListRequest)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.UpdateAccount(System.Int32,CCSystem.BLL.DTOs.Accounts.UpdateAccountRequest)" -->
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
+            <summary>
+            Register a new account into the system.
+            </summary>
+            <param name="account">
+            Account object contains Email and Password properties.
+            Notice that the password must be hashed with MD5 algorithm before sending to Register API.
+            
+            </param>
+            <returns>
+            An object with a JSON format that contains Account Id, Email, Role name, and a pair token (access token, refresh token).
+            </returns>
+            <remarks>
+            Sample request:
+            
+                POST
+                {
+                    "email": "abc@gmail.com",
+                    "password": "********"
+                }
+            </remarks>
+            <response code="200">Register Successfully.</response>
+            <response code="400">Some Error about request data and logic data.</response>
+            <response code="404">Some Error about request data not found.</response>
+            <response code="500">Some Error about the system.</response>
+            <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw Error about request data and logic business.</exception>
+            <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
+            <exception cref="T:System.Exception">Throw Error about the system.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostLoginAsync(CCSystem.BLL.DTOs.Accounts.AccountLoginRequest)">
+             <summary>
+             Login to access into the system by your account.
+             </summary>
+             <param name="account">
+             Account object contains Email property and Password property. 
+             Notice that the password must be hashed with MD5 algorithm before sending to Login API.
+             </param>
+             <returns>
+             An Object with a json format that contains Account Id, Email, Role name, and a pair token (access token, refresh token).
+             </returns>
+             <remarks>
+                 Sample request:
+            
+                     POST 
+                     {
+                         "email": "abc@gmail.com"
+                         "password": "********"
+                     }
+             </remarks>
+             <response code="200">Login Successfully.</response>
+             <response code="400">Some Error about request data and logic data.</response>
+             <response code="404">Some Error about request data not found.</response>
+             <response code="500">Some Error about the system.</response>
+             <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw Error about request data and logic bussiness.</exception>
+             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
+             <exception cref="T:System.Exception">Throw Error about the system.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostVerifyEmail(CCSystem.BLL.DTOs.Accounts.EmailVerificationRequest)">
+             <summary>
+             Verify email before resetting password.
+             </summary>
+             <param name="emailVerificationRequest">
+             EmailVerificationRequest object contains Email property.
+             </param>
+             <returns>
+             A success message about the sentting OTP code to Email.
+             </returns>
+             <remarks>
+                 Sample request:
+            
+                     POST 
+                     {
+                         "email": "abc@gmail.com"
+                     }
+             </remarks>
+             <response code="200">Sent OTP Code to Email Successfully.</response>
+             <response code="404">Some Error about request data that are not found.</response>
+             <response code="500">Some Error about the system.</response>
+             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
+             <exception cref="T:System.Exception">Throw Error about the system.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostConfirmOTPCode(CCSystem.BLL.DTOs.Accounts.OTPCodeVerificationRequest)">
+             <summary>
+             Compare sent OTP Code in the system with receiver's OTP Code. 
+             </summary>
+             <param name="otpCodeVerificationRequest">
+             OTPCodeVerificationRequest object contains Email property and OTPCode property.
+             </param>
+             <returns>
+             A success message when the OTP Code in the system matchs to receiver's OTP Code.
+             </returns>
+             <remarks>
+                 Sample request:
+            
+                     POST 
+                     {
+                         "email": "abc@gmail.com",
+                         "otpCode": "000000"
+                     }
+             </remarks>
+             <response code="200">Sent OTP Code to Email Successfully.</response>
+             <response code="400">Some Error about request data and logic data.</response>
+             <response code="404">Some Error about request data that are not found.</response>
+             <response code="500">Some Error about the system.</response>
+             <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw Error about request data and logic bussiness.</exception>
+             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
+             <exception cref="T:System.Exception">Throw Error about the system.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PutResetPasswordAsync(CCSystem.BLL.DTOs.Accounts.ResetPasswordRequest)">
+             <summary>
+             A new password will be updated after the email is verified before.
+             </summary>
+             <param name="resetPassword">
+             ResetPassword object contains Email property and new password property.
+             Notice that the new password must be hashed with MD5 algorithm before sending to Login API.
+             </param>
+             <returns>
+             A success message about the resetring password procedure.
+             </returns>
+             <remarks>
+                 Sample request:
+            
+                     PUT
+                     {
+                         "email": "abc@gmail.com"
+                         "newPassword": "********"
+                     }
+             </remarks>
+             <response code="200">A success message about the resetring password procedure.</response>
+             <response code="400">Some Error about request data and logic data.</response>
+             <response code="500">Some Error about the system.</response>
+             <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw Error about request data and logic bussiness.</exception>
+             <exception cref="T:System.Exception">Throw Error about the system.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostReGenerateTokensAsync(CCSystem.BLL.DTOs.AccountTokens.AccountTokenRequest)">
+             <summary>
+             Re-generate pair token from the old pair token that are provided by the MBKC system before.
+             </summary>
+             <param name="accountToken">
+             AccountToken Object contains access token property and refresh token property.
+             </param>
+             <returns>
+             The new pair token (Access token, Refresh token) to continue access into the MBKC system.
+             </returns>
+             <remarks>
+                 Sample request:
+            
+                     POST 
+                     {
+                         "accessToken": "abcxyz"
+                         "refreshToken": "klmnopq"
+                     }
+             </remarks>
+             <response code="200">Re-Generate Token Successfully.</response>
+             <response code="404">Some Error about request data that are not found.</response>
+             <response code="400">Some Error about request data and logic data.</response>
+             <response code="500">Some Error about the system.</response>
+             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
+             <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw Error about request data and logic bussiness.</exception>
+             <exception cref="T:System.Exception">Throw Error about the system.</exception>
+        </member>
+        <member name="T:CCSystem.API.Controllers.CategoryController">
+            <summary>
+            Controller for managing categories.
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.GetAllCategories">
+            <summary>
+            Get all categories.
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.GetCategoryById(System.Int32)">
+            <summary>
+            Get category by ID.
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.CreateCategory(CCSystem.BLL.DTOs.Category.CategoryRequest)">
+            <summary>
+            Create a new category.
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.UpdateCategory(System.Int32,CCSystem.BLL.DTOs.Category.CategoryRequest)">
+            <summary>
+            Update a category.
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.DeleteCategory(System.Int32)">
+            <summary>
+            Delete a category
+            </summary>
+            <param name="id">Category Id</param>
+            <returns>No content</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.GetSearchCategoryAsync(CCSystem.BLL.DTOs.Category.SearchCategoryRequest)">
+            <summary>
+            Search categories
+            </summary>
+            <returns>List of categories</returns>
+            <response code="200">Return a list of services matching the criteria.</response>
+            <response code="400">Invalid search criteria or business logic error.</response>
+            <response code="500">Unexpected system error.</response>
+            <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw error if search criteria are invalid.</exception>
+            <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw error if related data are not found.</exception>
+            <exception cref="T:System.Exception">Throw error for unexpected system issues.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.CreatePaymentUrl(CCSystem.BLL.DTOs.Payments.CreatePaymentRequest)">
+            <summary>
+            Tạo url thanh toán
+            </summary>
+            <param name="money">Số tiền phải thanh toán</param>
+            <param name="description">Mô tả giao dịch</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.IpnAction">
+            <summary>
+            Thực hiện hành động sau khi thanh toán. URL này cần được khai báo với VNPAY để API này hoạt đồng (ví dụ: http://localhost:1234/api/Vnpay/IpnAction)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.Callback">
+            <summary>
+            Trả kết quả thanh toán về cho người dùng
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CCSystem.API.Controllers.ServiceDetailController">
+            <summary>
+            Controller for managing service details.
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServiceDetailController.#ctor(CCSystem.BLL.Services.Interfaces.IServiceDetailService,FluentValidation.IValidator{CCSystem.BLL.DTOs.ServiceDetails.PostServiceDetailRequest})">
+            <summary>
+            Controller for managing service details.
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServiceDetailController.GetServiceDetailById(System.Int32)">
+            <summary>
+            Get a service detail by ID.
+            </summary>
+            
+            <param name="id">The Id of the service detail to retrieve.</param>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServiceDetailController.CreateServiceDetail(CCSystem.BLL.DTOs.ServiceDetails.PostServiceDetailRequest)">
+             <summary>
+             Create a service detail.
+             </summary>
+            
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServiceDetailController.UpdateServiceDetail(CCSystem.BLL.DTOs.ServiceDetails.PutServiceDetailRequest)">
+            <summary>
+            Update a service detail.
+            </summary>
+            
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServicesController.PostCreateServiceAsync(CCSystem.BLL.DTOs.Services.PostServiceRequest)">
+            <summary>
+            Create new service.
+            </summary>
+            <param name="postServiceRequest">
+            An object that includes information about the service.
+            </param>
+            <returns>
+            A success message about creating new service.
+            </returns>
+            <remarks>
+                Sample request:
+                
+                    POST
+                    CategoryId = 1
+                    ServiceName = MyService
+                    Description = Service description
+                    Image = [Image file]
+                    Price = 100.0
+                    Duration = 60
+                    IsActive = true
+            </remarks>
+            <response code="200">Created new service successfully.</response>
+            <response code="400">Some error about request data and business logic.</response>
+            <response code="500">Some error about the system.</response>
+            <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw error about request data and business logic.</exception>
+            <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw error when related data are not found.</exception>
+            <exception cref="T:System.Exception">Throw error about the system.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServicesController.GetSearchServiceAsync(CCSystem.BLL.DTOs.Services.SearchServiceRequest)">
+             <summary>
+             Search services based on given criteria.
+             </summary>
+             <param name="searchServiceRequest">
+             An object containing search criteria for services.
+             </param>
+             <returns>
+             A list of services matching the search criteria.
+             </returns>
+             <remarks>
+                 Sample request:
+            
+                     GET
+                     CategoryName = MyCategory
+                     ServiceName = MyService
+                     Description = Service description
+                     Price = 100.0
+                     Duration = 60
+                     IsActive = true
+             </remarks>
+             <response code="200">Return a list of services matching the criteria.</response>
+             <response code="400">Invalid search criteria or business logic error.</response>
+             <response code="500">Unexpected system error.</response>
+             <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw error if search criteria are invalid.</exception>
+             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw error if related data are not found.</exception>
+             <exception cref="T:System.Exception">Throw error for unexpected system issues.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServicesController.GetListServicesAsync">
+            <summary>
+            Retrieves the list of services.
+            </summary>
+            <returns>
+            A list of services.
+            </returns>
+            <response code="200">Services retrieved successfully.</response>
+            <response code="500">An error occurred in the system.</response>
+            <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ServicesController.GetServiceByIdAsync(CCSystem.BLL.DTOs.Services.ServiceIdRequest)">
+            <summary>
+            Retrieves detailed information of a service by its Id.
+            </summary>
+            <param name="id">The Id of the service to retrieve.</param>
+            <returns>
+            Detailed information of the service.
+            </returns>
+            <response code="200">Service information retrieved successfully.</response>
+            <response code="404">No service found with the provided Id.</response>
+            <response code="500">An error occurred in the system.</response>
+            <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no service exists with the provided Id.</exception>
+            <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
+        </member>
+    </members>
+</doc>

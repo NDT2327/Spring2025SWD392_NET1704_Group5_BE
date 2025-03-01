@@ -52,6 +52,10 @@ builder.Services.AddAutoMapper(typeof(CategoryProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddExceptionMiddleware();
+builder.Services.AddScoped<IServiceDetailService, ServiceDetailService>();
+builder.Services.AddAutoMapper(typeof(ServiceDetailProfile));
+
+
 //Middlewares
 builder.Services.AddTransient<ExceptionMiddleware>();
 
