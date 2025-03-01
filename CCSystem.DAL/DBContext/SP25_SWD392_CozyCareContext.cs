@@ -19,7 +19,6 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
     {
     }
 
-    #region DbSet
     public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<Booking> Bookings { get; set; }
@@ -39,8 +38,8 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
     public virtual DbSet<ScheduleAssignment> ScheduleAssignments { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
-    #endregion
 
+    public virtual DbSet<ServiceDetail> ServiceDetails { get; set; }
 
     public static string GetConnectionString(string connectionStringName)
     {
@@ -57,10 +56,9 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
         => optionsBuilder.UseSqlServer(GetConnectionString("MyDbStore"))
         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
-
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-    //        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-2OQHH02\\SQLEXPRESS;Initial Catalog=SP25_SWD392_CozyCare;User ID=sa;Password=12345;Encrypt=False");
+    //        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-2OQHH02\\SQLEXPRESS;Initial Catalog=SP25_SWD392_CozyCare;Persist Security Info=True;User ID=sa;Password=12345;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -81,6 +79,7 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("createdDate");
+            entity.Property(e => e.DateOfBirth).HasColumnName("dateOfBirth");
             entity.Property(e => e.Email)
                 .IsRequired()
                 .HasMaxLength(255)
@@ -89,6 +88,9 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
             entity.Property(e => e.FullName)
                 .HasMaxLength(255)
                 .HasColumnName("fullName");
+            entity.Property(e => e.Gender)
+                .HasMaxLength(50)
+                .HasColumnName("gender");
             entity.Property(e => e.Password)
                 .IsRequired()
                 .HasMaxLength(255)
@@ -114,6 +116,9 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
             entity.HasKey(e => e.BookingId).HasName("PK__Bookings__C6D03BCD8FCCFE43");
 
             entity.Property(e => e.BookingId).HasColumnName("bookingId");
+            entity.Property(e => e.Address)
+                .HasMaxLength(255)
+                .HasColumnName("address");
             entity.Property(e => e.BookingDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -159,6 +164,7 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
             entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.ScheduleDate).HasColumnName("scheduleDate");
             entity.Property(e => e.ScheduleTime).HasColumnName("scheduleTime");
+            entity.Property(e => e.ServiceDetailId).HasColumnName("serviceDetailId");
             entity.Property(e => e.ServiceId).HasColumnName("serviceId");
             entity.Property(e => e.UnitPrice)
                 .HasColumnType("decimal(10, 2)")
@@ -167,6 +173,10 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
             entity.HasOne(d => d.Booking).WithMany(p => p.BookingDetails)
                 .HasForeignKey(d => d.BookingId)
                 .HasConstraintName("FK_BookingDetails_Bookings");
+
+            entity.HasOne(d => d.ServiceDetail).WithMany(p => p.BookingDetails)
+                .HasForeignKey(d => d.ServiceDetailId)
+                .HasConstraintName("FK_BookingDetails_ServiceDetails");
 
             entity.HasOne(d => d.Service).WithMany(p => p.BookingDetails)
                 .HasForeignKey(d => d.ServiceId)
@@ -386,6 +396,34 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Services)
                 .HasForeignKey(d => d.CategoryId)
                 .HasConstraintName("FK_Services_Categories");
+        });
+
+        modelBuilder.Entity<ServiceDetail>(entity =>
+        {
+            entity.Property(e => e.ServiceDetailId).HasColumnName("serviceDetailId");
+            entity.Property(e => e.BasePrice)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("basePrice");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .HasColumnName("description");
+            entity.Property(e => e.Duration).HasColumnName("duration");
+            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.OptionName)
+                .HasMaxLength(255)
+                .HasColumnName("optionName");
+            entity.Property(e => e.OptionType)
+                .HasMaxLength(255)
+                .HasColumnName("optionType");
+            entity.Property(e => e.ServiceId).HasColumnName("serviceId");
+            entity.Property(e => e.Unit)
+                .HasMaxLength(50)
+                .HasColumnName("unit");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.ServiceDetails)
+                .HasForeignKey(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ServiceDetails_Services");
         });
 
         OnModelCreatingPartial(modelBuilder);

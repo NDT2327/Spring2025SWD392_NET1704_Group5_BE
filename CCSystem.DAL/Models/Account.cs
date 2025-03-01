@@ -33,6 +33,10 @@ public partial class Account
 
     public string Avatar { get; set; }
 
+    public string Gender { get; set; }
+
+    public DateOnly? DateOfBirth { get; set; }
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();

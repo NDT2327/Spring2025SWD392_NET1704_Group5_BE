@@ -21,6 +21,8 @@ public partial class BookingDetail
 
     public TimeOnly ScheduleTime { get; set; }
 
+    public int? ServiceDetailId { get; set; }
+
     public virtual Booking Booking { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
@@ -28,4 +30,6 @@ public partial class BookingDetail
     public virtual ICollection<ScheduleAssignment> ScheduleAssignments { get; set; } = new List<ScheduleAssignment>();
 
     public virtual Service Service { get; set; }
+
+    public virtual ServiceDetail ServiceDetail { get; set; }
 }
