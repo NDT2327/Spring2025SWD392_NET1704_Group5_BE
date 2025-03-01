@@ -72,5 +72,20 @@
             public const string DeleteServiceDetailEndPoint = ServiceDetailEndPoint + "/delete/{id}";
         }
         #endregion
+
+        #region Promotions
+        /// <summary>
+        /// Endpoint for managing Promotions.
+        /// </summary>
+        /// 
+        public static class Promotions
+        {
+            public const string PromotionEndPoint = ApiEndpoint + "/promotions";
+            public const string PromotionByCodeEndPoint = PromotionEndPoint + "/{code}";
+            public const string CreatePromotionEndPoint = PromotionEndPoint + "/create";
+            public const string UpdatePromotionEndPoint = PromotionEndPoint + "/update";
+            public const string DeletePromotionEndPoint = PromotionEndPoint + "/delete/{code}";
+        }
+        #endregion
     }
 }

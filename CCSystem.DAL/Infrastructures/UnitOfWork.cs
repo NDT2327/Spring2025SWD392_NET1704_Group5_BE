@@ -27,6 +27,7 @@ namespace CCSystem.DAL.Infrastructures
         private PaymentRepository _paymentRepository;
         private BookingRepository _bookingRepository;
         private ServiceDetailRepository _serviceDetailRepository;
+        private PromotionRepository _promotionRepository;
 
 
         public UnitOfWork(IDbFactory dbFactory)
@@ -164,6 +165,20 @@ namespace CCSystem.DAL.Infrastructures
                     this._serviceDetailRepository = new ServiceDetailRepository(this._dbContext);
                 }
                 return this._serviceDetailRepository;
+            }
+        }
+        #endregion
+
+        #region PromotionRepository
+        public PromotionRepository PromotionRepository
+        {
+            get
+            {
+                if (this._promotionRepository == null)
+                {
+                    this._promotionRepository = new PromotionRepository(this._dbContext);
+                }
+                return this._promotionRepository;
             }
         }
         #endregion
