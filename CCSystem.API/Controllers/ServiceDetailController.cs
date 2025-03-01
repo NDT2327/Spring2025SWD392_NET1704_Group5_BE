@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Formats.Asn1;
 
 namespace CCSystem.API.Controllers
 {
@@ -119,6 +120,31 @@ namespace CCSystem.API.Controllers
             }
         }
 
+        #endregion
+
+        #region Delete Service Detail
+        /// <summary>
+        /// Delete a service detail.
+        /// </summary>
+        /// 
+
+        [HttpDelete(APIEndPointConstant.ServiceDetail.DeleteServiceDetailEndPoint)]
+        public async Task<IActionResult> DeleteServiceDetail([FromRoute] int id)
+        {
+            try
+            {
+                await _serviceDetailService.DeleteServiceDetailAsync(id);
+                return Ok(new {message = "Deleted suncessfully"});
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred.", details = ex.Message });
+            }
+        }
         #endregion
     }
 }

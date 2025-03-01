@@ -69,6 +69,18 @@ namespace CCSystem.DAL.Repositories
                 throw new Exception("An error occurred while updating the service detail.", ex);
             }
         }
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var serviceDetail = await _context.ServiceDetails.FindAsync(id);
+            if (serviceDetail == null)
+            {
+                return false; // Not found
+            }
+
+            _context.ServiceDetails.Remove(serviceDetail);
+            await _context.SaveChangesAsync();
+            return true; // Successfully deleted
+        }
 
     }
 }

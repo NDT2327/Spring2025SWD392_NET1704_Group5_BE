@@ -96,5 +96,16 @@ namespace CCSystem.BLL.Services.Implementations
 
             return await _unitOfWork.ServiceDetailRepository.UpdateAsync(serviceDetail);
         }
+
+        public async Task<bool> DeleteServiceDetailAsync(int id)
+        {
+            bool isDeleted = await _unitOfWork.ServiceDetailRepository.DeleteAsync(id);
+            if (!isDeleted)
+            {
+                throw new KeyNotFoundException($"ServiceDetail with ID {id} not found.");
+            }
+
+            return true;
+        }
     }
 }
