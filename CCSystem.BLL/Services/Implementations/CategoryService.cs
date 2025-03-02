@@ -21,9 +21,9 @@ namespace CCSystem.BLL.Service
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CategoryService(UnitOfWork unitOfWork, IMapper mapper)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = (UnitOfWork)unitOfWork;
             _mapper = mapper;
         }
         public async Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync()

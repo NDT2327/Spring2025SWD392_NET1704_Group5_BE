@@ -55,7 +55,7 @@ namespace CCSystem.API.Controllers
                 var booking = await _bookingService.GetBooking(request.BookingId);
                 if (booking == null)
                     return NotFound("Booking không tồn tại.");
-                if (booking.PaymentStatus == "Paid")
+                if (booking.PaymentStatus == "PAID")
                 {
                     throw new BadRequestException(MessageConstant.BookingMessage.BookingIsPaid);
                 }
@@ -67,7 +67,7 @@ namespace CCSystem.API.Controllers
                     CustomerId = booking.CustomerId,
                     Amount = (decimal)booking.TotalAmount,
                     PaymentMethod = "VNPay",
-                    Status = "Pending",
+                    Status = "PENDING",
                     CreatedDate = DateTime.UtcNow,
                     TransactionId = Guid.NewGuid().ToString(),
                 };
@@ -123,15 +123,15 @@ namespace CCSystem.API.Controllers
                 if (paymentResult.IsSuccess)
                 {
                     // Cập nhật trạng thái thanh toán
-                    payment.Status = "Success";
+                    payment.Status = "SUCCESS";
                     payment.PaymentDate = DateTime.UtcNow;
 
                     // Cập nhật trạng thái Booking
                     var booking = await _bookingService.GetBooking(payment.BookingId);
                     if (booking != null)
                     {
-                        booking.PaymentStatus = "Paid";
-                        booking.BookingStatus = "Confirmed";
+                        booking.PaymentStatus = "PAID";
+                        booking.BookingStatus = "CONFIRMED";
                         await _bookingService.UpdateBookingAsync(booking);
                     }
 
@@ -141,7 +141,7 @@ namespace CCSystem.API.Controllers
                 else
                 {
                     // Nếu thanh toán thất bại
-                    payment.Status = "Failed";
+                    payment.Status = "FAILED";
                     await _paymentService.UpdatePaymentAsync(payment);
                     return BadRequest("Thanh toán thất bại.");
                 }
@@ -180,15 +180,15 @@ namespace CCSystem.API.Controllers
 
                 // Cập nhật thông tin Payment
                 payment.TransactionId = paymentResult.VnpayTransactionId.ToString();
-                payment.Status = paymentResult.IsSuccess ? "Success" : "Failed";
+                payment.Status = paymentResult.IsSuccess ? "SUCCESS" : "FAILED";
                 payment.PaymentMethod = paymentResult.PaymentMethod;
                 payment.UpdatedDate = DateTime.UtcNow;
 
                 var booking = await _bookingService.GetBooking(payment.BookingId);
                 if (booking != null)
                 {
-                    booking.PaymentStatus = "Paid";
-                    booking.BookingStatus = "Confirmed";
+                    booking.PaymentStatus = "PAID";
+                    booking.BookingStatus = "CONFIRMED";
                     await _bookingService.UpdateBookingAsync(booking);
                 }
 

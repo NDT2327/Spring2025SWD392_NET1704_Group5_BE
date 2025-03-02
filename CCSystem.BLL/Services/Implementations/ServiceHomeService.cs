@@ -73,7 +73,7 @@ namespace CCSystem.BLL.Services.Implementations
             }
             catch (BadRequestException ex)
             {
-                string message = ErrorUtil.GetErrorString("Exception", ex.Message);
+                string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
                 throw new BadRequestException(message);
             }
             catch (NotFoundException ex)

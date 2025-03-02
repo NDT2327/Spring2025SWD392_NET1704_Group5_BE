@@ -87,5 +87,12 @@
             public const string DeletePromotionEndPoint = PromotionEndPoint + "/delete/{code}";
         }
         #endregion
+
+        public static class Booking
+        {
+            public const string BookingEndpoint = ApiEndpoint + "/bookings";
+
+        }
+
     }
 }
