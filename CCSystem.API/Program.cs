@@ -46,7 +46,9 @@ builder.Services.AddDbFactory();
 builder.Services.AddUnitOfWork();
 builder.Services.AddServices();
 builder.Services.AddScoped<UnitOfWork>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddLogging();
+
+builder.Services.AddTransient<ReviewService>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddAutoMapper(typeof(CategoryProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

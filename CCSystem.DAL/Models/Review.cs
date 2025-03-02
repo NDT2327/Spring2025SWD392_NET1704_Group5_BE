@@ -13,7 +13,7 @@ public partial class Review
 
     public int DetailId { get; set; }
 
-    public int? Rating { get; set; }
+    public int Rating { get; set; }
 
     public string Comment { get; set; }
 

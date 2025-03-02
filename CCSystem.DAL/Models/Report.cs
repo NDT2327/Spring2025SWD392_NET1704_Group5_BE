@@ -8,22 +8,13 @@ namespace CCSystem.DAL.Models;
 public partial class Report
 {
     public int RecordId { get; set; }
-
     public int HousekeeperId { get; set; }
-
     public int AssignId { get; set; }
-
-    public DateOnly WorkDate { get; set; }
-
-    public TimeOnly StartTime { get; set; }
-
-    public TimeOnly EndTime { get; set; }
-
+    public DateTime WorkDate { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
     public double TotalHours { get; set; }
-
     public string TaskStatus { get; set; }
-
     public virtual ScheduleAssignment Assign { get; set; }
-
     public virtual Account Housekeeper { get; set; }
 }
