@@ -19,12 +19,33 @@ namespace CCSystem.DAL.Repositories
 
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            return await _context.Categories.ToListAsync();
+            var categories = await _context.Categories
+                .AsNoTracking() // 🔥 Tránh cache dữ liệu cũ
+                .Select(c => new Category
+                {
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                    Description = c.Description,
+                    Image = c.Image, // 🔥 Chắc chắn lấy đúng `Image`
+                    IsActive = c.IsActive,
+                    CreatedDate = c.CreatedDate,
+                    UpdatedDate = c.UpdatedDate
+                }).ToListAsync();
+
+            foreach (var category in categories)
+            {
+                Console.WriteLine($"Category: {category.CategoryName}, Image: {category.Image ?? "NULL"}"); // 🔥 Log để debug
+            }
+
+            return categories;
         }
+
 
         public async Task<Category?> GetCategoryByIdAsync(int id)
         {
-            return await _context.Categories.FindAsync(id);
+            return await _context.Categories
+                .AsNoTracking() // ⚡ Tránh lỗi cache, tăng hiệu suất
+                .FirstOrDefaultAsync(c => c.CategoryId == id); // 📌 Load đầy đủ dữ liệu từ DB
         }
 
         public async Task CreateCategoryAsync(Category category)
