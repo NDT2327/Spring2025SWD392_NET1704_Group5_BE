@@ -45,12 +45,6 @@ builder.Services.Configure<JWTAuth>(builder.Configuration.GetSection("JWTAuth"))
 builder.Services.AddDbFactory();
 builder.Services.AddUnitOfWork();
 builder.Services.AddServices();
-builder.Services.AddScoped<UnitOfWork>();
-builder.Services.AddLogging();
-
-builder.Services.AddTransient<ReviewService>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddAutoMapper(typeof(CategoryProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddExceptionMiddleware();
