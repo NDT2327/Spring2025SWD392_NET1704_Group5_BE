@@ -57,6 +57,7 @@
             public const string PaymentRefund = ApiEndpoint + "/refund";
 
         }
+
         // New Report Endpoints
         public static class Report
         {
@@ -78,6 +79,44 @@
             public const string UpdateReviewEndpoint = ReviewEndpoint + "/updatereview/{id}";
             public const string DeleteReviewEndpoint = ReviewEndpoint + "/deletereview/{id}";
         }
+
+
+        #region Service Detail
+        /// <summary>
+        /// Endpoint for managing service details.
+        /// </summary>
+        /// 
+        public static class  ServiceDetail
+        {
+            public const string ServiceDetailEndPoint = ApiEndpoint + "/serviceDetail";
+            public const string ServiceDetailByIdEndPoint = ServiceDetailEndPoint + "/{id}";
+            public const string CreateServiceDetailEndPoint = ServiceDetailEndPoint + "/create";
+            public const string UpdateServiceDetailEndPoint = ServiceDetailEndPoint + "/update/{id}";
+            public const string DeleteServiceDetailEndPoint = ServiceDetailEndPoint + "/delete/{id}";
+        }
+        #endregion
+
+        #region Promotions
+        /// <summary>
+        /// Endpoint for managing Promotions.
+        /// </summary>
+        /// 
+        public static class Promotions
+        {
+            public const string PromotionEndPoint = ApiEndpoint + "/promotions";
+            public const string PromotionByCodeEndPoint = PromotionEndPoint + "/{code}";
+            public const string CreatePromotionEndPoint = PromotionEndPoint + "/create";
+            public const string UpdatePromotionEndPoint = PromotionEndPoint + "/update/{code}";
+            public const string DeletePromotionEndPoint = PromotionEndPoint + "/delete/{code}";
+        }
+        #endregion
+
+        public static class Booking
+        {
+            public const string BookingEndpoint = ApiEndpoint + "/bookings";
+
+        }
+
     }
 }
   

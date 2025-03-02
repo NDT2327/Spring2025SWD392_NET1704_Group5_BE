@@ -3,6 +3,8 @@ using CCSystem.DAL.FirebaseStorages.Repositories;
 using CCSystem.DAL.Redis.Repositories;
 using CCSystem.DAL.Repositories;
 using CCSystem.DAL.SMTPs.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
 using Redis.OM;
 using System;
 using System.Collections.Generic;
@@ -28,7 +30,10 @@ namespace CCSystem.DAL.Infrastructures
         private BookingRepository _bookingRepository;
         private ReportRepository _reportRepository;
         private ReviewRepository _reviewRepository;
-        
+        private BookingDetailRepository _bookingDetailRepository;
+        private ServiceDetailRepository _serviceDetailRepository;
+        private PromotionRepository _promotionRepository;
+
 
 
         public UnitOfWork(IDbFactory dbFactory)
@@ -51,6 +56,7 @@ namespace CCSystem.DAL.Infrastructures
             }
         }
 
+
         public ReportRepository ReportRepository
         {
             get
@@ -62,6 +68,26 @@ namespace CCSystem.DAL.Infrastructures
                 return this._reportRepository;
             }
         }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _dbContext.Database.BeginTransactionAsync();
+        }
+
+
+        public BookingDetailRepository BookingDetailRepository
+        {
+            get
+            {
+                if (this._bookingDetailRepository == null)
+                {
+                    this._bookingDetailRepository = new BookingDetailRepository(this._dbContext);
+                }
+                return this._bookingDetailRepository;
+            }
+        }
+
+
         public BookingRepository BookingRepository
         {
             get
@@ -177,6 +203,34 @@ namespace CCSystem.DAL.Infrastructures
                 return this._accountTokenRedisRepository;
             }
         }
+
+        #region ServiceDetailRepository
+        public ServiceDetailRepository ServiceDetailRepository
+        {
+            get
+            {
+                if (this._serviceDetailRepository == null)
+                {
+                    this._serviceDetailRepository = new ServiceDetailRepository(this._dbContext);
+                }
+                return this._serviceDetailRepository;
+            }
+        }
+        #endregion
+
+        #region PromotionRepository
+        public PromotionRepository PromotionRepository
+        {
+            get
+            {
+                if (this._promotionRepository == null)
+                {
+                    this._promotionRepository = new PromotionRepository(this._dbContext);
+                }
+                return this._promotionRepository;
+            }
+        }
+        #endregion
 
         public void Commit()
         {

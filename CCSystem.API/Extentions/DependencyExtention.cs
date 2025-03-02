@@ -46,7 +46,11 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IVnpay, Vnpay>();
             services.AddScoped<IBookingService, BookingService>();
-            
+            services.AddScoped<IBookingDetailService, BookingDetailService>();
+            services.AddScoped<IServiceDetailService, ServiceDetailService>();
+            services.AddScoped<IPromotionService, PromotionService>();
+
+
 
             return services;
         }
