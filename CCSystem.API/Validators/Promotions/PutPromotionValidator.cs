@@ -1,6 +1,5 @@
 ﻿using CCSystem.BLL.DTOs.Promotions;
 using FluentValidation;
-using System;
 
 namespace CCSystem.API.Validators.Promotions
 {
@@ -8,40 +7,26 @@ namespace CCSystem.API.Validators.Promotions
     {
         public PutPromotionValidator()
         {
-            RuleFor(x => x.Code)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotEmpty().WithMessage("{PropertyName} cannot be empty.")
-                .MaximumLength(50).WithMessage("{PropertyName} cannot exceed 50 characters.");
+            //RuleFor(x => x.Code)
+            //    .NotEmpty().WithMessage("Promotion code is required.");
 
             RuleFor(x => x.DiscountAmount)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be greater than or equal to 0.")
-                .When(x => x.DiscountAmount.HasValue);
+                .GreaterThanOrEqualTo(0).WithMessage("Discount Amount must be non-negative.");
 
             RuleFor(x => x.DiscountPercent)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .InclusiveBetween(0, 100).WithMessage("{PropertyName} must be between 0 and 100.")
-                .When(x => x.DiscountPercent.HasValue);
+                .InclusiveBetween(0, 100).WithMessage("Discount Percent must be between 0 and 100.");
 
             RuleFor(x => x.StartDate)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .GreaterThanOrEqualTo(DateTime.Today).WithMessage("{PropertyName} cannot be in the past.");
+                .LessThan(x => x.EndDate).WithMessage("Start Date must be before End Date.");
 
             RuleFor(x => x.EndDate)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .GreaterThan(x => x.StartDate).WithMessage("{PropertyName} must be after StartDate.");
+                .GreaterThan(DateTime.UtcNow).WithMessage("End Date must be in the future.");
 
             RuleFor(x => x.MinOrderAmount)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be greater than or equal to 0.")
-                .When(x => x.MinOrderAmount.HasValue);
+                .GreaterThanOrEqualTo(0).WithMessage("Min Order Amount must be non-negative.");
 
             RuleFor(x => x.MaxDiscountAmount)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be greater than or equal to 0.")
-                .When(x => x.MaxDiscountAmount.HasValue);
+                .GreaterThanOrEqualTo(0).WithMessage("Max Discount Amount must be non-negative.");
         }
     }
 }

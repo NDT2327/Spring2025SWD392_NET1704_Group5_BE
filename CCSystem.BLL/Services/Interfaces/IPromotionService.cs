@@ -13,5 +13,7 @@ namespace CCSystem.DAL.Repositories
         public Task<List<GetPromotionResponse>> GetAllPromotionsAsync();
         public Task<GetPromotionResponse> GetPromotionByCodeAsync(string code);
         public Task<Promotion> CreatePromotionAsync(PostPromotionRequest request);
+        public Task<bool> UpdatePromotionAsync(string code, PutPromotionRequest request);
+        public Task<bool> DeletePromotionAsync(string code);
     }
 }

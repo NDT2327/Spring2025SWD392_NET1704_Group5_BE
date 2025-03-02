@@ -83,5 +83,30 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception("Error creating promotion.", ex);
             }
         }
+
+        public async Task<bool> UpdatePromotionAsync(string code, PutPromotionRequest request)
+        {
+            var existingPromotion = await _unitOfWork.PromotionRepository.GetPromotionByCodeAsync(code);
+            if (existingPromotion == null)
+            {
+                throw new Exception("Promotion not found.");
+            }
+            _mapper.Map(request, existingPromotion); // Update the existing entity with new values
+
+            return await _unitOfWork.PromotionRepository.UpdatePromotionAsync(existingPromotion);
+        }
+
+        public async Task<bool> DeletePromotionAsync(string code)
+        {
+            var promotion = await _unitOfWork.PromotionRepository.GetPromotionByCodeAsync(code);
+
+            if (promotion == null)
+            {
+                return false; // Promotion not found
+            }
+
+            await _unitOfWork.PromotionRepository.DeletePromotionAsync(promotion);
+            return true;
+        }
     }
 }

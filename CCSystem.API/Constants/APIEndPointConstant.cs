@@ -68,7 +68,7 @@
             public const string ServiceDetailEndPoint = ApiEndpoint + "/serviceDetail";
             public const string ServiceDetailByIdEndPoint = ServiceDetailEndPoint + "/{id}";
             public const string CreateServiceDetailEndPoint = ServiceDetailEndPoint + "/create";
-            public const string UpdateServiceDetailEndPoint = ServiceDetailEndPoint + "/update";
+            public const string UpdateServiceDetailEndPoint = ServiceDetailEndPoint + "/update/{id}";
             public const string DeleteServiceDetailEndPoint = ServiceDetailEndPoint + "/delete/{id}";
         }
         #endregion
@@ -83,7 +83,7 @@
             public const string PromotionEndPoint = ApiEndpoint + "/promotions";
             public const string PromotionByCodeEndPoint = PromotionEndPoint + "/{code}";
             public const string CreatePromotionEndPoint = PromotionEndPoint + "/create";
-            public const string UpdatePromotionEndPoint = PromotionEndPoint + "/update";
+            public const string UpdatePromotionEndPoint = PromotionEndPoint + "/update/{code}";
             public const string DeletePromotionEndPoint = PromotionEndPoint + "/delete/{code}";
         }
         #endregion

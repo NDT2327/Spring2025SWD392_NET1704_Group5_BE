@@ -15,6 +15,9 @@ namespace CCSystem.BLL.Profiles.Promotions
         {
             CreateMap<PostPromotionRequest, Promotion>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.UtcNow));
+
+            CreateMap<PutPromotionRequest, Promotion>()
+                .ForMember(dest => dest.Code, opt => opt.Ignore());
         }
     }
 }

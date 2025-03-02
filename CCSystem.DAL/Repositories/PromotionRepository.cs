@@ -31,7 +31,7 @@ namespace CCSystem.DAL.Repositories
         {
             var promo = await _context.Promotions.FirstOrDefaultAsync(p => p.Code == code);
 
-            return promo ?? throw new Exception("Promotion not found");
+            return promo ?? throw new Exception("Promotion " +code+" not found.");
         }
 
         public async Task AddPromotionAsync(Promotion promotion)
@@ -51,6 +51,18 @@ namespace CCSystem.DAL.Repositories
             {
                 throw new Exception("An error occurred while adding the promotion.", ex);
             }
+        }
+
+        public async Task<bool> UpdatePromotionAsync(Promotion promotion)
+        {
+            _context.Promotions.Update(promotion);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task DeletePromotionAsync(Promotion promotion)
+        {
+            _context.Promotions.Remove(promotion);
+            await _context.SaveChangesAsync();
         }
 
     }

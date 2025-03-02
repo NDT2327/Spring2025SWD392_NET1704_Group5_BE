@@ -8,19 +8,12 @@ namespace CCSystem.BLL.DTOs.Promotions
 {
     public class PutPromotionRequest
     {
-        public string Code { get; set; }
-
+        //public required string Code { get; set; } // Must Existing Promotion Code (Primary Key)
         public decimal? DiscountAmount { get; set; }
-
         public double? DiscountPercent { get; set; }
-
         public DateTime StartDate { get; set; }
-
         public DateTime EndDate { get; set; }
-
         public decimal? MinOrderAmount { get; set; }
-
         public decimal? MaxDiscountAmount { get; set; }
-
     }
 }

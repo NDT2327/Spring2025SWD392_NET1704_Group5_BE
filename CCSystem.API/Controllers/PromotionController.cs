@@ -8,6 +8,8 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using CCSystem.DAL.Repositories;
 using CCSystem.API.Validators.Promotions;
+using Microsoft.AspNetCore.Components;
+using CCSystem.BLL.Services.Implementations;
 
 namespace CCSystem.API.Controllers
 {
@@ -95,5 +97,61 @@ namespace CCSystem.API.Controllers
 
         #endregion
 
+        #region Update Promotion
+        /// <summary>
+        /// Update a promotion.
+        /// </summary>
+        /// 
+
+        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        [HttpPut(APIEndPointConstant.Promotions.UpdatePromotionEndPoint)]
+        public async Task<IActionResult> UpdatePromotion([FromRoute] string code,[FromBody] PutPromotionRequest request)
+        {
+            ValidationResult validationResult = _putPromotionValidator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+            try
+            {
+                var isUpdated = await _promotionService.UpdatePromotionAsync(code, request);
+                if (!isUpdated)
+                {
+                    return NotFound(new { message = "Promotion not found or no changes were made." });
+                }
+
+                return Ok(new { message = "Promotion updated successfully." });
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { message = "Validation failed", errors = ex.Errors });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating promotion", details = ex.Message });
+            }
+        }
+        #endregion
+
+        #region Delete Promotion
+        /// <summary>
+        /// Delete a promotion.
+        /// </summary>
+        /// 
+
+        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        [HttpDelete(APIEndPointConstant.Promotions.DeletePromotionEndPoint)]
+        public async Task<IActionResult> DeletePromotion([FromRoute] string code)
+        {
+            var isDeleted = await _promotionService.DeletePromotionAsync(code);
+
+            if (!isDeleted)
+            {
+                return NotFound(new { message = "Promotion not found" });
+            }
+
+            return Ok(new { message = "Promotion deleted successfully" });
+        }
+        #endregion
     }
 }
