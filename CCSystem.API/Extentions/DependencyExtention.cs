@@ -2,11 +2,13 @@
 using CCSystem.API.Middlewares;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Service;
+using CCSystem.BLL.Services;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Repositories;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +17,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
 using VNPAY.NET;
+
 
 namespace CCSystem.API.Extentions
 {
@@ -39,6 +42,8 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IServiceHomeService, ServiceHomeService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IVnpay, Vnpay>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IBookingDetailService, BookingDetailService>();
@@ -46,9 +51,10 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IPromotionService, PromotionService>();
 
 
+
             return services;
         }
-
+      
 
         public static void AddJwtValidation(this WebApplicationBuilder builder)
         {

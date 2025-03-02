@@ -28,6 +28,8 @@ namespace CCSystem.DAL.Infrastructures
         private ServiceRepository _serviceRepository;
         private PaymentRepository _paymentRepository;
         private BookingRepository _bookingRepository;
+        private ReportRepository _reportRepository;
+        private ReviewRepository _reviewRepository;
         private BookingDetailRepository _bookingDetailRepository;
         private ServiceDetailRepository _serviceDetailRepository;
         private PromotionRepository _promotionRepository;
@@ -40,6 +42,30 @@ namespace CCSystem.DAL.Infrastructures
             if (this._dbContext == null)
             {
                 this._dbContext = dbFactory.InitDbContext();
+            }
+        }
+        public ReviewRepository ReviewRepository
+        {
+            get
+            {
+                if (this._reviewRepository == null)
+                {
+                    this._reviewRepository = new ReviewRepository(this._dbContext);
+                }
+                return this._reviewRepository;
+            }
+        }
+
+
+        public ReportRepository ReportRepository
+        {
+            get
+            {
+                if (this._reportRepository == null)
+                {
+                    this._reportRepository = new ReportRepository(this._dbContext);
+                }
+                return this._reportRepository;
             }
         }
 
@@ -60,6 +86,7 @@ namespace CCSystem.DAL.Infrastructures
                 return this._bookingDetailRepository;
             }
         }
+
 
         public BookingRepository BookingRepository
         {

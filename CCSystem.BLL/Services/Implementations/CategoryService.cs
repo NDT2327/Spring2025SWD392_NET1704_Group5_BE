@@ -23,7 +23,7 @@ namespace CCSystem.BLL.Service
 
         public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = (UnitOfWork)unitOfWork;
+            this._unitOfWork = (UnitOfWork)unitOfWork;
             _mapper = mapper;
         }
         public async Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync()
