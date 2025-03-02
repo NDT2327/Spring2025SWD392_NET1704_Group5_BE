@@ -29,4 +29,8 @@
     <ProjectReference Include="..\CCSystem.BLL\CCSystem.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\Report\" />
+  </ItemGroup>
+
 </Project>

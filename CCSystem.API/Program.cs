@@ -13,27 +13,25 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using CCSystem.BLL.Services;
+using CCSystem.BLL.Profiles.Promotions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddScoped<AccountRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddDbContext<SP25_SWD392_CozyCareContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbStore"));
 
-}, ServiceLifetime.Scoped);
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IDbFactory, DbFactory>();
-builder.Services.AddScoped<AccountRepository>();
+});
+
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(opts => opts.SuppressModelStateInvalidFilter = true)
     .AddJsonOptions(options =>
     {
         // Chuyển đổi enum thành chuỗi khi trả về JSON
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        //Chuyển đổi DateOnly và TimeOnly
+        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+        options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
     });
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
@@ -45,13 +43,11 @@ builder.Services.Configure<JWTAuth>(builder.Configuration.GetSection("JWTAuth"))
 builder.Services.AddDbFactory();
 builder.Services.AddUnitOfWork();
 builder.Services.AddServices();
-builder.Services.AddScoped<UnitOfWork>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddAutoMapper(typeof(CategoryProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddExceptionMiddleware();
+
+
 //Middlewares
 builder.Services.AddTransient<ExceptionMiddleware>();
 
@@ -66,6 +62,7 @@ builder.Services.AddCors(cors => cors.AddPolicy(
 
 //Middlewares
 var app = builder.Build();
+app.MapControllers();
 app.AddApplicationConfig();
 app.Run();
 
