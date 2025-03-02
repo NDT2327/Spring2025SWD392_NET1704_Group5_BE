@@ -12,9 +12,9 @@ namespace CCSystem.BLL.Services.Implementations
         private readonly UnitOfWork _unitOfWork;
 
         // Constructor để sử dụng UnitOfWork
-        public ReportService(UnitOfWork unitOfWork)
+        public ReportService(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = (UnitOfWork)unitOfWork;
         }
 
         // Tạo báo cáo mới

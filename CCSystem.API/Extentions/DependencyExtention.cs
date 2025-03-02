@@ -46,15 +46,11 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IVnpay, Vnpay>();
             services.AddScoped<IBookingService, BookingService>();
-            services.AddScoped<ReportRepository>();
+            
 
             return services;
         }
-        public static void AddJsonConverters(this IServiceCollection services)
-        {
-            services.AddSingleton<JsonDateOnlyConverter>();
-            services.AddSingleton<JsonTimeOnlyConverter>();
-        }
+      
 
         public static void AddJwtValidation(this WebApplicationBuilder builder)
         {

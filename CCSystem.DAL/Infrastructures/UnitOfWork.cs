@@ -28,6 +28,7 @@ namespace CCSystem.DAL.Infrastructures
         private BookingRepository _bookingRepository;
         private ReportRepository _reportRepository;
         private ReviewRepository _reviewRepository;
+        
 
 
         public UnitOfWork(IDbFactory dbFactory)

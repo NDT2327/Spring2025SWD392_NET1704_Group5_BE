@@ -13,9 +13,9 @@ namespace CCSystem.BLL.Services
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReviewService(UnitOfWork unitOfWork, IMapper mapper)
+        public ReviewService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            this._unitOfWork = (UnitOfWork)unitOfWork;
             _mapper = mapper;
         }
 
