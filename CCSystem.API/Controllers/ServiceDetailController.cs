@@ -96,7 +96,7 @@ namespace CCSystem.API.Controllers
         //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         [HttpPut(APIEndPointConstant.ServiceDetail.UpdateServiceDetailEndPoint)]
 
-        public async Task<IActionResult> UpdateServiceDetail([FromBody] PutServiceDetailRequest request)
+        public async Task<IActionResult> UpdateServiceDetail([FromRoute]int id, [FromBody] PutServiceDetailRequest request)
         {
             ValidationResult validationResult = _putServiceDetailValidator.Validate(request);
             if (!validationResult.IsValid) {
@@ -105,7 +105,7 @@ namespace CCSystem.API.Controllers
 
             try
             {
-                bool isUpdated = await _serviceDetailService.UpdateServiceDetailAsync(request);
+                bool isUpdated = await _serviceDetailService.UpdateServiceDetailAsync(id, request);
                 if (!isUpdated)
                 {
                     return NotFound(new { Message = "ServiceDetail not found or update failed." });
