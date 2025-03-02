@@ -8,7 +8,7 @@ namespace CCSystem.BLL.DTOs.ServiceDetails
 {
     public class PutServiceDetailRequest
     {
-        public int ServiceDetailId { get; set; }
+        //public int ServiceDetailId { get; set; }
         public int ServiceId { get; set; }  // Foreign key
         public string OptionName { get; set; }
         public string OptionType { get; set; }

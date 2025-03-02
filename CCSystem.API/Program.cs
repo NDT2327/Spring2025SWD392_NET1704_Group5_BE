@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using CCSystem.BLL.Services;
+using CCSystem.BLL.Profiles.Promotions;
 
 var builder = WebApplication.CreateBuilder(args);
 

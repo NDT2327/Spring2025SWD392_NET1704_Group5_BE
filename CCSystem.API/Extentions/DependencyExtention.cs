@@ -6,6 +6,7 @@ using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Infrastructures;
+using CCSystem.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
@@ -42,6 +43,7 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IBookingDetailService, BookingDetailService>();
             services.AddScoped<IServiceDetailService, ServiceDetailService>();
+            services.AddScoped<IPromotionService, PromotionService>();
 
 
             return services;

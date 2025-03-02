@@ -33,10 +33,7 @@ namespace CCSystem.DAL.Repositories
             await _context.SaveChangesAsync();
             return serviceDetail;
         }
-        public async Task<bool> ExistsAsync(int id)
-        {
-            return await _context.ServiceDetails.AnyAsync(s => s.ServiceDetailId == id);
-        }
+
         public async Task<bool> UpdateAsync(ServiceDetail serviceDetail)
         {
             try

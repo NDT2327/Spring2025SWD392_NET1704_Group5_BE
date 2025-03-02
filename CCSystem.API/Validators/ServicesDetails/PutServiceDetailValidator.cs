@@ -7,8 +7,8 @@ namespace CCSystem.API.Validators.Services
     {
         public PutServiceDetailValidator()
         {
-            RuleFor(x => x.ServiceDetailId)
-                           .GreaterThan(0).WithMessage("ServiceDetailId must be greater than 0.");
+            //RuleFor(x => x.ServiceDetailId)
+            //               .GreaterThan(0).WithMessage("ServiceDetailId must be greater than 0.");
 
             RuleFor(x => x.ServiceId)
                 .GreaterThanOrEqualTo(0).WithMessage("ServiceId must be a non-negative number.");

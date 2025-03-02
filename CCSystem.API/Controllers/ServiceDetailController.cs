@@ -1,19 +1,11 @@
-﻿using CCSystem.API.Authorization;
-using CCSystem.API.Constants;
-using CCSystem.BLL.Constants;
+﻿using CCSystem.API.Constants;
 using CCSystem.BLL.DTOs.Services;
 using CCSystem.BLL.DTOs.ServiceDetails;
 using CCSystem.BLL.Errors;
-using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
-using CCSystem.BLL.Utils;
 using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Formats.Asn1;
 
 namespace CCSystem.API.Controllers
 {
@@ -26,14 +18,16 @@ namespace CCSystem.API.Controllers
         #region Init controller 
         private readonly IServiceDetailService _serviceDetailService;
         private readonly IValidator<PostServiceDetailRequest> _postServiceDetailValidator;
+        private readonly IValidator<PutServiceDetailRequest> _putServiceDetailValidator;
 
         /// <summary>
         /// Controller for managing service details.
         /// </summary>
-        public ServiceDetailController(IServiceDetailService serviceDetailService, IValidator<PostServiceDetailRequest> postServiceDetailValidator)
+        public ServiceDetailController(IServiceDetailService serviceDetailService, IValidator<PostServiceDetailRequest> postServiceDetailValidator, IValidator<PutServiceDetailRequest> putServiceDetailValidator)
         {
             this._serviceDetailService = serviceDetailService;
             _postServiceDetailValidator = postServiceDetailValidator;
+            _putServiceDetailValidator = putServiceDetailValidator;
         }
 
         #endregion
@@ -102,11 +96,16 @@ namespace CCSystem.API.Controllers
         //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         [HttpPut(APIEndPointConstant.ServiceDetail.UpdateServiceDetailEndPoint)]
 
-        public async Task<IActionResult> UpdateServiceDetail([FromBody] PutServiceDetailRequest request)
+        public async Task<IActionResult> UpdateServiceDetail([FromRoute]int id, [FromBody] PutServiceDetailRequest request)
         {
+            ValidationResult validationResult = _putServiceDetailValidator.Validate(request);
+            if (!validationResult.IsValid) {
+                return BadRequest(validationResult.Errors);
+            }
+
             try
             {
-                bool isUpdated = await _serviceDetailService.UpdateServiceDetailAsync(request);
+                bool isUpdated = await _serviceDetailService.UpdateServiceDetailAsync(id, request);
                 if (!isUpdated)
                 {
                     return NotFound(new { Message = "ServiceDetail not found or update failed." });
