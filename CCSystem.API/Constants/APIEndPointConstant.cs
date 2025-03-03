@@ -93,7 +93,7 @@
             public const string CreateServiceDetailEndPoint = ServiceDetailEndPoint + "/create";
             public const string UpdateServiceDetailEndPoint = ServiceDetailEndPoint + "/update/{id}";
             public const string DeleteServiceDetailEndPoint = ServiceDetailEndPoint + "/delete/{id}";
-                public const string GetServiceDetailByServiceIdEndpont = ServiceDetailByIdEndPoint + "servicedetailid"; 
+            public const string GetServiceDetailByServiceIdEndpont = ServiceDetailByIdEndPoint + "/getbyserviceId"; 
         }
         #endregion
 
