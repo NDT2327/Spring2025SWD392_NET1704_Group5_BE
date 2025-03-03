@@ -72,10 +72,10 @@ namespace CCSystem.BLL.Services.Implementations
 
         #region UpdateServiceDetailAsync
 
-        public async Task<bool> UpdateServiceDetailAsync(PutServiceDetailRequest request)
+        public async Task<bool> UpdateServiceDetailAsync(int serviceDetailId, PutServiceDetailRequest request)
         {
             // Check if ServiceDetail exists
-            var serviceDetail = await _unitOfWork.ServiceDetailRepository.GetByIdAsync(request.ServiceDetailId);
+            var serviceDetail = await _unitOfWork.ServiceDetailRepository.GetByIdAsync(serviceDetailId);
             if (serviceDetail == null)
             {
                 throw new Exception("ServiceDetail not found.");

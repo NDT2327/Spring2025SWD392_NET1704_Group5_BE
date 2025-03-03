@@ -12,7 +12,7 @@ namespace CCSystem.BLL.Services.Interfaces
         //public Task<List<GetServiceDetailResponse>> GetAllServiceDetailsAsync();
         public Task<GetServiceDetailResponse> GetServiceDetailByIdAsync(int id);
         public Task<PostServiceDetailResponse> CreateServiceDetailAsync(PostServiceDetailRequest request);
-        public Task<bool> UpdateServiceDetailAsync(PutServiceDetailRequest request);
+        public Task<bool> UpdateServiceDetailAsync(int serviceDetailID, PutServiceDetailRequest request);
         public Task<bool> DeleteServiceDetailAsync(int id);
     }
 }
