@@ -20,7 +20,6 @@ namespace CCSystem.DAL.Repositories
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
             var categories = await _context.Categories
-                .AsNoTracking() // 🔥 Tránh cache dữ liệu cũ
                 .Select(c => new Category
                 {
                     CategoryId = c.CategoryId,
@@ -44,7 +43,6 @@ namespace CCSystem.DAL.Repositories
         public async Task<Category?> GetCategoryByIdAsync(int id)
         {
             return await _context.Categories
-                .AsNoTracking() // ⚡ Tránh lỗi cache, tăng hiệu suất
                 .FirstOrDefaultAsync(c => c.CategoryId == id); // 📌 Load đầy đủ dữ liệu từ DB
         }
 
