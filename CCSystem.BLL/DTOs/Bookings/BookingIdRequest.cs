@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCSystem.BLL.DTOs.Booking
+namespace CCSystem.BLL.DTOs.Bookings
 {
     public class BookingIdRequest
     {

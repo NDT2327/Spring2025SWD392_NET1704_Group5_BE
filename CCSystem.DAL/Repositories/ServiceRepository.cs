@@ -18,6 +18,21 @@ namespace CCSystem.DAL.Repositories
             _context = context;
         }
 
+        public async Task<List<Service>> GetServicesByCategoryId(int categoryId)
+        {
+            try
+            {
+                var services = await _context.Services.Include(s => s.Category)
+                    .Where(s => s.Category.CategoryId == categoryId)
+                    .ToListAsync();
+                return services;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<Service>> GetListServicesAsync()
         {
             try

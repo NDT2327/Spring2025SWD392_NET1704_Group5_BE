@@ -16,5 +16,7 @@ namespace CCSystem.BLL.Services.Interfaces
         public Task<List<ServiceResponse>> GetListServicesAsync();
 
         public Task<ServiceResponse> GetServiceById(int id);
+
+        public Task<List<ServiceResponse>> GetServicesByCategoryId(int categoryId);
     }
 }
