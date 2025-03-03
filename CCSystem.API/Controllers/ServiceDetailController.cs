@@ -32,6 +32,17 @@ namespace CCSystem.API.Controllers
 
         #endregion
 
+        [HttpGet(APIEndPointConstant.ServiceDetail.GetServiceDetailByServiceIdEndpont)]
+        public async Task<IActionResult> GetServiceDetailsByServiceId(int id)
+        {
+            var result = await _serviceDetailService.GetServiceDetailsByServiceIdAsync(id);
+            if (result == null || result.Count == 0)
+            {
+                return NotFound("No service details found for this service.");
+            }
+            return Ok(result);
+        }
+
         #region Get Service Detail
 
         /// <summary>
