@@ -31,7 +31,7 @@ namespace CCSystem.BLL.Services.Implementations
 
         public async Task CreateBookingWithDetailsAsync(PostBookingRequest postBookingRequest)
         {
-            //using var transaction = await _unitOfWork.BeginTransactionAsync();
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
                 var customer = await _unitOfWork.AccountRepository.GetByIdAsync(postBookingRequest.CustomerId);
@@ -92,7 +92,7 @@ namespace CCSystem.BLL.Services.Implementations
                 await _unitOfWork.CommitAsync();
 
                 // Xác nhận transaction
-                //await transaction.CommitAsync();
+                await transaction.CommitAsync();
 
             }
             catch (BadRequestException ex)
@@ -108,7 +108,7 @@ namespace CCSystem.BLL.Services.Implementations
             catch (Exception ex)
             {
                 // Hoàn tác tất cả thay đổi nếu có lỗi
-                //await transaction.RollbackAsync();
+                await transaction.RollbackAsync();
                 throw new Exception($"Lỗi khi tạo booking và booking details: {ex.Message}");
             }
         }

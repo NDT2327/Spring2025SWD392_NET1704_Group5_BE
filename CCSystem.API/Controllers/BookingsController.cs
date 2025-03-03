@@ -1,8 +1,12 @@
 ﻿using CCSystem.API.Constants;
 using CCSystem.BLL.DTOs.Bookings;
 using CCSystem.BLL.Errors;
+using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
+using CCSystem.BLL.Utils;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +17,12 @@ namespace CCSystem.API.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly IBookingService _bookingsService;
+        private readonly IValidator<PostBookingRequest> _postBookingRequestValidator;
 
-        public BookingsController(IBookingService bookingsService)
+        public BookingsController(IBookingService bookingsService, IValidator<PostBookingRequest> postBookingRequestValidator)
         {
             this._bookingsService = bookingsService;
+            this._postBookingRequestValidator = postBookingRequestValidator;
         }
 
         #region Create Booking With Details
@@ -60,6 +66,13 @@ namespace CCSystem.API.Controllers
         [HttpPost(APIEndPointConstant.Booking.BookingEndpoint)]
         public async Task<IActionResult> CreateBookingWithDetailsAsync([FromBody] PostBookingRequest postBookingRequest)
         {
+            ValidationResult validationResult = await this._postBookingRequestValidator.ValidateAsync(postBookingRequest);
+            if (validationResult.IsValid == false)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
             await _bookingsService.CreateBookingWithDetailsAsync(postBookingRequest);
             return Ok(new { Message = "Booking created successfully" });
         }

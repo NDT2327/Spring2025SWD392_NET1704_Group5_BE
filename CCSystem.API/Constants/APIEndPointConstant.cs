@@ -45,7 +45,7 @@
             public const string ServiceEndpoint = ApiEndpoint + "/services";
             public const string SearchServiceEndpoint = ServiceEndpoint + "/search";
             public const string GetServiceByIdEndpoint = ServiceEndpoint + "/{id}";
-
+            public const string GetByCategoryId = ServiceEndpoint + "/category" + "/{id}";
 
         }
 
