@@ -1,6 +1,7 @@
 ﻿using CCSystem.API.Authorization;
 using CCSystem.API.Constants;
 using CCSystem.BLL.Constants;
+using CCSystem.BLL.DTOs.Category;
 using CCSystem.BLL.DTOs.Services;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
@@ -17,17 +18,21 @@ namespace CCSystem.API.Controllers
     public class ServicesController : ControllerBase
     {
         private IServiceHomeService _serviceHomeService;
+        private ICategoryService _categoryService;
         private IValidator<PostServiceRequest> _postServiceValidator;
         private IValidator<SearchServiceRequest> _searchServiceValidator;
         private IValidator<ServiceIdRequest> _serviceIdValidator;
+        private IValidator<CategoryIdRequest> _categoryIdValidator;
 
         public ServicesController(IServiceHomeService serviceHomeService, IValidator<PostServiceRequest> postServiceValidator,
-            IValidator<SearchServiceRequest> searchServiceValidator, IValidator<ServiceIdRequest> serviceIdValidator)
+            IValidator<SearchServiceRequest> searchServiceValidator, IValidator<ServiceIdRequest> serviceIdValidator, ICategoryService categoryService, IValidator<CategoryIdRequest> categoryIdValidator)
         {
             this._serviceHomeService = serviceHomeService;
             this._postServiceValidator = postServiceValidator;
             this._searchServiceValidator = searchServiceValidator;
             this._serviceIdValidator = serviceIdValidator;
+            this._categoryService = categoryService;
+            this._categoryIdValidator = categoryIdValidator;
         }
 
         #region Create Service
@@ -187,6 +192,43 @@ namespace CCSystem.API.Controllers
             return Ok(service);
         }
         #endregion
+
+        #region Get Services By Category Id
+        /// <summary>
+        /// Retrieves a list of services based on the specified category id.
+        /// </summary>
+        /// <param name="categoryId">The identifier of the category.</param>
+        /// <returns>A list of services associated with the given category.</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/v1/services/category/1
+        /// </remarks>
+        /// <response code="200">Returns a list of services for the specified category.</response>
+        /// <response code="400">Invalid category id or business logic error.</response>
+        /// <response code="500">Unexpected system error.</response>
+        /// <exception cref="NotFoundException">Thrown if the specified category does not exist.</exception>
+        [ProducesResponseType(typeof(IEnumerable<ServiceResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        [HttpGet(APIEndPointConstant.Service.GetByCategoryId)]
+        public async Task<IActionResult> GetServicesByCategoryIdAsync([FromRoute] CategoryIdRequest request)
+        {
+            ValidationResult validationResult = await _categoryIdValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            var services = await _serviceHomeService.GetServicesByCategoryId(request.Id);
+            return Ok(services);
+
+        }
+        #endregion
+
 
     }
 }

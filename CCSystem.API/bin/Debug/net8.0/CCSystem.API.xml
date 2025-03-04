@@ -444,5 +444,21 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no service exists with the provided Id.</exception>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
         </member>
+        <member name="M:CCSystem.API.Controllers.ServicesController.GetServicesByCategoryIdAsync(CCSystem.BLL.DTOs.Category.CategoryIdRequest)">
+             <summary>
+             Retrieves a list of services based on the specified category id.
+             </summary>
+             <param name="categoryId">The identifier of the category.</param>
+             <returns>A list of services associated with the given category.</returns>
+             <remarks>
+             Sample request:
+            
+                 GET /api/v1/services/category/1
+             </remarks>
+             <response code="200">Returns a list of services for the specified category.</response>
+             <response code="400">Invalid category id or business logic error.</response>
+             <response code="500">Unexpected system error.</response>
+             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown if the specified category does not exist.</exception>
+        </member>
     </members>
 </doc>

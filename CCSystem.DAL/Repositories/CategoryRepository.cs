@@ -17,6 +17,7 @@ namespace CCSystem.DAL.Repositories
             _context = context;
         }
 
+
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
             var categories = await _context.Categories

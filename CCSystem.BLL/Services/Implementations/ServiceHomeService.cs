@@ -126,6 +126,25 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
+        public async Task<List<ServiceResponse>> GetServicesByCategoryId(int categoryId)
+        {
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(categoryId);
+                if (category == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistCategoryId);
+                }
+                var services = await _unitOfWork.ServiceRepository.GetServicesByCategoryId(category.CategoryId);
+                var response = _mapper.Map<List<ServiceResponse>>(services);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<ServiceResponse>> SearchServiceAsync(SearchServiceRequest request)
         {
             try
