@@ -119,8 +119,30 @@ namespace CCSystem.BLL.Services.Implementations
             try
             {
                 var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+                if (booking == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
+                }
                 //return _mapper.Map<BookingResponse>(booking);
                 return booking;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<BookingResponse> GetBookingById(int id)
+        {
+            try
+            {
+                var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+                if (booking == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
+                }
+                var response = _mapper.Map<BookingResponse>(booking);
+                return response;
             }
             catch (Exception ex)
             {

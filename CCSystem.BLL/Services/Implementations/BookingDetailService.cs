@@ -75,5 +75,23 @@ namespace CCSystem.BLL.Services.Implementations
             }
 
         }
+
+        public async Task<BookingDetailResponse> GetBookingDetailById(int id)
+        {
+            try
+            {
+                var bDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(id);
+                if (bDetail == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingDetailId);
+                }
+                var response = _mapper.Map<BookingDetailResponse>(bDetail);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
