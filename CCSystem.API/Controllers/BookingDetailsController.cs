@@ -60,6 +60,9 @@ namespace CCSystem.API.Controllers
         #endregion
 
         #region Get Booking Detail By Booking Id
+        /// <summary>
+        /// Get detailed information from a booking Id.
+        /// </summary>
         [ProducesResponseType(typeof(BookingDetailResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]

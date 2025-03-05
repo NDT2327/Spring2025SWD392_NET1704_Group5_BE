@@ -21,6 +21,8 @@ namespace CCSystem.BLL.Constants
             public const string NotExistBookingId = "Booking id does not exist in the system";
             public const string NotExistBookingDetailId = "Booking Detail id does not exist in the system";
             public const string NotExistServiceDetailId = "Service detail id does not exist in the system";
+            public const string NotExistAssignId = "Assign id does not exist in the system";
+
 
         }
 
