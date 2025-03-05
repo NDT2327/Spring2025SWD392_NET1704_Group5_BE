@@ -1,4 +1,5 @@
-﻿using CCSystem.BLL.DTOs.Report;
+﻿using CCSystem.API.Constants;
+using CCSystem.BLL.DTOs.Report;
 using CCSystem.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ public class ReportsController : ControllerBase
         _reportService = reportService;
     }
 
-    [HttpPost]
+    [HttpPost(APIEndPointConstant.Report.CreateReportEndpoint)]
     public async Task<IActionResult> CreateReportAsync([FromBody] ReportRequest request)
     {
         if (!ModelState.IsValid)
@@ -24,7 +25,7 @@ public class ReportsController : ControllerBase
         var reportResponse = await _reportService.CreateReportAsync(request);
         return Ok(reportResponse);
     }
-    [HttpPut("{id}")]
+    [HttpPut(APIEndPointConstant.Report.UpdateReportEndpoint)]
     public async Task<IActionResult> UpdateReport(int id, ReportRequest request)
     {
         var result = await _reportService.UpdateReportAsync(id, request);
@@ -33,7 +34,7 @@ public class ReportsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete(APIEndPointConstant.Report.DeleteReportEndpoint)]
     public async Task<IActionResult> DeleteReport(int id)
     {
         var result = await _reportService.DeleteReportAsync(id);
@@ -42,7 +43,7 @@ public class ReportsController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet(APIEndPointConstant.Report.GetReportByIdEndpoint)]
     public async Task<IActionResult> GetReportById(int id)
     {
         var result = await _reportService.GetReportByIdAsync(id);
@@ -51,7 +52,7 @@ public class ReportsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet]
+    [HttpGet(APIEndPointConstant.Report.GetAllReportsEndpoint)]
     public async Task<IActionResult> GetAllReports()
     {
         var result = await _reportService.GetAllReportsAsync();

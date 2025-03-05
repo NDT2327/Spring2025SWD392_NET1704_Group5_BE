@@ -14,5 +14,6 @@ namespace CCSystem.BLL.Services.Interfaces
         public Task<PostServiceDetailResponse> CreateServiceDetailAsync(PostServiceDetailRequest request);
         public Task<bool> UpdateServiceDetailAsync(int serviceDetailID, PutServiceDetailRequest request);
         public Task<bool> DeleteServiceDetailAsync(int id);
+        Task<List<GetServiceDetailResponse>> GetServiceDetailsByServiceIdAsync(int serviceId);
     }
 }
