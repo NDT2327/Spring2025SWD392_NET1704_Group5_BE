@@ -26,7 +26,7 @@ namespace CCSystem.BLL.Services.Implementations
         #region Get ServiceDetail by ID
         public async Task<GetServiceDetailResponse> GetServiceDetailByIdAsync(int id)
         {
-            var serviceDetail =await _unitOfWork.ServiceDetailRepository.GetByIdAsync(id);
+            var serviceDetail = await _unitOfWork.ServiceDetailRepository.GetByIdAsync(id);
 
             if (serviceDetail != null)
             {
@@ -37,6 +37,25 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception("Service Detail not found");
             }
         }
+        public async Task<List<GetServiceDetailResponse>> GetServiceDetailsByServiceIdAsync(int serviceId)
+        {
+            var serviceDetails = await _unitOfWork.ServiceDetailRepository.GetByServiceIdAsync(serviceId);
+            return serviceDetails.Select(detail => new GetServiceDetailResponse
+            {
+                ServiceDetailId = detail.ServiceDetailId,
+                ServiceId = detail.ServiceId,
+                OptionName = detail.OptionName,
+                OptionType = detail.OptionType,
+                BasePrice = detail.BasePrice,
+                Unit = detail.Unit,
+                Duration = detail.Duration,
+                Description = detail.Description,
+                IsActive = detail.IsActive
+            }).ToList();
+        }
+
+
+
         #endregion
 
         #region CreateServiceDetailAsync
@@ -115,4 +134,5 @@ namespace CCSystem.BLL.Services.Implementations
         }
         #endregion
     }
+
 }

@@ -79,5 +79,11 @@ namespace CCSystem.DAL.Repositories
             return true; // Successfully deleted
         }
 
+        public async Task<List<ServiceDetail>> GetByServiceIdAsync(int serviceId)
+        {
+            return await _context.ServiceDetails
+                .Where(s => s.ServiceId == serviceId)
+                .ToListAsync();
+        }
     }
 }
