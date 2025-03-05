@@ -34,7 +34,11 @@ namespace CCSystem.DAL.Repositories
         {
             try
             {
-                return await _context.BookingDetails.FirstOrDefaultAsync(bd => bd.DetailId == id);
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.ServiceDetail)
+                    .Include(bd => bd.Service)
+                    .FirstOrDefaultAsync(bd => bd.DetailId == id);
             }
             catch (Exception ex)
             {

@@ -11,6 +11,7 @@ namespace CCSystem.BLL.Services.Interfaces
     public interface IBookingService
     {
         Task<Booking> GetBooking(int id);
+        Task<BookingResponse> GetBookingById(int id);
         Task UpdateBookingAsync(Booking booking);
         Task CreateBookingWithDetailsAsync(PostBookingRequest postBookingRequest);
     }

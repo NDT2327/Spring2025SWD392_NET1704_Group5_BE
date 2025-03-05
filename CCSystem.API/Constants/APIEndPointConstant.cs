@@ -115,6 +115,14 @@
         public static class Booking
         {
             public const string BookingEndpoint = ApiEndpoint + "/bookings";
+            public const string GetBookingById = BookingEndpoint + "/{id}";
+
+        }
+
+        public static class BookingDetail
+        {
+            public const string BookingDetailEndpoint = ApiEndpoint + "/bookingDetails";
+            public const string GetBDetailByIdEndpoint = BookingDetailEndpoint + "/{id}";
 
         }
 
