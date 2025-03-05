@@ -124,16 +124,10 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
         [HttpGet(APIEndPointConstant.Account.GetAccountProfileEndpoint)]
-        public async Task<IActionResult> GetAccountProfile([FromQuery] string accountId)
+        public async Task<IActionResult> GetAccountProfile([FromRoute] AccountIdRequest accountId)
         {
-            if (string.IsNullOrWhiteSpace(accountId))
-            {
-                return BadRequest(new { message = "Account ID is required" });
-            }
-
-            var claims = User.Claims;
-            int id = int.Parse(accountId);
-            var result = await _accountService.GetAccountByIdAsync(id);
+            
+            var result = await _accountService.GetAccountByIdAsync(accountId.Id);
             if (result == null)
             {
                 return NotFound(new { message = "Account not found" });

@@ -26,6 +26,8 @@ namespace CCSystem.API.Validators.BookingDetails
                 .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.")
                 .NotEmpty().WithMessage("{PropertyName} must not be empty.")
                 .NotNull().WithMessage("{PropertyName} must not be null.");
+
+
         }
     }
 }

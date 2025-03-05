@@ -31,7 +31,7 @@
             <param name="accountId">Account ID to unlock</param>
             <returns>Success message if unlocked</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)" -->
         <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccounts(CCSystem.BLL.DTOs.Accounts.AccountsListRequest)" -->
         <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.UpdateAccount(System.Int32,CCSystem.BLL.DTOs.Accounts.UpdateAccountRequest)" -->
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
