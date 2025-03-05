@@ -18,6 +18,23 @@ namespace CCSystem.DAL.Repositories
             this._context = context;
         }
 
+        public async Task<List<BookingDetail>> GetBookingDetailsByBooking(int id)
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
+                    .Include(bd => bd.ServiceDetail)
+                    .Where(bd => bd.BookingId == id)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task CreateBookingDetailAsync(BookingDetail bookingDetail)
         {
             try

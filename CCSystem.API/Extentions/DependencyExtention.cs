@@ -54,7 +54,7 @@ namespace CCSystem.API.Extentions
 
             return services;
         }
-      
+
 
         public static void AddJwtValidation(this WebApplicationBuilder builder)
         {
@@ -147,6 +147,11 @@ namespace CCSystem.API.Extentions
         {
             // Configure the HTTP request pipeline.
             app.UseSwagger();
+            //app.UseSwaggerUI(c =>
+            //    {
+            //        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dispatch API V1");
+            //        c.RoutePrefix = string.Empty;
+            //    });
             app.UseSwaggerUI();
             app.UseCors(CorsConstant.PolicyName);
             app.UseAuthentication();

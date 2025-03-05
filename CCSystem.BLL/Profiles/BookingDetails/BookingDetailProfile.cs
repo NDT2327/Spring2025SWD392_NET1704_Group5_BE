@@ -13,7 +13,10 @@ namespace CCSystem.BLL.Profiles.BookingDetails
     {
         public BookingDetailProfile()
         {
-            CreateMap<BookingDetail, BookingDetailResponse>().ReverseMap();
+            CreateMap<BookingDetail, BookingDetailResponse>()
+                .ForMember(dept => dept.ServiceName, opt => opt.MapFrom(src => src.Service.ServiceName))
+                .ForMember(dept => dept.ServiceDetailName, opt => opt.MapFrom(src => src.ServiceDetail.OptionName))
+                .ReverseMap();
         }
     }
 }

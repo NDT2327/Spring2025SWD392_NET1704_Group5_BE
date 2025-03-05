@@ -1,5 +1,6 @@
 ﻿using CCSystem.API.Constants;
 using CCSystem.BLL.DTOs.BookingDetails;
+using CCSystem.BLL.DTOs.Bookings;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
@@ -16,11 +17,13 @@ namespace CCSystem.API.Controllers
     {
         private readonly IBookingDetailService _bookingDetailService;
         private readonly IValidator<BookingDetailIdRequest> _bookingDetailIdValidator;
+        private readonly IValidator<BookingIdRequest> _bookingIdValidator;
 
-        public BookingDetailsController(IBookingDetailService bookingDetailService, IValidator<BookingDetailIdRequest> bookingDetailIdValidator)
+        public BookingDetailsController(IBookingDetailService bookingDetailService, IValidator<BookingDetailIdRequest> bookingDetailIdValidator, IValidator<BookingIdRequest> bookingIdValidator)
         {
             this._bookingDetailService = bookingDetailService;
             this._bookingDetailIdValidator = bookingDetailIdValidator;
+            this._bookingIdValidator = bookingIdValidator;
         }
 
         #region Get Booking Detail By Id
@@ -53,6 +56,26 @@ namespace CCSystem.API.Controllers
             var bookingDetail = await _bookingDetailService.GetBookingDetailById(bookingDetailId.Id);
 
             return Ok(bookingDetail);
+        }
+        #endregion
+
+        #region Get Booking Detail By Booking Id
+        [ProducesResponseType(typeof(BookingDetailResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpGet(APIEndPointConstant.BookingDetail.GetBDetailByBookIdEndpoint)]
+        public async Task<IActionResult> GetBookingDetailByBookingId([FromRoute] BookingIdRequest request)
+        {
+            ValidationResult validationResult = await _bookingIdValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            var listBookingDetail = await _bookingDetailService.GetBookDetailByBooking(request.Id);
+            return Ok(listBookingDetail);
         }
         #endregion
     }

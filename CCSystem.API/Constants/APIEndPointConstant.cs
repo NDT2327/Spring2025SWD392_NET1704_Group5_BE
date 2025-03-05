@@ -123,6 +123,8 @@
         {
             public const string BookingDetailEndpoint = ApiEndpoint + "/bookingDetails";
             public const string GetBDetailByIdEndpoint = BookingDetailEndpoint + "/{id}";
+            public const string GetBDetailByBookIdEndpoint = BookingDetailEndpoint + "/booking" + "/{id}";
+
 
         }
 

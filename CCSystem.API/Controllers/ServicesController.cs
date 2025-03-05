@@ -120,7 +120,7 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
         [Produces(MediaTypeConstant.ApplicationJson)]
-        [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
+        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
         [HttpGet(APIEndPointConstant.Service.SearchServiceEndpoint)]
         public async Task<IActionResult> GetSearchServiceAsync([FromQuery] SearchServiceRequest searchServiceRequest)
         {

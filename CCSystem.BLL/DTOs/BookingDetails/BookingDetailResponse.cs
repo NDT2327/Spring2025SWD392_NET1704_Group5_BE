@@ -15,15 +15,19 @@ namespace CCSystem.BLL.DTOs.BookingDetails
 
         public int ServiceId { get; set; }
 
-        public DateOnly ScheduleDate { get; set; }
+        public string ServiceName { get; set; }
+
+        public int? ServiceDetailId { get; set; }
+
+        public string ServiceDetailName { get; set; }
 
         public int Quantity { get; set; }
 
         public decimal UnitPrice { get; set; }
 
+        public DateOnly ScheduleDate { get; set; }
+        
         public TimeOnly ScheduleTime { get; set; }
-
-        public int? ServiceDetailId { get; set; }
 
         //public virtual Booking Booking { get; set; }
 
