@@ -54,6 +54,7 @@ namespace CCSystem.BLL.Services.Implementations
                     UnitPrice = postBookingDetailRequest.Quantity * serviceDetail.BasePrice.Value,
                     ServiceId = postBookingDetailRequest.ServiceId,
                     ServiceDetailId = postBookingDetailRequest.ServiceDetailId,
+                    IsAssign = false
                 };
                 await _unitOfWork.BookingDetailRepository.CreateBookingDetailAsync(bookingDetail);
                 await _unitOfWork.CommitAsync();
@@ -74,6 +75,26 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
 
+        }
+
+        public async Task<List<BookingDetailResponse>> GetBookDetailByBooking(int bookingId)
+        {
+            try
+            {
+                var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId);
+                if (booking == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
+                }
+                var detailLists = await _unitOfWork.BookingDetailRepository
+                    .GetBookingDetailsByBooking(booking.BookingId);
+                var reponses = _mapper.Map<List<BookingDetailResponse>>(detailLists);
+                return reponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<BookingDetailResponse> GetBookingDetailById(int id)

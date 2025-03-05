@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAtyZOr5QC+UynJDdokVSu6AAAAAACAAAAAAAQZgAAAAEAACAAAAB1mwdzjnnEHFuQD++mhNTi9kLSPMt1sgoJ7W9K1v93owAAAAAOgAAAAAIAACAAAADvhliRjO7GgF/IWIVkNPXSi3l5+mEglGJK1ES8yXqIW4AAAAC50FW9jA1nAKHQjU26/Pagmw9WH/ImbCF02UF9UsG/spt7nRxIs6nDnj1uKpG5zLHdiHmt/MbJCTgi2FhNbylToDZNk8J+ZoKerEEboghA7ddGXqgoB/zdKZzyqg+6zvYHyKtyrWbg1G31jkJTW/xYIEokLveYhrQmX+PVLLMYcUAAAACytPta/pQdJ6DWak78LUkmNsMPIoGjKpl6CfWJraoKSbe4XTo64WJ6Lqjv2d97wqm8d23lKWYt+c4CcMphz5c+</EncryptedPassword>
+    <History>True|2025-03-05T09:29:14.3348196Z||;True|2025-03-05T16:16:59.5902467+07:00||;False|2025-03-05T16:14:17.7579698+07:00||;True|2025-03-05T16:07:21.1640153+07:00||;True|2025-03-05T16:02:42.9640586+07:00||;False|2025-03-05T15:53:30.5413068+07:00||;True|2025-03-05T15:48:49.2966810+07:00||;False|2025-03-05T15:46:44.6043776+07:00||;False|2025-03-05T15:45:36.3995741+07:00||;True|2025-03-05T15:37:40.4512765+07:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <EFMigrations Include="CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext">
+      <Value>Data Source=tcp:ccsystem-apidbserver.database.windows.net,1433%3bInitial Catalog=CCSystem.API_db%3bUser Id=AzureCozyCareSystem%40ccsystem-apidbserver%3bPassword=rty1435/rty1435</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

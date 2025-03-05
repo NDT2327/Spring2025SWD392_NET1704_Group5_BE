@@ -49,7 +49,9 @@ namespace CCSystem.DAL.Repositories
         {
             try
             {
-                return await _context.Bookings.FindAsync(bookingId);
+                return await _context.Bookings
+                    .Include(b => b.Customer)
+                    .FirstOrDefaultAsync(b => b.BookingId == bookingId);
             }
             catch (Exception ex)
             {
