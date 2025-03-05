@@ -31,7 +31,6 @@ namespace CCSystem.API.Controllers
         }
 
         #endregion
-
         [HttpGet(APIEndPointConstant.ServiceDetail.GetServiceDetailByServiceIdEndpont)]
         public async Task<IActionResult> GetServiceDetailsByServiceId(int id)
         {
@@ -63,7 +62,7 @@ namespace CCSystem.API.Controllers
             return Ok(serviceDetail);
         }
         #endregion
-
+        
         #region Create Service Detail
         /// <summary>
         /// Create a service detail.
