@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using CCSystem.BLL.Exceptions;
 using CCSystem.DAL.Repositories;
 using CCSystem.BLL.Utils;
+using CCSystem.BLL.Constants;
 
 namespace CCSystem.BLL.Service
 {
@@ -66,8 +67,7 @@ namespace CCSystem.BLL.Service
 
             return response;
         }
-
-        public async Task<CategoryResponse> CreateCategoryAsync(CategoryRequest request)
+        public async Task CreateCategoryAsync(CategoryRequest request)
         {
             string folderName = "category_images";
             bool isUpload = false;
@@ -76,23 +76,25 @@ namespace CCSystem.BLL.Service
 
             try
             {
-                if (request.Image != null && request.Image.Length > 0)
+                if (request.Image == null || request.Image.Length == 0)
                 {
-                    // Tạo đường dẫn file tạm
-                    tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName));
+                    throw new InvalidOperationException(MessageConstant.CommonMessage.NotExistFile);
+                }
 
-                    // Lưu file tạm thời
-                    await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
-                    {
-                        await request.Image.CopyToAsync(stream);
-                    }
+                // Tạo đường dẫn file tạm
+                tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName));
 
-                    // Tải lên Firebase
-                    imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
-                    if (!string.IsNullOrEmpty(imageUrl))
-                    {
-                        isUpload = true;
-                    }
+                // Lưu file tạm thời
+                await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
+
+                // Tải lên Firebase
+                imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    isUpload = true;
                 }
 
                 // Tạo đối tượng Category
@@ -106,18 +108,20 @@ namespace CCSystem.BLL.Service
 
                 await _unitOfWork.CategoryRepository.CreateCategoryAsync(category);
                 await _unitOfWork.CommitAsync();
-
-                var savedCategory = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(category.CategoryId);
-
-                return _mapper.Map<CategoryResponse>(savedCategory);
+            }
+            catch (BadRequestException ex)
+            {
+                string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
+                throw new BadRequestException(message);
             }
             catch (Exception ex)
             {
-                if (isUpload)
+                if (isUpload && !string.IsNullOrEmpty(imageUrl))
                 {
                     await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(imageUrl);
                 }
-                throw new Exception("Failed to create category: " + ex.Message);
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
             }
             finally
             {
@@ -125,14 +129,60 @@ namespace CCSystem.BLL.Service
             }
         }
 
+
         public async Task UpdateCategoryAsync(int id, CategoryRequest request)
         {
             var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(id);
             if (category == null) throw new KeyNotFoundException("Category not found");
 
-            _mapper.Map(request, category);
-            _unitOfWork.CategoryRepository.UpdateCategory(category); 
-            await _unitOfWork.CommitAsync(); 
+            string folderName = "category_images";
+            bool isUpload = false;
+            string imageUrl = category.Image; // Giữ nguyên ảnh cũ nếu không có ảnh mới
+            string tempFilePath = "";
+
+            try
+            {
+                // Nếu có ảnh mới, upload ảnh lên Firebase
+                if (request.Image != null && request.Image.Length > 0)
+                {
+                    tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName));
+
+                    await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        await request.Image.CopyToAsync(stream);
+                    }
+
+                    imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
+                    isUpload = true;
+
+                    // Xóa ảnh cũ nếu có ảnh mới
+                    if (!string.IsNullOrEmpty(category.Image) && Uri.IsWellFormedUriString(category.Image, UriKind.Absolute))
+                    {
+                        await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(category.Image);
+                    }
+                }
+
+                    // Cập nhật thông tin category
+                    category.CategoryName = request.CategoryName;
+                category.Description = request.Description;
+                category.IsActive = request.IsActive;
+                category.Image = imageUrl; // Cập nhật ảnh mới (hoặc giữ ảnh cũ nếu không có ảnh mới)
+
+                _unitOfWork.CategoryRepository.UpdateCategory(category);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                if (isUpload)
+                {
+                    await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(imageUrl);
+                }
+                throw new Exception("Failed to update category: " + ex.Message);
+            }
+            finally
+            {
+                await FileUtils.SafeDeleteFileAsync(tempFilePath);
+            }
         }
 
         public async Task DeleteCategoryAsync(int id)

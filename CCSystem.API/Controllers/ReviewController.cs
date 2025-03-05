@@ -8,6 +8,9 @@ using AutoMapper;
 
 namespace CCSystem.API.Controllers
 {
+    /// <summary>
+    /// Controller quản lý đánh giá (Review).
+    /// </summary>
     [ApiController]
     [Route(APIEndPointConstant.Review.ReviewEndpoint)] 
     public class ReviewController : ControllerBase
@@ -15,14 +18,22 @@ namespace CCSystem.API.Controllers
         private readonly IReviewService _reviewService;
         private readonly IValidator<ReviewRequest> _validator;
         private readonly IMapper _mapper;
-
+        /// <summary>
+        /// Khởi tạo ReviewController với các dịch vụ liên quan.
+        /// </summary>
+        /// <param name="reviewService">Dịch vụ quản lý đánh giá</param>
+        /// <param name="validator">Trình xác thực đánh giá</param>
+        /// <param name="mapper">Trình ánh xạ dữ liệu</param>
         public ReviewController(IReviewService reviewService, IValidator<ReviewRequest> validator, IMapper mapper)
         {
             _reviewService = reviewService;
             _validator = validator;
             _mapper = mapper;
         }
-
+        /// <summary>
+        /// Lấy danh sách tất cả đánh giá.
+        /// </summary>
+        /// <returns>Danh sách đánh giá</returns>
         [HttpGet(APIEndPointConstant.Review.GetAllReviewsEndpoint)] 
         public async Task<IActionResult> GetAllReviews()
         {
@@ -30,7 +41,11 @@ namespace CCSystem.API.Controllers
             return Ok(reviews);
         }
 
-        // GET: /api/v1/reviews/{id}
+        /// <summary>
+        /// Lấy đánh giá theo ID.
+        /// </summary>
+        /// <param name="id">ID của đánh giá</param>
+        /// <returns>Thông tin đánh giá nếu tồn tại</returns>
         [HttpGet(APIEndPointConstant.Review.GetReviewByIdEndpoint)] 
         public async Task<IActionResult> GetReviewById(int id)
         {
@@ -42,8 +57,12 @@ namespace CCSystem.API.Controllers
             return Ok(review);
         }
 
-        // POST: /api/v1/reviews/createreview
-        [HttpPost(APIEndPointConstant.Review.CreateReviewEndpoint)] 
+        /// <summary>
+        /// Tạo một đánh giá mới.
+        /// </summary>
+        /// <param name="reviewRequest">Thông tin đánh giá</param>
+        /// <returns>Trả về NoContent nếu thành công</returns>
+        [HttpPost(APIEndPointConstant.Review.CreateReviewEndpoint)]
         public async Task<IActionResult> CreateReview([FromBody] ReviewRequest reviewRequest)
         {
             if (reviewRequest == null)
@@ -57,10 +76,16 @@ namespace CCSystem.API.Controllers
                 return BadRequest(validationResult.Errors);
             }
 
-            var reviewResponse = await _reviewService.AddReviewAsync(reviewRequest);
-            return CreatedAtAction(nameof(GetReviewById), new { id = reviewResponse.ReviewId }, reviewResponse);
+            await _reviewService.AddReviewAsync(reviewRequest); 
+            return NoContent(); 
         }
-
+        /// <summary>
+        /// Cập nhật đánh giá theo ID.
+        /// </summary>
+        /// <param name="id">ID của đánh giá</param>
+        /// <param name="reviewRequest">Dữ liệu đánh giá cập nhật</param>
+        /// <returns>Thông báo cập nhật thành công</returns>
+       
         [HttpPut(APIEndPointConstant.Review.UpdateReviewEndpoint)] 
         public async Task<IActionResult> UpdateReview(int id, [FromBody] ReviewRequest reviewRequest)
         {
@@ -76,7 +101,11 @@ namespace CCSystem.API.Controllers
             return Ok($"Review with ID {id} has been updated successfully.");
         }
 
-        // DELETE: /api/v1/reviews/deletereview/{id}
+        /// <summary>
+        /// Xóa đánh giá theo ID.
+        /// </summary>
+        /// <param name="id">ID của đánh giá</param>
+        /// <returns>Trả về NoContent nếu thành công</returns>
         [HttpDelete(APIEndPointConstant.Review.DeleteReviewEndpoint)] 
         public async Task<IActionResult> DeleteReview(int id)
         {

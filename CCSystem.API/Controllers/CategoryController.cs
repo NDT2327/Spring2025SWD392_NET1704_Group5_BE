@@ -31,8 +31,11 @@ namespace CCSystem.API.Controllers
     public class CategoryController : ControllerBase
     {
         private ICategoryService _categoryService;
-
-    public CategoryController(ICategoryService categoryService)
+        /// <summary>
+        /// Constructor để inject service quản lý danh mục.
+        /// </summary>
+        /// <param name="categoryService">Service xử lý danh mục</param>
+        public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
     }
