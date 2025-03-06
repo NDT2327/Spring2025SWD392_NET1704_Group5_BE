@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.BLL.Exceptions;
+using CCSystem.BLL.Utils;
 
 namespace CCSystem.BLL.Services.Implementations
 {
@@ -18,7 +20,7 @@ namespace CCSystem.BLL.Services.Implementations
         }
 
         // Tạo báo cáo mới
-        public async Task<ReportResponse> CreateReportAsync(ReportRequest request)
+        public async Task CreateReportAsync(ReportRequest request)
         {
             if (request == null)
             {
@@ -48,27 +50,22 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     throw new InvalidOperationException("Không thể tạo báo cáo. RecordId không được gán.");
                 }
-
-                return new ReportResponse
-                {
-                    RecordId = report.RecordId,
-                    HousekeeperId = report.HousekeeperId,
-                    AssignId = report.AssignId,
-                    WorkDate = report.WorkDate,
-                    StartTime = report.StartTime,
-                    EndTime = report.EndTime,
-                    TotalHours = report.TotalHours,
-                    TaskStatus = report.TaskStatus
-                };
+            }
+            catch (BadRequestException ex)
+            {
+                string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
+                throw new BadRequestException(message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Lỗi khi tạo báo cáo: " + ex.Message, ex);
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
             }
         }
 
+
         // Cập nhật báo cáo
-        public async Task<ReportResponse> UpdateReportAsync(int id, ReportRequest request)
+        public async Task UpdateReportAsync(int id, ReportRequest request)
         {
             // Kiểm tra xem request có null không
             if (request == null)
@@ -79,7 +76,7 @@ namespace CCSystem.BLL.Services.Implementations
             var report = await _unitOfWork.ReportRepository.GetByIdAsync(id);
             if (report == null)
             {
-                return null; // Hoặc có thể ném exception tùy theo yêu cầu
+                throw new NotFoundException("Không tìm thấy báo cáo với ID: " + id);
             }
 
             // Kiểm tra các thuộc tính trong request có hợp lệ không
@@ -96,21 +93,23 @@ namespace CCSystem.BLL.Services.Implementations
             report.TotalHours = request.TotalHours;
             report.TaskStatus = request.TaskStatus;
 
-            await _unitOfWork.ReportRepository.UpdateAsync(report);
-            await _unitOfWork.CommitAsync();
-
-            return new ReportResponse
+            try
             {
-                RecordId = report.RecordId,
-                HousekeeperId = report.HousekeeperId,
-                AssignId = report.AssignId,
-                WorkDate = report.WorkDate,
-                StartTime = report.StartTime,
-                EndTime = report.EndTime,
-                TotalHours = report.TotalHours,
-                TaskStatus = report.TaskStatus
-            };
+                await _unitOfWork.ReportRepository.UpdateAsync(report);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (BadRequestException ex)
+            {
+                string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
+                throw new BadRequestException(message);
+            }
+            catch (Exception ex)
+            {
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
+            }
         }
+
         // Xóa báo cáo
         public async Task<bool> DeleteReportAsync(int id)
         {
