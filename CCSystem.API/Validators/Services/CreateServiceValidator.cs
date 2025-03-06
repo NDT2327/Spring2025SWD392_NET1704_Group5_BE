@@ -9,7 +9,9 @@ namespace CCSystem.API.Validators.Services
         {
             RuleFor(x => x.CategoryId)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
+                .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.")
+                .NotEmpty().WithMessage("{PropertyName} must not be empty.")
+                .NotNull().WithMessage("{PropertyName} must not be null.");
 
             RuleFor(x => x.ServiceName)
                 .Cascade(CascadeMode.StopOnFirstFailure)

@@ -85,5 +85,12 @@ namespace CCSystem.BLL.Constants
 
         }
 
+        public static class ScheduleAssign
+        {
+            public const string AlreadyAssign = "Housekeeper already has an assigned task in this time slot";
+            public const string CreatedNewScheduleAssignSuccessfully = "Create a new Schedule Assignment Successfully";
+
+        }
+
     }
 }

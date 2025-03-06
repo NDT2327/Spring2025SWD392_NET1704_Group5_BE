@@ -72,7 +72,6 @@ namespace CCSystem.API.Controllers
         [HttpPost(APIEndPointConstant.Service.ServiceEndpoint)]
         public async Task<IActionResult> PostCreateServiceAsync([FromForm] PostServiceRequest postServiceRequest)
         {
-            // Giả sử bạn đã có validator cho PostServiceRequest
             ValidationResult validationResult = await _postServiceValidator.ValidateAsync(postServiceRequest);
             if (!validationResult.IsValid)
             {
