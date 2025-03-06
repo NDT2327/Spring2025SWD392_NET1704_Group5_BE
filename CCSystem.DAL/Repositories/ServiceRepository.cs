@@ -49,8 +49,9 @@ namespace CCSystem.DAL.Repositories
         {
             try
             {
-                return await _context.Services.
-                    FirstOrDefaultAsync(s => s.ServiceId == id);
+                return await _context.Services
+                    .Include(s => s.Category)
+                    .FirstOrDefaultAsync(s => s.ServiceId == id);
             }
             catch (Exception ex)
             {

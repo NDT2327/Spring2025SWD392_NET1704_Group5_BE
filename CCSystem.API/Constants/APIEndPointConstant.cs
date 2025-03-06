@@ -93,6 +93,7 @@
             public const string CreateServiceDetailEndPoint = ServiceDetailEndPoint + "/create";
             public const string UpdateServiceDetailEndPoint = ServiceDetailEndPoint + "/update/{id}";
             public const string DeleteServiceDetailEndPoint = ServiceDetailEndPoint + "/delete/{id}";
+            public const string GetServiceDetailByServiceIdEndpont = ServiceDetailEndPoint + "/service" + "/{id}";
         }
         #endregion
 
@@ -114,6 +115,16 @@
         public static class Booking
         {
             public const string BookingEndpoint = ApiEndpoint + "/bookings";
+            public const string GetBookingById = BookingEndpoint + "/{id}";
+
+        }
+
+        public static class BookingDetail
+        {
+            public const string BookingDetailEndpoint = ApiEndpoint + "/bookingDetails";
+            public const string GetBDetailByIdEndpoint = BookingDetailEndpoint + "/{id}";
+            public const string GetBDetailByBookIdEndpoint = BookingDetailEndpoint + "/booking" + "/{id}";
+
 
         }
 

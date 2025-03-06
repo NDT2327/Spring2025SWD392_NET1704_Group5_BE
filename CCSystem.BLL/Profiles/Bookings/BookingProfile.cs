@@ -13,7 +13,9 @@ namespace CCSystem.BLL.Profiles.Bookings
     {
         public BookingProfile()
         {
-            CreateMap<Booking, BookingResponse>().ReverseMap();
+            CreateMap<Booking, BookingResponse>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Customer.Email))
+                .ReverseMap();
         }
     }
 }

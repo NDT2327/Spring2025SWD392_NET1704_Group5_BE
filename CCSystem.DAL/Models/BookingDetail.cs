@@ -23,6 +23,8 @@ public partial class BookingDetail
 
     public int? ServiceDetailId { get; set; }
 
+    public bool? IsAssign { get; set; }
+
     public virtual Booking Booking { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();

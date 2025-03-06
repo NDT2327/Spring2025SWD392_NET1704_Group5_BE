@@ -12,17 +12,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CCSystem.API.Controllers
 {
-    
+
     [ApiController]
     public class BookingsController : ControllerBase
     {
         private readonly IBookingService _bookingsService;
         private readonly IValidator<PostBookingRequest> _postBookingRequestValidator;
+        private readonly IValidator<BookingIdRequest> _bookingsIdValidator;
 
-        public BookingsController(IBookingService bookingsService, IValidator<PostBookingRequest> postBookingRequestValidator)
+        public BookingsController(IBookingService bookingsService, IValidator<PostBookingRequest> postBookingRequestValidator, IValidator<BookingIdRequest> bookingsIdRequestValidator)
         {
             this._bookingsService = bookingsService;
             this._postBookingRequestValidator = postBookingRequestValidator;
+            this._bookingsIdValidator = bookingsIdRequestValidator;
         }
 
         #region Create Booking With Details
@@ -56,7 +58,7 @@ namespace CCSystem.API.Controllers
         /// <response code="400">Bad request due to invalid data.</response>
         /// <response code="404">Not found error if customer or booking detail not found.</response>
         /// <response code="500">Internal server error.</response>
-        
+
         [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
@@ -77,5 +79,41 @@ namespace CCSystem.API.Controllers
             return Ok(new { Message = "Booking created successfully" });
         }
         #endregion
+
+        #region Get Booking By Id
+
+        /// <summary>
+        /// Retrieves detailed information of a booking by its Id.
+        /// </summary>
+        /// <param name="id">The Id of the booking to retrieve.</param>
+        /// <returns>
+        /// Detailed information of the booking.
+        /// </returns>
+        /// <response code="200">Booking information retrieved successfully.</response>
+        /// <response code="404">No booking found with the provided Id.</response>
+        /// <response code="500">An error occurred in the system.</response>
+        /// <exception cref="NotFoundException">Thrown when no booking exists with the provided Id.</exception>
+        /// <exception cref="Exception">Throws a system exception if an error occurs.</exception>
+        [ProducesResponseType(typeof(BookingResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpGet(APIEndPointConstant.Booking.GetBookingById)]
+        public async Task<IActionResult> GetBookingByIdAsync([FromRoute] BookingIdRequest bookingId)
+        {
+            ValidationResult validationResult = await _bookingsIdValidator.ValidateAsync(bookingId);
+            if (validationResult.IsValid == false)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            var booking = await _bookingsService.GetBookingById(bookingId.Id);
+            return Ok(booking);
+
+        }
+
+        #endregion
+
     }
 }

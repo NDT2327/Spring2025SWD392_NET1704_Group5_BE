@@ -161,6 +161,9 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
 
             entity.Property(e => e.DetailId).HasColumnName("detailId");
             entity.Property(e => e.BookingId).HasColumnName("bookingId");
+            entity.Property(e => e.IsAssign)
+                .HasDefaultValue(false)
+                .HasColumnName("isAssign");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.ScheduleDate).HasColumnName("scheduleDate");
             entity.Property(e => e.ScheduleTime).HasColumnName("scheduleTime");

@@ -12,6 +12,8 @@ namespace CCSystem.BLL.DTOs.Bookings
 
         public int CustomerId { get; set; }
 
+        public string Email { get; set; }
+
         public string PromotionCode { get; set; }
 
         public DateTime? BookingDate { get; set; }
