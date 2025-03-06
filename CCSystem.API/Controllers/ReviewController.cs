@@ -12,7 +12,7 @@ namespace CCSystem.API.Controllers
     /// Controller quản lý đánh giá (Review).
     /// </summary>
     [ApiController]
-    [Route(APIEndPointConstant.Review.ReviewEndpoint)] 
+    [Route(APIEndPointConstant.Review.ReviewEndpoint)]
     public class ReviewController : ControllerBase
     {
         private readonly IReviewService _reviewService;
@@ -34,7 +34,7 @@ namespace CCSystem.API.Controllers
         /// Lấy danh sách tất cả đánh giá.
         /// </summary>
         /// <returns>Danh sách đánh giá</returns>
-        [HttpGet(APIEndPointConstant.Review.GetAllReviewsEndpoint)] 
+        [HttpGet(APIEndPointConstant.Review.GetAllReviewsEndpoint)]
         public async Task<IActionResult> GetAllReviews()
         {
             var reviews = await _reviewService.GetAllReviewsAsync();
@@ -46,7 +46,7 @@ namespace CCSystem.API.Controllers
         /// </summary>
         /// <param name="id">ID của đánh giá</param>
         /// <returns>Thông tin đánh giá nếu tồn tại</returns>
-        [HttpGet(APIEndPointConstant.Review.GetReviewByIdEndpoint)] 
+        [HttpGet(APIEndPointConstant.Review.GetReviewByIdEndpoint)]
         public async Task<IActionResult> GetReviewById(int id)
         {
             var review = await _reviewService.GetReviewByIdAsync(id);
@@ -67,17 +67,28 @@ namespace CCSystem.API.Controllers
         {
             if (reviewRequest == null)
             {
-                return BadRequest("ReviewRequest cannot be null.");
+                return BadRequest(new { message = "ReviewRequest cannot be null." });
             }
 
             ValidationResult validationResult = await _validator.ValidateAsync(reviewRequest);
             if (!validationResult.IsValid)
             {
-                return BadRequest(validationResult.Errors);
+                return BadRequest(new
+                {
+                    message = "Validation failed.",
+                    errors = validationResult.Errors.Select(e => e.ErrorMessage)
+                });
             }
 
-            await _reviewService.AddReviewAsync(reviewRequest); 
-            return NoContent(); 
+            try
+            {
+                await _reviewService.AddReviewAsync(reviewRequest); 
+                return Ok(new { message = "Review created successfully." }); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while creating the review.", error = ex.Message });
+            }
         }
         /// <summary>
         /// Cập nhật đánh giá theo ID.
@@ -85,8 +96,8 @@ namespace CCSystem.API.Controllers
         /// <param name="id">ID của đánh giá</param>
         /// <param name="reviewRequest">Dữ liệu đánh giá cập nhật</param>
         /// <returns>Thông báo cập nhật thành công</returns>
-       
-        [HttpPut(APIEndPointConstant.Review.UpdateReviewEndpoint)] 
+
+        [HttpPut(APIEndPointConstant.Review.UpdateReviewEndpoint)]
         public async Task<IActionResult> UpdateReview(int id, [FromBody] ReviewRequest reviewRequest)
         {
             var existingReview = await _reviewService.GetReviewByIdAsync(id);
@@ -106,17 +117,24 @@ namespace CCSystem.API.Controllers
         /// </summary>
         /// <param name="id">ID của đánh giá</param>
         /// <returns>Trả về NoContent nếu thành công</returns>
-        [HttpDelete(APIEndPointConstant.Review.DeleteReviewEndpoint)] 
+        [HttpDelete(APIEndPointConstant.Review.DeleteReviewEndpoint)]
         public async Task<IActionResult> DeleteReview(int id)
         {
             var existingReview = await _reviewService.GetReviewByIdAsync(id);
             if (existingReview == null)
             {
-                return NotFound($"Review with ID {id} not found.");
+                return NotFound(new { message = $"Review with ID {id} not found." });
             }
 
-            await _reviewService.DeleteReviewAsync(id);
-            return NoContent();
+            try
+            {
+                await _reviewService.DeleteReviewAsync(id); 
+                return Ok(new { message = $"Review with ID {id} deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting the review.", error = ex.Message });
+            }
         }
     }
 }

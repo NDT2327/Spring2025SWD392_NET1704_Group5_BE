@@ -109,12 +109,11 @@ namespace CCSystem.API.Controllers
             var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Category not found" });
             }
 
             await _categoryService.DeleteCategoryAsync(id);
-
-            return NoContent();
+            return Ok(new { message = "Category deleted successfully" });
         }
         #endregion
 
