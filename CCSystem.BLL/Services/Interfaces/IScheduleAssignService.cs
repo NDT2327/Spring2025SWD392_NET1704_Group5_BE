@@ -12,7 +12,7 @@ namespace CCSystem.BLL.Services.Interfaces
     {
         Task<List<ScheduleAssignmentResponse>> GetAllAsync();
         Task<ScheduleAssignmentResponse> GetByIdAsync(int id);
-        Task AddAsync(ScheduleAssignment assignment);
-        Task UpdateAsync(ScheduleAssignment assignment);
+        Task AddAsync(PostScheduleAssignRequest request);
+        Task UpdateAsync(PostScheduleAssignRequest request);
     }
 }

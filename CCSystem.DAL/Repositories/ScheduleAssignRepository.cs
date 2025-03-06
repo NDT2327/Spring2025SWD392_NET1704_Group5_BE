@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,5 +58,11 @@ namespace CCSystem.DAL.Repositories
                 _context.ScheduleAssignments.Remove(assignment);
             }
         }
+
+        public async Task<bool> ExistsAsync(Expression<Func<ScheduleAssignment, bool>> predicate)
+        {
+            return await _context.ScheduleAssignments.AnyAsync(predicate);
+        }
+
     }
 }

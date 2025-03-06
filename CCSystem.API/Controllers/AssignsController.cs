@@ -1,5 +1,6 @@
 ﻿using CCSystem.API.Authorization;
 using CCSystem.API.Constants;
+using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.ScheduleAssign;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
@@ -18,11 +19,13 @@ namespace CCSystem.API.Controllers
     {
         private readonly IScheduleAssignService _scheduleAssignService;
         private readonly IValidator<AssignIdRequest> _assignIdValidator;
+        private readonly IValidator<PostScheduleAssignRequest> _postScheduleAssignValidator;
 
-        public AssignsController(IScheduleAssignService scheduleAssignService, IValidator<AssignIdRequest> assignIdValidator)
+        public AssignsController(IScheduleAssignService scheduleAssignService, IValidator<AssignIdRequest> assignIdValidator, IValidator<PostScheduleAssignRequest> postScheduleAssignValidator)
         {
             this._scheduleAssignService = scheduleAssignService;
             this._assignIdValidator = assignIdValidator;
+            this._postScheduleAssignValidator = postScheduleAssignValidator;
         }
 
         #region Get List Assigns
@@ -53,7 +56,7 @@ namespace CCSystem.API.Controllers
         public async Task<IActionResult> GetById([FromRoute] AssignIdRequest request)
         {
             ValidationResult validationResult = await _assignIdValidator.ValidateAsync(request);
-            if (validationResult.IsValid == false)
+            if (!validationResult.IsValid)
             {
                 string errors = ErrorUtil.GetErrorsString(validationResult);
                 throw new BadRequestException(errors);
@@ -61,6 +64,34 @@ namespace CCSystem.API.Controllers
 
             var assign = await _scheduleAssignService.GetByIdAsync(request.Id);
             return Ok(assign);
+        }
+        #endregion
+
+        #region Post Assign Schedule
+        ///<summary>
+        ///Assign housekeeper in work
+        /// </summary>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        //[Consumes(MediaTypeConstant.MultipartFormData)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [PermissionAuthorize(PermissionAuthorizeConstant.Admin, PermissionAuthorizeConstant.Staff, PermissionAuthorizeConstant.Housekeeper)]
+        [HttpPost(APIEndPointConstant.ScheduleAssign.ScheduleAssignEndpoint)]
+        public async Task<IActionResult> PostAssignHousekeeper([FromBody] PostScheduleAssignRequest request)
+        {
+            ValidationResult validationResult = await _postScheduleAssignValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            await this._scheduleAssignService.AddAsync(request);
+            return Ok(new 
+            {
+                Message = MessageConstant.ScheduleAssign.CreatedNewScheduleAssignSuccessfully
+            });
         }
         #endregion
     }

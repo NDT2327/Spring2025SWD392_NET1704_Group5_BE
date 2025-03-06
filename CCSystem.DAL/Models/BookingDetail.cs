@@ -25,6 +25,8 @@ public partial class BookingDetail
 
     public bool? IsAssign { get; set; }
 
+    public string BookdetailStatus { get; set; }
+
     public virtual Booking Booking { get; set; }
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
