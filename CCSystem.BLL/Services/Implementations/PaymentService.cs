@@ -5,6 +5,7 @@ using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.DAL.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -56,6 +57,48 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<IEnumerable<PaymentResponse>> GetPaymentsByCustomerIdAsync(int customerId)
+        {
+            var payments = await _unitOfWork.PaymentRepository.GetPaymentsByCustomerIdAsync(customerId);
+
+            return payments.Select(p => new PaymentResponse
+            {
+                PaymentId = p.PaymentId,
+                CustomerId = p.CustomerId,
+                BookingId = p.BookingId,
+                Amount = p.Amount,
+                PaymentMethod = p.PaymentMethod,
+                Status = p.Status,
+                PaymentDate = p.PaymentDate,
+                CreatedDate = p.CreatedDate,
+                UpdatedDate = p.UpdatedDate,
+                Notes = p.Notes,
+                TransactionId = p.TransactionId
+            }).ToList();
+        }
+        public async Task<PaymentResponse?> GetByBookingIdAsync(int bookingId)
+        {
+            var payment = await _unitOfWork.PaymentRepository.GetByBookingIdAsync(bookingId);
+
+            if (payment == null)
+                return null;
+
+            return new PaymentResponse
+            {
+                PaymentId = payment.PaymentId,
+                CustomerId = payment.CustomerId,
+                BookingId = payment.BookingId,
+                Amount = payment.Amount,
+                PaymentMethod = payment.PaymentMethod,
+                Status = payment.Status,
+                PaymentDate = payment.PaymentDate,
+                CreatedDate = payment.CreatedDate,
+                UpdatedDate = payment.UpdatedDate,
+                Notes = payment.Notes,
+                TransactionId = payment.TransactionId
+            };
+        }
+
 
         public async Task UpdatePaymentAsync(Payment payment)
         {

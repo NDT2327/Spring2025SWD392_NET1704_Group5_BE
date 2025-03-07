@@ -152,6 +152,22 @@ namespace CCSystem.API.Controllers
             }
         }
         #endregion
+        [HttpGet(APIEndPointConstant.Payment.GetPaymentByCustomerId)]
+        public async Task<IActionResult> GetPaymentsByCustomerId([FromRoute] int id)
+        {
+            var payments = await _paymentService.GetPaymentsByCustomerIdAsync(id);
+            return payments.Any() ? Ok(payments) : NotFound("No payments found for this customer.");
+        }
+        [HttpGet(APIEndPointConstant.Payment.GetPaymentByBookingId)]
+        public async Task<IActionResult> GetByBookingId([FromRoute] int id) 
+        {
+            var paymentDto = await _paymentService.GetByBookingIdAsync(id);
+
+            if (paymentDto == null)
+                return NotFound($"Không tìm thấy Payment với BookingId: {id}");
+
+            return Ok(paymentDto);
+        }
 
         #region Payment Callback Vnpay
         /// <summary>

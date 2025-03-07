@@ -77,6 +77,24 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
+        public async Task<IEnumerable<Payment>> GetPaymentsByCustomerIdAsync(int customerId)
+        {
+            return await _context.Set<Payment>()
+                .Where(p => p.CustomerId == customerId)
+                .ToListAsync();
+        }
+        public async Task<Payment> GetByBookingIdAsync(int bookingId)
+        {
+            var payment = await _context.Payments.FirstOrDefaultAsync(p => p.BookingId == bookingId);
+
+            if (payment == null)
+            {
+                throw new KeyNotFoundException($"Không tìm thấy Payment với BookingId: {bookingId}");
+            }
+
+            return payment;
+        }
+
         public async Task UpdateAsync(Payment payment)
         {
             try

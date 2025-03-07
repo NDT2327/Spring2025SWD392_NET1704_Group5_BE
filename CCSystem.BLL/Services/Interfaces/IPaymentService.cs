@@ -13,6 +13,7 @@ namespace CCSystem.BLL.Services.Interfaces
         Task CreatePaymentAsync(Payment payment);
         Task<Payment> GetPaymentByIdAsync(int paymentId);
         Task UpdatePaymentAsync(Payment payment);
-
+        Task<IEnumerable<PaymentResponse>> GetPaymentsByCustomerIdAsync(int customerId);
+        Task<PaymentResponse?> GetByBookingIdAsync(int bookingId);
     }
 }

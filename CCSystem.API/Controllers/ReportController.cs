@@ -111,4 +111,15 @@ public class ReportsController : ControllerBase
         var result = await _reportService.GetAllReportsAsync();
         return Ok(result);
     }
+    [HttpGet(APIEndPointConstant.Report.GetReportByHousekeeperIdEndpoint)]
+    public async Task<ActionResult<IEnumerable<ReportResponse>>> GetReportsByHousekeeperId([FromRoute] int id)
+    {
+        var reports = await _reportService.GetReportsByHousekeeperIdAsync(id);
+        if (reports == null || !reports.Any())
+        {
+            return NotFound("No reports found for this housekeeper.");
+        }
+        return Ok(reports);
+    }
 }
+

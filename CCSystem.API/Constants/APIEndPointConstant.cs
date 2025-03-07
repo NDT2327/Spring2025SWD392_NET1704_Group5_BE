@@ -55,6 +55,9 @@
             public const string PaymentCallbackVnpay = PaymentEndpoint + "/PaymentCallbackVnpay";
             public const string PaymentIpnAction = ApiEndpoint + "/IpnAction";
             public const string PaymentRefund = ApiEndpoint + "/refund";
+            public const string GetPaymentByCustomerId = ApiEndpoint + "/customer" + "/{id}";
+            public const string GetPaymentByBookingId = ApiEndpoint + "/booking" + "/{id}";
+
 
         }
 
@@ -64,6 +67,7 @@
             public const string ReportEndpoint = ApiEndpoint + "/reports";
             public const string GetAllReportsEndpoint = ReportEndpoint + "/getallreports";
             public const string GetReportByIdEndpoint = ReportEndpoint + "/{id}";
+            public const string GetReportByHousekeeperIdEndpoint = ReportEndpoint +"/Housekeeper"+ "/{id}";
             public const string CreateReportEndpoint = ReportEndpoint + "/createreport";
             public const string UpdateReportEndpoint = ReportEndpoint + "/updatereport/{id}";
             public const string DeleteReportEndpoint = ReportEndpoint + "/deletereport/{id}";
@@ -75,6 +79,7 @@
             public const string ReviewEndpoint = ApiEndpoint + "/reviews";
             public const string GetAllReviewsEndpoint = ReviewEndpoint + "/getallreviews";
             public const string GetReviewByIdEndpoint = ReviewEndpoint + "/{id}";
+            public const string GetReviewByCustomerIdEndpoint = ReviewEndpoint + "/customer" + "/{id}";
             public const string CreateReviewEndpoint = ReviewEndpoint + "/createreview";
             public const string UpdateReviewEndpoint = ReviewEndpoint + "/updatereview/{id}";
             public const string DeleteReviewEndpoint = ReviewEndpoint + "/deletereview/{id}";
