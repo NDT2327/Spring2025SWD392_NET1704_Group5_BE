@@ -34,6 +34,21 @@
         <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)" -->
         <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccounts(CCSystem.BLL.DTOs.Accounts.AccountsListRequest)" -->
         <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.UpdateAccount(System.Int32,CCSystem.BLL.DTOs.Accounts.UpdateAccountRequest)" -->
+        <member name="M:CCSystem.API.Controllers.AssignsController.GetListAsync">
+            <summary>
+             Get list of Assign
+             </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.GetById(CCSystem.BLL.DTOs.ScheduleAssign.AssignIdRequest)">
+            <summary>
+             Get Assign By Id
+             </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.PostAssignHousekeeper(CCSystem.BLL.DTOs.ScheduleAssign.PostScheduleAssignRequest)">
+            <summary>
+            Assign housekeeper in work
+             </summary>
+        </member>
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.
@@ -209,6 +224,11 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no booking detail exists with the provided Id.</exception>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
         </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailByBookingId(CCSystem.BLL.DTOs.Bookings.BookingIdRequest)">
+            <summary>
+            Get detailed information from a booking Id.
+            </summary>
+        </member>
         <member name="M:CCSystem.API.Controllers.BookingsController.CreateBookingWithDetailsAsync(CCSystem.BLL.DTOs.Bookings.PostBookingRequest)">
             <summary>
             Create a booking along with its booking details.
@@ -255,10 +275,21 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no booking exists with the provided Id.</exception>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
         </member>
+        <member name="M:CCSystem.API.Controllers.BookingsController.GetBookingsByCustomer(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+            <summary>
+            Get Bookings by Customer Id
+            </summary>
+        </member>
         <member name="T:CCSystem.API.Controllers.CategoryController">
             <summary>
             Controller for managing categories.
             </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.CategoryController.#ctor(CCSystem.BLL.Services.Interfaces.ICategoryService)">
+            <summary>
+            Constructor để inject service quản lý danh mục.
+            </summary>
+            <param name="categoryService">Service xử lý danh mục</param>
         </member>
         <member name="M:CCSystem.API.Controllers.CategoryController.GetAllCategories">
             <summary>
@@ -354,6 +385,54 @@
             Delete a promotion.
             </summary>
             
+        </member>
+        <member name="T:CCSystem.API.Controllers.ReviewController">
+            <summary>
+            Controller quản lý đánh giá (Review).
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.#ctor(CCSystem.BLL.Services.IReviewService,FluentValidation.IValidator{CCSystem.BLL.DTOs.Review.ReviewRequest},AutoMapper.IMapper)">
+            <summary>
+            Khởi tạo ReviewController với các dịch vụ liên quan.
+            </summary>
+            <param name="reviewService">Dịch vụ quản lý đánh giá</param>
+            <param name="validator">Trình xác thực đánh giá</param>
+            <param name="mapper">Trình ánh xạ dữ liệu</param>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.GetAllReviews">
+            <summary>
+            Lấy danh sách tất cả đánh giá.
+            </summary>
+            <returns>Danh sách đánh giá</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.GetReviewById(System.Int32)">
+            <summary>
+            Lấy đánh giá theo ID.
+            </summary>
+            <param name="id">ID của đánh giá</param>
+            <returns>Thông tin đánh giá nếu tồn tại</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.CreateReview(CCSystem.BLL.DTOs.Review.ReviewRequest)">
+            <summary>
+            Tạo một đánh giá mới.
+            </summary>
+            <param name="reviewRequest">Thông tin đánh giá</param>
+            <returns>Trả về NoContent nếu thành công</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.UpdateReview(System.Int32,CCSystem.BLL.DTOs.Review.ReviewRequest)">
+            <summary>
+            Cập nhật đánh giá theo ID.
+            </summary>
+            <param name="id">ID của đánh giá</param>
+            <param name="reviewRequest">Dữ liệu đánh giá cập nhật</param>
+            <returns>Thông báo cập nhật thành công</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.DeleteReview(System.Int32)">
+            <summary>
+            Xóa đánh giá theo ID.
+            </summary>
+            <param name="id">ID của đánh giá</param>
+            <returns>Trả về NoContent nếu thành công</returns>
         </member>
         <member name="T:CCSystem.API.Controllers.ServiceDetailController">
             <summary>
@@ -487,6 +566,44 @@
              <response code="400">Invalid category id or business logic error.</response>
              <response code="500">Unexpected system error.</response>
              <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown if the specified category does not exist.</exception>
+        </member>
+        <member name="M:ReportsController.#ctor(CCSystem.BLL.Services.IReportService)">
+            <summary>
+            Constructor để inject service quản lý báo cáo.
+            </summary>
+            <param name="reportService">Service báo cáo</param>
+        </member>
+        <member name="M:ReportsController.CreateReportAsync(CCSystem.BLL.DTOs.Report.ReportRequest)">
+            <summary>
+            Tạo một báo cáo mới.
+            </summary>
+            <param name="request">Thông tin báo cáo</param>
+        </member>
+        <member name="M:ReportsController.UpdateReport(System.Int32,CCSystem.BLL.DTOs.Report.ReportRequest)">
+            <summary>
+            Cập nhật báo cáo theo ID.
+            </summary>
+            <param name="id">ID báo cáo</param>
+            <param name="request">Thông tin cập nhật</param>
+        </member>
+        <member name="M:ReportsController.DeleteReport(System.Int32)">
+            <summary>
+            Xóa báo cáo theo ID.
+            </summary>
+            <param name="id">ID báo cáo</param>
+        </member>
+        <member name="M:ReportsController.GetReportById(System.Int32)">
+            <summary>
+            Lấy thông tin báo cáo theo ID.
+            </summary>
+            <param name="id">ID báo cáo</param>
+            <returns>Thông tin báo cáo nếu tồn tại</returns>
+        </member>
+        <member name="M:ReportsController.GetAllReports">
+            <summary>
+            Lấy danh sách tất cả báo cáo.
+            </summary>
+            <returns>Danh sách báo cáo</returns>
         </member>
     </members>
 </doc>

@@ -18,6 +18,13 @@ namespace CCSystem.DAL.Repositories
             this._context = context;
         }
 
+        public async Task<List<Booking>> GetBookingsByCustomer(int id)
+        {
+            return await _context.Bookings
+                .Include(b => b.Customer)
+                .Where(b => b.CustomerId == id)
+                .ToListAsync();
+        }
         public async Task AddAsync(Booking booking)
         {
             try
@@ -30,7 +37,7 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<Booking>> GetAllAsync()
+        public async Task<List<Booking>> GetAllAsync()
         {
             try
             {
@@ -86,5 +93,6 @@ namespace CCSystem.DAL.Repositories
         //        throw new Exception("Error deleting booking", ex);
         //    }
         //}
+
     }
 }

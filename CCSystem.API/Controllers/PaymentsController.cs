@@ -71,7 +71,8 @@ namespace CCSystem.API.Controllers
                     CreatedDate = DateTime.UtcNow,
                     TransactionId = Guid.NewGuid().ToString(),
                 };
-                
+                await _paymentService.CreatePaymentAsync(payment);
+
 
                 // Tạo request để lấy URL thanh toán
                 var paymentRequest = new PaymentRequest
@@ -86,7 +87,6 @@ namespace CCSystem.API.Controllers
                 };
 
                 var paymentUrl = _vnpay.GetPaymentUrl(paymentRequest);
-                await _paymentService.CreatePaymentAsync(payment);
                 return Created(paymentUrl, paymentUrl);
             }
             catch (Exception ex)

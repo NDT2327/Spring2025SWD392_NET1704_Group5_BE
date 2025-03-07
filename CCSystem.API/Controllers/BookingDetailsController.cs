@@ -59,7 +59,7 @@ namespace CCSystem.API.Controllers
         }
         #endregion
 
-        #region Get Booking Detail By Booking Id
+        #region Get Booking Details By Booking Id
         /// <summary>
         /// Get detailed information from a booking Id.
         /// </summary>
