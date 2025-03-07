@@ -6,6 +6,7 @@ using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Utils;
+using CCSystem.DAL.Repositories;
 
 namespace CCSystem.BLL.Services.Implementations
 {
@@ -146,6 +147,23 @@ namespace CCSystem.BLL.Services.Implementations
                 TaskStatus = report.TaskStatus
             };
         }
+        public async Task<IEnumerable<ReportResponse>> GetReportsByHousekeeperIdAsync(int housekeeperId)
+        {
+            var reports = await _unitOfWork.ReportRepository.GetReportsByHousekeeperIdAsync(housekeeperId);
+
+            return reports.Select(r => new ReportResponse
+            {
+                RecordId = r.RecordId,
+                HousekeeperId = r.HousekeeperId,
+                AssignId = r.AssignId,
+                WorkDate = r.WorkDate,
+                StartTime = r.StartTime,
+                EndTime = r.EndTime,
+                TotalHours = r.TotalHours,
+                TaskStatus = r.TaskStatus
+            }).ToList();
+        }
+    
 
         // Lấy tất cả báo cáo
         public async Task<IEnumerable<ReportResponse>> GetAllReportsAsync()

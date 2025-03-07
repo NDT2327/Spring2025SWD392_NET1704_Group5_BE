@@ -41,6 +41,17 @@ namespace CCSystem.API.Controllers
             return Ok(reviews);
         }
 
+        [HttpGet(APIEndPointConstant.Review.GetReviewByCustomerIdEndpoint)]
+        public async Task<IActionResult> GetReviewsByCustomerId([FromRoute] int id)
+        {
+            var reviews = await _reviewService.GetReviewsByCustomerIdAsync(id);
+            if (reviews == null || !reviews.Any())
+            {
+                return NotFound("No reviews found for this customer.");
+            }
+            return Ok(reviews);
+        }
+
         /// <summary>
         /// Lấy đánh giá theo ID.
         /// </summary>
