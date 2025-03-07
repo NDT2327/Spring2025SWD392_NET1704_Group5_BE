@@ -10,7 +10,7 @@ namespace CCSystem.BLL.DTOs.Bookings
     public class PostBookingRequest
     {
         public int CustomerId { get; set; }
-        public string? PromotionCode { get; set; } = null;
+        public string PromotionCode { get; set; } 
         //public DateTime? BookingDate { get; set; }
         //public string BookingStatus { get; set; }
         //public string PaymentStatus { get; set; }

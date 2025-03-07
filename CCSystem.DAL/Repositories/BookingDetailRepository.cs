@@ -106,5 +106,19 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
+        public async Task<BookingDetail?> GetExistingBookingDetailAsync(int customerId, int serviceId, int serviceDetailId, DateOnly scheduleDate, TimeOnly scheduleTime)
+        {
+            return await _context.BookingDetails
+                .Include(b => b.Booking) // Join với Booking để lấy CustomerId
+                .Where(b => b.Booking.CustomerId == customerId
+                            && b.ScheduleDate == scheduleDate // Chuyển đổi DateTime -> DateOnly
+                            && b.ScheduleTime == scheduleTime // Chuyển đổi TimeSpan -> TimeOnly
+                            && b.ServiceId == serviceId
+                            && b.ServiceDetailId == serviceDetailId)
+                .FirstOrDefaultAsync();
+        }
+
+
+
     }
 }

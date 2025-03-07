@@ -121,6 +121,8 @@
         {
             public const string BookingEndpoint = ApiEndpoint + "/bookings";
             public const string GetBookingById = BookingEndpoint + "/{id}";
+            public const string GetBookingByCusId = BookingEndpoint + "/customer" + "/{id}";
+
 
         }
 

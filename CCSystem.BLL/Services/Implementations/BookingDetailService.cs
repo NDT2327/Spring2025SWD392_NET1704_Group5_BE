@@ -4,6 +4,7 @@ using CCSystem.BLL.DTOs.BookingDetails;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using System;
@@ -54,7 +55,8 @@ namespace CCSystem.BLL.Services.Implementations
                     UnitPrice = postBookingDetailRequest.Quantity * serviceDetail.BasePrice.Value,
                     ServiceId = postBookingDetailRequest.ServiceId,
                     ServiceDetailId = postBookingDetailRequest.ServiceDetailId,
-                    IsAssign = false
+                    IsAssign = false,
+                    BookdetailStatus = BookingDetailEnums.BookingDetailStatus.PENDING.ToString(),
                 };
                 await _unitOfWork.BookingDetailRepository.CreateBookingDetailAsync(bookingDetail);
                 await _unitOfWork.CommitAsync();

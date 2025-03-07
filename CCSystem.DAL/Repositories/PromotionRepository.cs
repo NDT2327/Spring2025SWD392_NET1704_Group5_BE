@@ -31,7 +31,7 @@ namespace CCSystem.DAL.Repositories
         {
             var promo = await _context.Promotions.FirstOrDefaultAsync(p => p.Code == code);
 
-            return promo ?? throw new Exception("Promotion " +code+" not found.");
+            return promo;
         }
 
         public async Task AddPromotionAsync(Promotion promotion)
