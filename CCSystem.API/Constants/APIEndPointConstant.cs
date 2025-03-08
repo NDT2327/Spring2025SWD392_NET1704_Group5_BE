@@ -131,13 +131,16 @@
             public const string BookingDetailEndpoint = ApiEndpoint + "/bookingDetails";
             public const string GetBDetailByIdEndpoint = BookingDetailEndpoint + "/{id}";
             public const string GetBDetailByBookIdEndpoint = BookingDetailEndpoint + "/booking" + "/{id}";
+            public const string GetActiveBDetailEndpoint = BookingDetailEndpoint + "/active";
+
         }
 
         public static class ScheduleAssign
         {
             public const string ScheduleAssignEndpoint = ApiEndpoint + "/scheduleAssigns";
             public const string GetScheduleAssignByIdEndpoint = ScheduleAssignEndpoint + "/{id}";
-
+            public const string GetScheduleAssignByHousekeeperIdEndpoint = ScheduleAssignEndpoint + "/housekeeper" + "/{id}";
+            public const string ChangeStatusEndpoint = ScheduleAssignEndpoint + "/status";
         }
     }
 }

@@ -81,5 +81,28 @@ namespace CCSystem.API.Controllers
             return Ok(listBookingDetail);
         }
         #endregion
+
+        #region Get Active Booking Detail
+        /// <summary>
+        /// Get Active booking detail information.
+        /// </summary>
+        /// <returns>
+        /// List of active booking details.
+        /// </returns>
+        /// <response code="200">Active booking details retrieved successfully.</response>
+        /// <response code="404">No active booking details found.</response>
+        /// <response code="500">An error occurred in the system.</response>
+        [ProducesResponseType(typeof(IEnumerable<BookingDetailResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpGet(APIEndPointConstant.BookingDetail.GetActiveBDetailEndpoint)]
+        public async Task<IActionResult> GetActiveBookingDetail()
+        {
+            var activeBookingDetails = await _bookingDetailService.GetActiveBookingDetail();
+
+            return Ok(activeBookingDetails);
+        }
+        #endregion
     }
 }

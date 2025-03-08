@@ -13,6 +13,8 @@ namespace CCSystem.BLL.Services.Interfaces
         Task<List<ScheduleAssignmentResponse>> GetAllAsync();
         Task<ScheduleAssignmentResponse> GetByIdAsync(int id);
         Task AddAsync(PostScheduleAssignRequest request);
-        Task UpdateAsync(PostScheduleAssignRequest request);
+        //Task UpdateAsync(PostScheduleAssignRequest request);
+        Task<List<ScheduleAssignmentResponse>> GetAssignsByHousekeeper(int housekeeperId);
+        Task ChangeAssignStatus(PatchAssignStatusRequest request);
     }
 }

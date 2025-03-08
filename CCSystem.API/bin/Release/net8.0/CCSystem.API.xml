@@ -49,6 +49,16 @@
             Assign housekeeper in work
              </summary>
         </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.GetAssignsByHousekeeper(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+            <summary>
+            Retrieves schedule assignments for a given housekeeper.
+            </summary>
+            <param name="housekeeperId">The ID of the housekeeper.</param>
+            <returns>A list of schedule assignments.</returns>
+            <response code="200">Returns the list of assignments.</response>
+            <response code="404">If the housekeeper does not exist.</response>
+            <response code="500">If there is an internal server error.</response>
+        </member>
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.
@@ -229,6 +239,17 @@
             Get detailed information from a booking Id.
             </summary>
         </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetActiveBookingDetail">
+            <summary>
+            Get Active booking detail information.
+            </summary>
+            <returns>
+            List of active booking details.
+            </returns>
+            <response code="200">Active booking details retrieved successfully.</response>
+            <response code="404">No active booking details found.</response>
+            <response code="500">An error occurred in the system.</response>
+        </member>
         <member name="M:CCSystem.API.Controllers.BookingsController.CreateBookingWithDetailsAsync(CCSystem.BLL.DTOs.Bookings.PostBookingRequest)">
             <summary>
             Create a booking along with its booking details.
@@ -349,6 +370,18 @@
             Trả kết quả thanh toán về cho người dùng
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.UpdatePaymentWithBooking(System.Int32,CCSystem.BLL.DTOs.Payments.PutPaymentWithBooking)">
+            <summary>
+            Update payment details and synchronize with the corresponding booking.
+            </summary>
+            <param name="paymentId">The ID of the payment to update.</param>
+            <param name="request">The payment update request.</param>
+            <returns>Updated payment and booking details.</returns>
+            <response code="200">Payment updated successfully.</response>
+            <response code="400">Invalid request data.</response>
+            <response code="404">Payment or booking not found.</response>
+            <response code="500">An internal server error occurred.</response>
         </member>
         <member name="M:CCSystem.API.Controllers.PromotionController.#ctor(CCSystem.DAL.Repositories.IPromotionService,FluentValidation.IValidator{CCSystem.BLL.DTOs.Promotions.PostPromotionRequest},FluentValidation.IValidator{CCSystem.BLL.DTOs.Promotions.PutPromotionRequest})">
             <summary>

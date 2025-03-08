@@ -68,7 +68,8 @@ namespace CCSystem.DAL.Repositories
         {
             try
             {
-                return await _context.Payments.FindAsync(paymentId);
+                return await _context.Payments
+                    .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
             }
             catch (Exception ex)
             {

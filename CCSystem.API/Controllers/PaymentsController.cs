@@ -2,10 +2,15 @@
 using CCSystem.API.Constants;
 using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.Payments;
+using CCSystem.BLL.DTOs.Services;
+using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
+using CCSystem.BLL.Utils;
 using CCSystem.DAL.Models;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,9 +32,9 @@ namespace CCSystem.API.Controllers
         private readonly IVnpay _vnpay;
         private readonly IConfiguration _configuration;
         private IBookingService _bookingService;
+        private IValidator<PutPaymentWithBooking> _putPaymentWithBookingValidator;
 
-
-        public PaymentController(IPaymentService paymentService, IVnpay vnPayservice, IConfiguration configuration, IBookingService bookingService)
+        public PaymentController(IPaymentService paymentService, IVnpay vnPayservice, IConfiguration configuration, IBookingService bookingService, IValidator<PutPaymentWithBooking> putPaymentWithBookingValidator)
         {
             this._paymentService = paymentService;
             this._vnpay = vnPayservice;
@@ -37,6 +42,7 @@ namespace CCSystem.API.Controllers
 
             this._vnpay.Initialize(_configuration["Vnpay:TmnCode"], _configuration["Vnpay:HashSecret"], _configuration["Vnpay:BaseUrl"], _configuration["Vnpay:CallbackUrl"]);
             this._bookingService = bookingService;
+            this._putPaymentWithBookingValidator = putPaymentWithBookingValidator;
         }
 
         #region Create Payment Url
@@ -152,14 +158,18 @@ namespace CCSystem.API.Controllers
             }
         }
         #endregion
+
+
         [HttpGet(APIEndPointConstant.Payment.GetPaymentByCustomerId)]
         public async Task<IActionResult> GetPaymentsByCustomerId([FromRoute] int id)
         {
             var payments = await _paymentService.GetPaymentsByCustomerIdAsync(id);
             return payments.Any() ? Ok(payments) : NotFound("No payments found for this customer.");
         }
+
+
         [HttpGet(APIEndPointConstant.Payment.GetPaymentByBookingId)]
-        public async Task<IActionResult> GetByBookingId([FromRoute] int id) 
+        public async Task<IActionResult> GetByBookingId([FromRoute] int id)
         {
             var paymentDto = await _paymentService.GetByBookingIdAsync(id);
 
@@ -220,6 +230,38 @@ namespace CCSystem.API.Controllers
             }
         }
         #endregion
-    }
 
+        #region Update Payment With Booking
+        /// <summary>
+        /// Update payment details and synchronize with the corresponding booking.
+        /// </summary>
+        /// <param name="paymentId">The ID of the payment to update.</param>
+        /// <param name="request">The payment update request.</param>
+        /// <returns>Updated payment and booking details.</returns>
+        /// <response code="200">Payment updated successfully.</response>
+        /// <response code="400">Invalid request data.</response>
+        /// <response code="404">Payment or booking not found.</response>
+        /// <response code="500">An internal server error occurred.</response>
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpPut(APIEndPointConstant.Payment.PaymentEndpoint)]
+        public async Task<IActionResult> UpdatePaymentWithBooking(int paymentId, [FromBody] PutPaymentWithBooking request)
+        {
+            ValidationResult validationResult = await _putPaymentWithBookingValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            await _paymentService.UpdatePaymentWithBooking(paymentId, request);
+
+            return Ok(new { Message = "Payment updated successfully." });
+        }
+        #endregion
+
+    }
 }

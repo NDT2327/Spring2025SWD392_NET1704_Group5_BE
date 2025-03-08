@@ -79,6 +79,21 @@ namespace CCSystem.BLL.Services.Implementations
 
         }
 
+        public async Task<List<BookingDetailResponse>> GetActiveBookingDetail()
+        {
+            try
+            {
+                var bdetails = await _unitOfWork.BookingDetailRepository.GetActiveBookingDetailAsync();
+                var responses = _mapper.Map<List<BookingDetailResponse>>(bdetails);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
+        }
+
         public async Task<List<BookingDetailResponse>> GetBookDetailByBooking(int bookingId)
         {
             try

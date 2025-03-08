@@ -64,5 +64,13 @@ namespace CCSystem.DAL.Repositories
             return await _context.ScheduleAssignments.AnyAsync(predicate);
         }
 
+        public async Task<List<ScheduleAssignment>> GetAssignsByHousekeeper(int housekeeperId)
+        {
+            return await _context.ScheduleAssignments
+                .Where(sa => sa.HousekeeperId == housekeeperId)
+                .ToListAsync();
+
+        }
+
     }
 }
