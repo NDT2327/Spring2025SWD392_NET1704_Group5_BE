@@ -44,6 +44,8 @@
         {
             public const string ServiceEndpoint = ApiEndpoint + "/services";
             public const string SearchServiceEndpoint = ServiceEndpoint + "/search";
+            public const string UpdateServiceEndpoint = ServiceEndpoint + "/update" + "/{id}";
+            public const string DeleteServiceEndpoint = ServiceEndpoint + "/delete" + "/{serviceid}";
             public const string GetServiceByIdEndpoint = ServiceEndpoint + "/{id}";
             public const string GetByCategoryId = ServiceEndpoint + "/category" + "/{id}";
 

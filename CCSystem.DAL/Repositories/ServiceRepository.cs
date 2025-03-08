@@ -104,6 +104,27 @@ namespace CCSystem.DAL.Repositories
                 throw new Exception("An error occurred while searching for services.", ex);
             }
         }
+        public async Task Update(Service service)
+        {
+            _context.Services.Update(service);
+            await Task.CompletedTask;
+        }
+
+        public async Task DeleteServiceAsync(int serviceId)
+        {
+            var service = await _context.Services.FindAsync(serviceId);
+
+            if (service == null)
+            {
+                throw new KeyNotFoundException("Service not found");
+            }
+
+            service.IsActive = false;
+            service.UpdatedDate = DateTime.UtcNow;
+
+            _context.Services.Update(service);
+            await _context.SaveChangesAsync();
+        }
 
 
         public async Task CreateServiceAsync(Service service)
