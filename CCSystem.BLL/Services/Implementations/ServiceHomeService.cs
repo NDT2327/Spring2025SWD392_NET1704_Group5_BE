@@ -96,6 +96,112 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
+        public async Task UpdateServiceAsync(int serviceId, PostServiceRequest request)
+        {
+            string folderName = "service_images";
+            bool isUpload = false;
+            string imageUrl = "";
+            string tempFilePath = "";
+            try
+            {
+                var service = await _unitOfWork.ServiceRepository.GetServiceAsync(serviceId);
+                if (service == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistServiceId);
+                }
+
+                var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(request.CategoryId);
+                if (category == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistCategoryId);
+                }
+
+                // Nếu có thay đổi hình ảnh
+                if (request.Image != null && request.Image.Length > 0)
+                {
+                    // Lưu tạm hình ảnh mới
+                    tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName));
+                    await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        await request.Image.CopyToAsync(stream);
+                    }
+
+                    // Upload hình ảnh mới lên Firebase
+                    imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        // Xóa hình ảnh cũ nếu có
+                        if (!string.IsNullOrEmpty(service.Image))
+                        {
+                            await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(service.Image);
+                        }
+
+                        // Cập nhật hình ảnh mới
+                        service.Image = imageUrl;
+                    }
+                }
+
+                // Cập nhật các thông tin dịch vụ còn lại
+                service.CategoryId = request.CategoryId;
+                service.ServiceName = request.ServiceName;
+                service.Description = request.Description;
+                service.Price = request.Price;
+                service.Duration = request.Duration;
+                service.IsActive = request.IsActive ?? true;
+                service.UpdatedDate = DateTime.UtcNow;
+
+                // Lưu thay đổi
+                await _unitOfWork.ServiceRepository.Update(service);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (BadRequestException ex)
+            {
+                string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
+                throw new BadRequestException(message);
+            }
+            catch (NotFoundException ex)
+            {
+                string message = ErrorUtil.GetErrorString("Failed to update service", ex.Message);
+                throw new NotFoundException(message);
+            }
+            catch (Exception ex)
+            {
+                // Nếu có lỗi trong quá trình upload hình ảnh, xóa hình ảnh đã upload
+                if (isUpload && !string.IsNullOrEmpty(imageUrl))
+                {
+                    await this._unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(imageUrl);
+                }
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
+            }
+            finally
+            {
+                // Xóa file tạm thời sau khi sử dụng
+                await FileUtils.SafeDeleteFileAsync(tempFilePath);
+            }
+        }
+        public async Task DeleteServiceAsync(int serviceId)
+        {
+            // Tìm dịch vụ trong cơ sở dữ liệu
+            var service = await _unitOfWork.ServiceRepository.GetServiceAsync(serviceId);
+
+            if (service == null)
+            {
+                throw new KeyNotFoundException("Service not found");
+            }
+
+            // Thực hiện xóa (cập nhật trạng thái)
+            service.IsActive = false;
+            service.UpdatedDate = DateTime.UtcNow;
+
+            // Cập nhật lại dịch vụ trong cơ sở dữ liệu
+            await _unitOfWork.ServiceRepository.Update(service);
+            await _unitOfWork.CommitAsync();
+        }
+
+
+
+
         public async Task<List<ServiceResponse>> GetListServicesAsync()
         {
             try

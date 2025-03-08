@@ -45,7 +45,12 @@ namespace CCSystem.DAL.Repositories
                 .Where(r => r.CustomerId == customerId)
                 .ToListAsync();
         }
-
+        public async Task<List<Review>> GetReviewsByDetailIdAsync(int detailId)
+        {
+            return await _dbContext.Reviews
+                .Where(r => r.DetailId == detailId)
+                .ToListAsync();
+        }
 
 
         public async Task DeleteAsync(int id)

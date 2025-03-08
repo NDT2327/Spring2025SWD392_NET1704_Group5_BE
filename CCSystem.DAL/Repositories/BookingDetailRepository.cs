@@ -63,6 +63,38 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
+        public async Task<List<BookingDetail>> GetBookingDetailsByServiceId(int serviceId)
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.ServiceDetail)
+                    .Where(bd => bd.ServiceId == serviceId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<BookingDetail>> GetBookingDetailsByServiceDetailId(int serviceDetailId)
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
+                    .Where(bd => bd.ServiceDetailId == serviceDetailId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<BookingDetail> GetBookingDetailByBookingServiceServiceDetail(int bookingId, int serviceId, int serviceDetailId)
         {
             try

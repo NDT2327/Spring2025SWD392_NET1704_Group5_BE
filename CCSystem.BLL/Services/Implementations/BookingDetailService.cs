@@ -7,6 +7,7 @@ using CCSystem.BLL.Utils;
 using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,6 +98,17 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+        }
+        public async Task<List<BookingDetailResponse>> GetBookingDetailsByServiceIdAsync(int serviceId)
+        {
+            var bookingDetails = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByServiceId(serviceId);
+            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+        }
+
+        public async Task<List<BookingDetailResponse>> GetBookingDetailsByServiceDetailIdAsync(int serviceDetailId)
+        {
+            var bookingDetails = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByServiceDetailId(serviceDetailId);
+            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
         }
 
         public async Task<BookingDetailResponse> GetBookingDetailById(int id)
