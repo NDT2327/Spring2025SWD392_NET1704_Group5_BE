@@ -142,6 +142,20 @@ namespace CCSystem.API.Controllers
         }
 
         #endregion
+        /// <summary>
+        /// Lấy thông tin đơn đặt chỗ theo mã khuyến mãi (PromotionCode).
+        /// </summary>
+        /// <param name="promotionCode">Mã khuyến mãi</param>
+        /// <returns>Thông tin đơn đặt chỗ</returns>
+        [HttpGet(APIEndPointConstant.Booking.GetBookingByPromotionCode)]
+        public async Task<IActionResult> GetByPromotionCode([FromRoute] string promotionCode)
+        {
+            var bookingDto = await _bookingsService.GetByPromotionCodeAsync(promotionCode);
 
+            if (bookingDto == null)
+                return NotFound($"Không tìm thấy Booking với PromotionCode: {promotionCode}");
+
+            return Ok(bookingDto);
+        }
     }
 }

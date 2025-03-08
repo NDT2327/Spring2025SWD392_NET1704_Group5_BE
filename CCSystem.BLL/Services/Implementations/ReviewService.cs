@@ -48,7 +48,11 @@ namespace CCSystem.BLL.Services
                 ReviewDate = r.ReviewDate ?? DateTime.MinValue
             }).ToList();
         }
-
+        public async Task<List<ReviewResponse>> GetReviewsByDetailIdAsync(int detailId)
+        {
+            var reviews = await _unitOfWork.ReviewRepository.GetReviewsByDetailIdAsync(detailId);
+            return _mapper.Map<List<ReviewResponse>>(reviews);
+        }
         public async Task AddReviewAsync(ReviewRequest reviewRequest)
         {
             if (reviewRequest == null)
