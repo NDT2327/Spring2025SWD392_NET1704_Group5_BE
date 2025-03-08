@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.ScheduleAssign;
 using CCSystem.BLL.Exceptions;
@@ -34,8 +35,20 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingDetailId);
                 }
+
+                // Nếu đã có housekeeper assign trước đó, không cho phép assign lại
+                var existingAssignment = await _unitOfWork.ScheduleAssignRepository.ExistsAsync(sa =>
+                    sa.DetailId == request.DetailId &&
+                    (sa.Status == AssignEnums.Status.ASSIGNED.ToString() ||
+                     sa.Status == AssignEnums.Status.INPROGRESS.ToString()));
+
+                if (existingAssignment)
+                {
+                    throw new ConflictException("This booking detail has already been assigned to a housekeeper!");
+                }
+
                 if (bDetail.IsAssign == true 
-                    || bDetail.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.ASSIGN.ToString()
+                    || bDetail.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.ASSIGNED.ToString()
                     || bDetail.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.COMPLETED.ToString()
                     || bDetail.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.CANCELLED.ToString())
                 {
@@ -78,7 +91,7 @@ namespace CCSystem.BLL.Services.Implementations
                 };
 
                 bDetail.IsAssign = true;
-                bDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.ASSIGN.ToString();
+                bDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.ASSIGNED.ToString();
 
                 await _unitOfWork.ScheduleAssignRepository.AddAsync(scheduleAssign);
                 await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bDetail);
@@ -136,9 +149,57 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
-        public Task UpdateAsync(PostScheduleAssignRequest request)
+        public async Task<List<ScheduleAssignmentResponse>> GetAssignsByHousekeeper(int housekeeperId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var housekeeper = await _unitOfWork.AccountRepository.GetByIdAsync(housekeeperId);
+                if (housekeeper == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
+                }
+                var assigns = await _unitOfWork.ScheduleAssignRepository.GetAssignsByHousekeeper(housekeeper.AccountId);
+                var responses = _mapper.Map<List<ScheduleAssignmentResponse>>(assigns);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task ChangeAssignStatus(PatchAssignStatusRequest request)
+        {
+            try
+            {
+                var assign = await _unitOfWork.ScheduleAssignRepository.GetByIdAsync(request.AssignmentId);
+                if (assign == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistAssignId);
+                }
+                var validStatuses = new List<string>
+                {
+                    AssignEnums.Status.ASSIGNED.ToString(),
+                    AssignEnums.Status.CANCELLED.ToString(),
+                    AssignEnums.Status.COMPLETED.ToString(),
+                    AssignEnums.Status.INPROGRESS.ToString(),
+                };
+
+                if (!validStatuses.Contains(request.Status))
+                {
+                    throw new BadRequestException(MessageConstant.ScheduleAssign.StatusValidate);
+                }
+
+                assign.Status = request.Status;
+
+
+                await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assign);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
