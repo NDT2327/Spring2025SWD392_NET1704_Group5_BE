@@ -82,6 +82,7 @@ namespace CCSystem.API.Controllers
         }
         #endregion
 
+
         #region Get Active Booking Detail
         /// <summary>
         /// Get Active booking detail information.
@@ -104,5 +105,28 @@ namespace CCSystem.API.Controllers
             return Ok(activeBookingDetails);
         }
         #endregion
+
+        /// <summary>
+        /// Lấy danh sách BookingDetails theo ServicelId
+        /// </summary>
+        [HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceId)]
+
+        public async Task<IActionResult> GetBookingDetailsByServiceId(int id)
+        {
+            var bookingDetails = await _bookingDetailService.GetBookingDetailsByServiceIdAsync(id);
+            return bookingDetails.Count > 0 ? Ok(bookingDetails) : NotFound($"Không tìm thấy BookingDetails với ServiceId: {id}");
+        }
+
+        /// <summary>
+        /// Lấy danh sách BookingDetails theo ServiceDetailId
+        /// </summary>
+        [HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceDetailId)]
+        public async Task<IActionResult> GetBookingDetailsByServiceDetailId(int id)
+        {
+            var bookingDetails = await _bookingDetailService.GetBookingDetailsByServiceDetailIdAsync(id);
+            return bookingDetails.Count > 0 ? Ok(bookingDetails) : NotFound($"Không tìm thấy BookingDetails với ServiceDetailId: {id}");
+        }
+
     }
 }
+

@@ -163,7 +163,7 @@ namespace CCSystem.BLL.Services.Implementations
                 TaskStatus = r.TaskStatus
             }).ToList();
         }
-    
+
 
         // Lấy tất cả báo cáo
         public async Task<IEnumerable<ReportResponse>> GetAllReportsAsync()
@@ -181,6 +181,22 @@ namespace CCSystem.BLL.Services.Implementations
                 TotalHours = report.TotalHours,
                 TaskStatus = report.TaskStatus
             });
+        }
+        public async Task<List<ReportResponse>> GetByAssignIdAsync(int assignId)
+        {
+            var reports = await _unitOfWork.ReportRepository.GetByAssignIdAsync(assignId);
+
+            return reports.Select(report => new ReportResponse
+            {
+                RecordId = report.RecordId,
+                HousekeeperId = report.HousekeeperId,
+                AssignId = report.AssignId,
+                WorkDate = report.WorkDate,
+                StartTime = report.StartTime,
+                EndTime = report.EndTime,
+                TotalHours = report.TotalHours,
+                TaskStatus = report.TaskStatus
+            }).ToList();
         }
     }
 }

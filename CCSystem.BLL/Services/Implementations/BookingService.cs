@@ -8,6 +8,7 @@ using CCSystem.BLL.Utils;
 using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -224,6 +225,15 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+        }
+        public async Task<BookingResponse?> GetByPromotionCodeAsync(string promotionCode)
+        {
+            var booking = await _unitOfWork.BookingRepository.GetByPromotionCodeAsync(promotionCode);
+
+            if (booking == null)
+                return null; 
+
+            return _mapper.Map<BookingResponse>(booking);
         }
 
         public async Task UpdateBookingAsync(Booking booking)

@@ -65,6 +65,13 @@ namespace CCSystem.DAL.Repositories
                 throw new Exception("Error retrieving booking by ID", ex);
             }
         }
+        public async Task<Booking> GetByPromotionCodeAsync(string promotionCode)
+        {
+            return await _context.Bookings
+                .Include(b => b.Payments)  
+                .Include(b => b.Customer)  
+                .FirstOrDefaultAsync(b => b.PromotionCode == promotionCode);
+        }
 
         public async Task UpdateAsync(Booking booking)
         {

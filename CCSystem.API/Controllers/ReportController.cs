@@ -111,6 +111,11 @@ public class ReportsController : ControllerBase
         var result = await _reportService.GetAllReportsAsync();
         return Ok(result);
     }
+    /// <summary>
+    /// Lấy danh sách báo cáo theo HousekeeperId.
+    /// </summary>
+    /// <param name="id">ID của Housekeeper</param>
+    /// <returns>Danh sách báo cáo nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
     [HttpGet(APIEndPointConstant.Report.GetReportByHousekeeperIdEndpoint)]
     public async Task<ActionResult<IEnumerable<ReportResponse>>> GetReportsByHousekeeperId([FromRoute] int id)
     {
@@ -120,6 +125,17 @@ public class ReportsController : ControllerBase
             return NotFound("No reports found for this housekeeper.");
         }
         return Ok(reports);
+    }
+    /// <summary>
+    /// Lấy danh sách báo cáo theo AssignId.
+    /// </summary>
+    /// <param name="id">ID của Assign</param>
+    /// <returns>Danh sách báo cáo nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
+    [HttpGet(APIEndPointConstant.Report.GetReportByAssignIdEndpoint)]
+    public async Task<IActionResult> GetByAssignId(int id)
+    {
+        var reports = await _reportService.GetByAssignIdAsync(id);
+        return reports.Count > 0 ? Ok(reports) : NotFound($"Không tìm thấy báo cáo với AssignId: {id}");
     }
 }
 

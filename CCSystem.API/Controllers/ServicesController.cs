@@ -1,5 +1,6 @@
 ﻿using CCSystem.API.Authorization;
 using CCSystem.API.Constants;
+using CCSystem.API.Validators.Services;
 using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.Category;
 using CCSystem.BLL.DTOs.Services;
@@ -87,6 +88,59 @@ namespace CCSystem.API.Controllers
             });
         }
         #endregion
+        [HttpPost(APIEndPointConstant.Service.UpdateServiceEndpoint)]
+        public async Task<IActionResult> UpdateService(int id, [FromForm] PostServiceRequest request)
+        {
+            try
+            {
+                // Validate the request using the UpdateServiceValidator
+                ValidationResult validationResult = await _postServiceValidator.ValidateAsync(request);
+                if (!validationResult.IsValid)
+                {
+                    // Nếu không hợp lệ, tạo thông điệp lỗi từ validation
+                    string errors = ErrorUtil.GetErrorsString(validationResult);
+                    throw new BadRequestException(errors);
+                }
+
+                // Nếu validation thành công, thực hiện cập nhật dịch vụ
+                await _serviceHomeService.UpdateServiceAsync(id, request);
+
+                return Ok(new { Message = "Service updated successfully" });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
+            }
+        }
+        [HttpPost(APIEndPointConstant.Service.DeleteServiceEndpoint)]
+        public async Task<IActionResult> DeleteService(int serviceid)
+        {
+            try
+            {
+                await _serviceHomeService.DeleteServiceAsync(serviceid);
+                return Ok(new { Message = "Service deleted successfully" });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
+            }
+        }
 
         #region Search Service
         /// <summary>

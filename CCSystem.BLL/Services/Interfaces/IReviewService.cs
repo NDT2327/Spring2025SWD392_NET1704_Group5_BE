@@ -14,5 +14,6 @@ namespace CCSystem.BLL.Services
         Task UpdateReviewAsync(ReviewRequest reviewRequest, int reviewId);
         Task DeleteReviewAsync(int id);
         Task<IEnumerable<ReviewResponse>> GetReviewsByCustomerIdAsync(int customerId);
+        public Task<List<ReviewResponse>> GetReviewsByDetailIdAsync(int detailId);
     }
 }

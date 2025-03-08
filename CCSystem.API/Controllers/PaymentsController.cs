@@ -159,7 +159,11 @@ namespace CCSystem.API.Controllers
         }
         #endregion
 
-
+        /// <summary>
+        /// Lấy danh sách thanh toán theo ID khách hàng.
+        /// </summary>
+        /// <param name="id">ID của khách hàng</param>
+        /// <returns>Danh sách các khoản thanh toán</returns>
         [HttpGet(APIEndPointConstant.Payment.GetPaymentByCustomerId)]
         public async Task<IActionResult> GetPaymentsByCustomerId([FromRoute] int id)
         {
@@ -167,9 +171,13 @@ namespace CCSystem.API.Controllers
             return payments.Any() ? Ok(payments) : NotFound("No payments found for this customer.");
         }
 
-
+        /// <summary>
+        /// Lấy thông tin thanh toán theo BookingId.
+        /// </summary>
+        /// <param name="id">ID của đơn đặt chỗ (Booking)</param>
+        /// <returns>Thông tin thanh toán</returns>
         [HttpGet(APIEndPointConstant.Payment.GetPaymentByBookingId)]
-        public async Task<IActionResult> GetByBookingId([FromRoute] int id)
+        public async Task<IActionResult> GetByBookingId([FromRoute] int id) 
         {
             var paymentDto = await _paymentService.GetByBookingIdAsync(id);
 
