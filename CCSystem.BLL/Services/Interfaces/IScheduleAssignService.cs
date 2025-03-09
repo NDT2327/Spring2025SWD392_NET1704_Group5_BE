@@ -16,5 +16,7 @@ namespace CCSystem.BLL.Services.Interfaces
         //Task UpdateAsync(PostScheduleAssignRequest request);
         Task<List<ScheduleAssignmentResponse>> GetAssignsByHousekeeper(int housekeeperId);
         Task ChangeAssignStatus(PatchAssignStatusRequest request);
+        Task CompleteAssignmentAndNotifyCustomer(CompleteAssignmentRequest request);
+        Task ConfirmAssignment(ConfirmAssignmentRequest request);
     }
 }

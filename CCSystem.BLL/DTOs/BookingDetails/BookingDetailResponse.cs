@@ -29,10 +29,13 @@ namespace CCSystem.BLL.DTOs.BookingDetails
         
         public TimeOnly ScheduleTime { get; set; }
 
-        //public virtual Booking Booking { get; set; }
+		public bool? IsAssign { get; set; }
 
-        //public virtual CCSystem.DAL.Models.Service Service { get; set; }
+		public string BookdetailStatus { get; set; }
+		//public virtual Booking Booking { get; set; }
 
-        //public virtual ServiceDetail ServiceDetail { get; set; }
-    }
+		//public virtual CCSystem.DAL.Models.Service Service { get; set; }
+
+		//public virtual ServiceDetail ServiceDetail { get; set; }
+	}
 }

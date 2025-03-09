@@ -32,8 +32,6 @@ namespace CCSystem.DAL.Repositories
         public async Task<ScheduleAssignment> GetByIdAsync(int id)
         {
             return await _context.ScheduleAssignments
-                .Include(sa => sa.Housekeeper)
-                .Include(sa => sa.Detail)
                 .FirstOrDefaultAsync(sa => sa.AssignmentId == id);
         }
 
@@ -70,6 +68,13 @@ namespace CCSystem.DAL.Repositories
                 .Where(sa => sa.HousekeeperId == housekeeperId)
                 .ToListAsync();
 
+        }
+
+        public async Task<List<ScheduleAssignment>> GetAssignmentByDetailId(int detailId)
+        {
+            return await _context.ScheduleAssignments
+                .Where(sa => sa.DetailId == detailId)
+                .ToListAsync();
         }
 
     }
