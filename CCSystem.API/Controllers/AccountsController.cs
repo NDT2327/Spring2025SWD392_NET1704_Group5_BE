@@ -174,7 +174,6 @@ namespace CCSystem.API.Controllers
                 return BadRequest(new { message = "Invalid request data." });
             }
 
-            // Validate request
             var validationResult = await _updateAccountValidator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
@@ -196,6 +195,8 @@ namespace CCSystem.API.Controllers
                 return StatusCode(500, new { message = "An error occurred while updating the account.", error = ex.Message });
             }
         }
+
+
         #endregion
     }
 }

@@ -3,6 +3,7 @@ using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.Payments;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using VNPAY.NET.Models;
 
 namespace CCSystem.BLL.Services.Implementations
 {
@@ -57,11 +59,11 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<IEnumerable<PaymentResponse>> GetPaymentsByCustomerIdAsync(int customerId)
+        public async Task<IEnumerable<DTOs.Payments.PaymentResponse>> GetPaymentsByCustomerIdAsync(int customerId)
         {
             var payments = await _unitOfWork.PaymentRepository.GetPaymentsByCustomerIdAsync(customerId);
 
-            return payments.Select(p => new PaymentResponse
+            return payments.Select(p => new DTOs.Payments.PaymentResponse
             {
                 PaymentId = p.PaymentId,
                 CustomerId = p.CustomerId,
@@ -76,14 +78,14 @@ namespace CCSystem.BLL.Services.Implementations
                 TransactionId = p.TransactionId
             }).ToList();
         }
-        public async Task<PaymentResponse?> GetByBookingIdAsync(int bookingId)
+        public async Task<DTOs.Payments.PaymentResponse?> GetByBookingIdAsync(int bookingId)
         {
             var payment = await _unitOfWork.PaymentRepository.GetByBookingIdAsync(bookingId);
 
             if (payment == null)
                 return null;
 
-            return new PaymentResponse
+            return new DTOs.Payments.PaymentResponse
             {
                 PaymentId = payment.PaymentId,
                 CustomerId = payment.CustomerId,
@@ -117,5 +119,55 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task UpdatePaymentWithBooking(int paymentId, PutPaymentWithBooking request)
+        {
+            try
+            {
+                var payment = await _unitOfWork.PaymentRepository.GetByIdAsync(paymentId);
+                if (payment == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistPaymentId);
+                }
+                var booking = await _unitOfWork.BookingRepository.GetByIdAsync(payment.BookingId);
+                if (booking == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
+                }
+                payment.TransactionId = request.TransactionId;
+                payment.Status = request.Status;
+                payment.PaymentMethod = request.PaymentMethod;
+                var validStatuses = new List<string>
+                {
+                    PaymentEnums.Status.SUCCESS.ToString(),
+                    PaymentEnums.Status.FAILED.ToString(),
+                    PaymentEnums.Status.PENDING.ToString()
+                };
+
+                if (!validStatuses.Contains(request.Status))
+                {
+                    throw new BadRequestException(MessageConstant.PaymentMessage.StatusMustSuccessOrFailedorPending);
+                }
+
+                if (payment.Status == PaymentEnums.Status.SUCCESS.ToString())
+                {
+
+                    booking.PaymentStatus = BookingEnums.PaymentStatus.PAID.ToString();
+                    booking.BookingStatus = BookingEnums.BookingStatus.CONFIRMED.ToString();
+                    await _unitOfWork.BookingRepository.UpdateAsync(booking);
+
+                }
+
+                payment.UpdatedDate = DateTime.UtcNow;
+
+                await _unitOfWork.PaymentRepository.UpdateAsync(payment);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

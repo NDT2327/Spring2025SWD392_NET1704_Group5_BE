@@ -1,4 +1,5 @@
 ﻿using CCSystem.DAL.DBContext;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -150,6 +151,25 @@ namespace CCSystem.DAL.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<List<BookingDetail>> GetActiveBookingDetailAsync()
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
+                    .Include(bd => bd.ServiceDetail)
+                    .Where(bd => bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.ASSIGNED.ToString() 
+                              && bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.COMPLETED.ToString()
+                              && bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.CANCELLED.ToString()
+                              && bd.IsAssign == false)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
 
     }

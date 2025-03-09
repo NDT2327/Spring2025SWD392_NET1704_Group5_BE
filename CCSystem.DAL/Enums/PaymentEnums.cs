@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace CCSystem.DAL.Enums
 {
-    public class BookingDetailEnums
+    public class PaymentEnums
     {
-        public enum BookingDetailStatus
+        public enum Status
         {
-            PENDING,
-            CANCELLED,
-            COMPLETED,
-            ASSIGNED
+            SUCCESS,
+            FAILED,
+            PENDING
         }
     }
 }

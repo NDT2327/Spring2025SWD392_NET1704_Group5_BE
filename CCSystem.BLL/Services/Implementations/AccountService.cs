@@ -196,38 +196,49 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     await request.Avatar.CopyToAsync(stream);
                 }
-
                 string imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
                 if (!string.IsNullOrEmpty(imageUrl))
                 {
-                    // Xóa Avatar cũ nếu có
-                    if (!string.IsNullOrEmpty(account.Avatar))
+                    // Kiểm tra Avatar cũ có hợp lệ trước khi xóa
+                    if (!string.IsNullOrEmpty(account.Avatar) && Uri.IsWellFormedUriString(account.Avatar, UriKind.Absolute))
                     {
                         await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(account.Avatar);
                     }
+
                     account.Avatar = imageUrl;
                 }
 
                 // Xóa file tạm
                 await FileUtils.SafeDeleteFileAsync(tempFilePath);
+                if (request.Year.HasValue && request.Month.HasValue && request.Day.HasValue)
+                {
+                    try
+                    {
+                        account.DateOfBirth = new DateOnly(request.Year.Value, request.Month.Value, request.Day.Value);
+                    }
+                    catch
+                    {
+                        throw new BadRequestException("Invalid date values.");
+                    }
+                }
+
+
+                // Cập nhật các thông tin khác
+                account.FullName = request.FullName;
+                account.Phone = request.Phone;
+                account.Address = request.Address;
+                account.Gender = request.Gender;
+                account.Rating = request.Rating;
+                account.Experience = request.Experience;
+                account.Status = request.Status;
+                account.UpdatedDate = DateTime.UtcNow; // Thêm ngày cập nhật
+
+                // Lưu thay đổi
+                await _unitOfWork.AccountRepository.UpdateAccount(account);
+                await _unitOfWork.CommitAsync();
             }
 
-            // Cập nhật các thông tin khác
-            account.FullName = request.FullName;
-            account.Phone = request.Phone;
-            account.Address = request.Address;
-            account.Gender = request.Gender;
-            account.DateOfBirth = request.DateOfBirth;
-            account.Rating = request.Rating;
-            account.Experience = request.Experience;
-            account.Status = request.Status;
-            account.UpdatedDate = DateTime.UtcNow; // Thêm ngày cập nhật
 
-            // Lưu thay đổi
-            await _unitOfWork.AccountRepository.UpdateAccount(account);
-            await _unitOfWork.CommitAsync();
         }
-
-
     }
 }
