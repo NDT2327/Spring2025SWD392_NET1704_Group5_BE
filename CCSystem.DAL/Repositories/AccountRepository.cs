@@ -128,17 +128,10 @@ namespace CCSystem.DAL.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
-        public void UpdateAccount(Account account)
+        public async Task UpdateAccount(Account account)
         {
-            try
-            {
-                this._context.Accounts.Update(account);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            _context.Accounts.Update(account);
+            await _context.SaveChangesAsync();
         }
         public async Task<Account> GetByIdAsync(int accountId)
         {

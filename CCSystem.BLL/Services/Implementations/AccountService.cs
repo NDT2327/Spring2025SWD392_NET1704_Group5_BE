@@ -8,6 +8,7 @@ using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -177,54 +178,56 @@ namespace CCSystem.BLL.Services.Implementations
             return getAccountResponse;
         }
 
-        public async Task<GetAccountResponse> UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest)
+        public async Task UpdateAccountAsync(int accountId, UpdateAccountRequest request)
         {
-            try
+            var account = await _unitOfWork.AccountRepository.GetAccountAsync(accountId);
+            if (account == null)
             {
-                // Fetch the account from the database
-                var existingAccount = await _unitOfWork.AccountRepository.GetAccountAsync(idAccount);
-
-                if (existingAccount == null)
-                {
-                    throw new NotFoundException($"Account with ID {idAccount} not found.");
-                }
-
-                // Update only the provided fields (null checks)
-                if (!string.IsNullOrEmpty(updateAccountRequest.Address))
-                {
-                    existingAccount.Address = updateAccountRequest.Address;
-                }
-
-                if (!string.IsNullOrEmpty(updateAccountRequest.Phone))
-                {
-                    existingAccount.Phone = updateAccountRequest.Phone;
-                }
-
-                if (!string.IsNullOrEmpty(updateAccountRequest.FullName))
-                {
-                    existingAccount.FullName = updateAccountRequest.FullName;
-                }
-
-
-                // Update the modification timestamp
-                existingAccount.UpdatedDate = DateTime.UtcNow;
-
-                // Save changes to the database
-                _unitOfWork.AccountRepository.UpdateAccount(existingAccount);
-                await _unitOfWork.CommitAsync();
-
-                // Map and return the updated account
-                return _mapper.Map<GetAccountResponse>(existingAccount);
+                throw new NotFoundException("Account not found.");
             }
-            catch (NotFoundException ex)
+
+            // Xử lý Avatar nếu có
+            if (request.Avatar != null && request.Avatar.Length > 0)
             {
-                throw new NotFoundException($"Update failed: {ex.Message}");
+                string folderName = "account_avatars";
+                string tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Avatar.FileName));
+
+                await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    await request.Avatar.CopyToAsync(stream);
+                }
+
+                string imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    // Xóa Avatar cũ nếu có
+                    if (!string.IsNullOrEmpty(account.Avatar))
+                    {
+                        await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(account.Avatar);
+                    }
+                    account.Avatar = imageUrl;
+                }
+
+                // Xóa file tạm
+                await FileUtils.SafeDeleteFileAsync(tempFilePath);
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"An unexpected error occurred: {ex.Message}");
-            }
+
+            // Cập nhật các thông tin khác
+            account.FullName = request.FullName;
+            account.Phone = request.Phone;
+            account.Address = request.Address;
+            account.Gender = request.Gender;
+            account.DateOfBirth = request.DateOfBirth;
+            account.Rating = request.Rating;
+            account.Experience = request.Experience;
+            account.Status = request.Status;
+            account.UpdatedDate = DateTime.UtcNow; // Thêm ngày cập nhật
+
+            // Lưu thay đổi
+            await _unitOfWork.AccountRepository.UpdateAccount(account);
+            await _unitOfWork.CommitAsync();
         }
+
 
     }
 }
