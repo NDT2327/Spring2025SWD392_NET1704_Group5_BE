@@ -49,6 +49,27 @@
             Assign housekeeper in work
              </summary>
         </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.GetAssignsByHousekeeper(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+            <summary>
+            Retrieves schedule assignments for a given housekeeper.
+            </summary>
+            <param name="housekeeperId">The ID of the housekeeper.</param>
+            <returns>A list of schedule assignments.</returns>
+            <response code="200">Returns the list of assignments.</response>
+            <response code="404">If the housekeeper does not exist.</response>
+            <response code="500">If there is an internal server error.</response>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.ChangeAssignStatus(CCSystem.BLL.DTOs.ScheduleAssign.PatchAssignStatusRequest)">
+            <summary>
+            Updates the status of an assignment.
+            </summary>
+            <param name="request">The request object containing the assignment ID and new status.</param>
+            <returns>A success message if the status is updated.</returns>
+            <response code="200">Assignment status updated successfully.</response>
+            <response code="400">If the status value is invalid.</response>
+            <response code="404">If the assignment does not exist.</response>
+            <response code="500">If an internal server error occurs.</response>
+        </member>
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.
@@ -229,6 +250,27 @@
             Get detailed information from a booking Id.
             </summary>
         </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetActiveBookingDetail">
+            <summary>
+            Get Active booking detail information.
+            </summary>
+            <returns>
+            List of active booking details.
+            </returns>
+            <response code="200">Active booking details retrieved successfully.</response>
+            <response code="404">No active booking details found.</response>
+            <response code="500">An error occurred in the system.</response>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailsByServiceId(System.Int32)">
+            <summary>
+            Lấy danh sách BookingDetails theo ServicelId
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailsByServiceDetailId(System.Int32)">
+            <summary>
+            Lấy danh sách BookingDetails theo ServiceDetailId
+            </summary>
+        </member>
         <member name="M:CCSystem.API.Controllers.BookingsController.CreateBookingWithDetailsAsync(CCSystem.BLL.DTOs.Bookings.PostBookingRequest)">
             <summary>
             Create a booking along with its booking details.
@@ -274,6 +316,18 @@
             <response code="500">An error occurred in the system.</response>
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no booking exists with the provided Id.</exception>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingsController.GetBookingsByCustomer(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+            <summary>
+            Get Bookings by Customer Id
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingsController.GetByPromotionCode(System.String)">
+            <summary>
+            Lấy thông tin đơn đặt chỗ theo mã khuyến mãi (PromotionCode).
+            </summary>
+            <param name="promotionCode">Mã khuyến mãi</param>
+            <returns>Thông tin đơn đặt chỗ</returns>
         </member>
         <member name="T:CCSystem.API.Controllers.CategoryController">
             <summary>
@@ -339,11 +393,37 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.GetPaymentsByCustomerId(System.Int32)">
+            <summary>
+            Lấy danh sách thanh toán theo ID khách hàng.
+            </summary>
+            <param name="id">ID của khách hàng</param>
+            <returns>Danh sách các khoản thanh toán</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.GetByBookingId(System.Int32)">
+            <summary>
+            Lấy thông tin thanh toán theo BookingId.
+            </summary>
+            <param name="id">ID của đơn đặt chỗ (Booking)</param>
+            <returns>Thông tin thanh toán</returns>
+        </member>
         <member name="M:CCSystem.API.Controllers.PaymentController.Callback">
             <summary>
             Trả kết quả thanh toán về cho người dùng
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.PaymentController.UpdatePaymentWithBooking(System.Int32,CCSystem.BLL.DTOs.Payments.PutPaymentWithBooking)">
+            <summary>
+            Update payment details and synchronize with the corresponding booking.
+            </summary>
+            <param name="paymentId">The ID of the payment to update.</param>
+            <param name="request">The payment update request.</param>
+            <returns>Updated payment and booking details.</returns>
+            <response code="200">Payment updated successfully.</response>
+            <response code="400">Invalid request data.</response>
+            <response code="404">Payment or booking not found.</response>
+            <response code="500">An internal server error occurred.</response>
         </member>
         <member name="M:CCSystem.API.Controllers.PromotionController.#ctor(CCSystem.DAL.Repositories.IPromotionService,FluentValidation.IValidator{CCSystem.BLL.DTOs.Promotions.PostPromotionRequest},FluentValidation.IValidator{CCSystem.BLL.DTOs.Promotions.PutPromotionRequest})">
             <summary>
@@ -400,12 +480,26 @@
             </summary>
             <returns>Danh sách đánh giá</returns>
         </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.GetReviewsByCustomerId(System.Int32)">
+            <summary>
+            Lấy danh sách đánh giá dựa trên CustomerId.
+            </summary>
+            <param name="id">ID của khách hàng</param>
+            <returns>Danh sách đánh giá nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
+        </member>
         <member name="M:CCSystem.API.Controllers.ReviewController.GetReviewById(System.Int32)">
             <summary>
             Lấy đánh giá theo ID.
             </summary>
             <param name="id">ID của đánh giá</param>
             <returns>Thông tin đánh giá nếu tồn tại</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.ReviewController.GetReviewsByDetailId(System.Int32)">
+            <summary>
+            Lấy danh sách đánh giá theo DetailId.
+            </summary>
+            <param name="detailId">ID của chi tiết đặt lịch</param>
+            <returns>Danh sách đánh giá nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
         </member>
         <member name="M:CCSystem.API.Controllers.ReviewController.CreateReview(CCSystem.BLL.DTOs.Review.ReviewRequest)">
             <summary>
@@ -599,6 +693,20 @@
             Lấy danh sách tất cả báo cáo.
             </summary>
             <returns>Danh sách báo cáo</returns>
+        </member>
+        <member name="M:ReportsController.GetReportsByHousekeeperId(System.Int32)">
+            <summary>
+            Lấy danh sách báo cáo theo HousekeeperId.
+            </summary>
+            <param name="id">ID của Housekeeper</param>
+            <returns>Danh sách báo cáo nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
+        </member>
+        <member name="M:ReportsController.GetByAssignId(System.Int32)">
+            <summary>
+            Lấy danh sách báo cáo theo AssignId.
+            </summary>
+            <param name="id">ID của Assign</param>
+            <returns>Danh sách báo cáo nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
         </member>
     </members>
 </doc>
