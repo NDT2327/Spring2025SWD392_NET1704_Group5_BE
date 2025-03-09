@@ -18,6 +18,8 @@ namespace CCSystem.BLL.DTOs.Accounts
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string Avatar { get; set; }
+        public string Gender { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
     }
 }

@@ -17,13 +17,15 @@ namespace CCSystem.API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
+        private readonly IValidator<UpdateAccountRequest> _updateAccountValidator;
         private IAccountService _accountService;
         private IValidator<AccountSearchRequest> _searchAccountValidator;
 
-        public AccountsController(IAccountService accountService, IValidator<AccountSearchRequest> searchAccountValidator)
+        public AccountsController(IAccountService accountService, IValidator<AccountSearchRequest> searchAccountValidator, IValidator<UpdateAccountRequest> updateAccountValidator)
         {
             this._accountService = accountService;
             this._searchAccountValidator = searchAccountValidator;
+            this._updateAccountValidator = updateAccountValidator;
         }
 
         #region Search Accounts
@@ -165,36 +167,35 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
         [HttpPut(APIEndPointConstant.Account.UpdateAccountEndpoint)]
-        public async Task<IActionResult> UpdateAccount(int id, [FromBody] UpdateAccountRequest updateRequest)
+        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromForm] UpdateAccountRequest request)
         {
-            if (updateRequest == null)
+            if (request == null)
             {
                 return BadRequest(new { message = "Invalid request data." });
             }
 
+            var validationResult = await _updateAccountValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                return BadRequest(new { message = errors });
+            }
+
             try
             {
-                var updatedAccount = await _accountService.UpdateAccountAsync(id, updateRequest);
-
-                return Ok(new
-                {
-                    message = "Account updated successfully.",
-                    data = updatedAccount
-                });
+                await _accountService.UpdateAccountAsync(id, request);
+                return Ok(new { message = "Account updated successfully." });
             }
             catch (NotFoundException ex)
             {
                 return NotFound(new { message = ex.Message });
-            }
-            catch (BadRequestException ex)
-            {
-                return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "An error occurred while updating the account.", error = ex.Message });
             }
         }
+
 
         #endregion
     }

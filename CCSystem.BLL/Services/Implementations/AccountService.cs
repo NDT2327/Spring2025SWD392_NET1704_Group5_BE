@@ -8,6 +8,7 @@ using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -177,54 +178,67 @@ namespace CCSystem.BLL.Services.Implementations
             return getAccountResponse;
         }
 
-        public async Task<GetAccountResponse> UpdateAccountAsync(int idAccount, UpdateAccountRequest updateAccountRequest)
+        public async Task UpdateAccountAsync(int accountId, UpdateAccountRequest request)
         {
-            try
+            var account = await _unitOfWork.AccountRepository.GetAccountAsync(accountId);
+            if (account == null)
             {
-                // Fetch the account from the database
-                var existingAccount = await _unitOfWork.AccountRepository.GetAccountAsync(idAccount);
+                throw new NotFoundException("Account not found.");
+            }
 
-                if (existingAccount == null)
+            // Xử lý Avatar nếu có
+            if (request.Avatar != null && request.Avatar.Length > 0)
+            {
+                string folderName = "account_avatars";
+                string tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Avatar.FileName));
+
+                await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    throw new NotFoundException($"Account with ID {idAccount} not found.");
+                    await request.Avatar.CopyToAsync(stream);
+                }
+                string imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    // Kiểm tra Avatar cũ có hợp lệ trước khi xóa
+                    if (!string.IsNullOrEmpty(account.Avatar) && Uri.IsWellFormedUriString(account.Avatar, UriKind.Absolute))
+                    {
+                        await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(account.Avatar);
+                    }
+
+                    account.Avatar = imageUrl;
                 }
 
-                // Update only the provided fields (null checks)
-                if (!string.IsNullOrEmpty(updateAccountRequest.Address))
+                // Xóa file tạm
+                await FileUtils.SafeDeleteFileAsync(tempFilePath);
+                if (request.Year.HasValue && request.Month.HasValue && request.Day.HasValue)
                 {
-                    existingAccount.Address = updateAccountRequest.Address;
+                    try
+                    {
+                        account.DateOfBirth = new DateOnly(request.Year.Value, request.Month.Value, request.Day.Value);
+                    }
+                    catch
+                    {
+                        throw new BadRequestException("Invalid date values.");
+                    }
                 }
 
-                if (!string.IsNullOrEmpty(updateAccountRequest.Phone))
-                {
-                    existingAccount.Phone = updateAccountRequest.Phone;
-                }
 
-                if (!string.IsNullOrEmpty(updateAccountRequest.FullName))
-                {
-                    existingAccount.FullName = updateAccountRequest.FullName;
-                }
+                // Cập nhật các thông tin khác
+                account.FullName = request.FullName;
+                account.Phone = request.Phone;
+                account.Address = request.Address;
+                account.Gender = request.Gender;
+                account.Rating = request.Rating;
+                account.Experience = request.Experience;
+                account.Status = request.Status;
+                account.UpdatedDate = DateTime.UtcNow; // Thêm ngày cập nhật
 
-
-                // Update the modification timestamp
-                existingAccount.UpdatedDate = DateTime.UtcNow;
-
-                // Save changes to the database
-                _unitOfWork.AccountRepository.UpdateAccount(existingAccount);
+                // Lưu thay đổi
+                await _unitOfWork.AccountRepository.UpdateAccount(account);
                 await _unitOfWork.CommitAsync();
+            }
 
-                // Map and return the updated account
-                return _mapper.Map<GetAccountResponse>(existingAccount);
-            }
-            catch (NotFoundException ex)
-            {
-                throw new NotFoundException($"Update failed: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"An unexpected error occurred: {ex.Message}");
-            }
+
         }
-
     }
 }
