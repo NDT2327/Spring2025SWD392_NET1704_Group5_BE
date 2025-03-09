@@ -33,6 +33,7 @@ namespace CCSystem.DAL.Infrastructures
         private BookingDetailRepository _bookingDetailRepository;
         private ServiceDetailRepository _serviceDetailRepository;
         private PromotionRepository _promotionRepository;
+        private ScheduleAssignRepository _scheduleAssignRepository;
 
 
 
@@ -44,6 +45,19 @@ namespace CCSystem.DAL.Infrastructures
                 this._dbContext = dbFactory.InitDbContext();
             }
         }
+
+        public ScheduleAssignRepository ScheduleAssignRepository
+        {
+            get
+            {
+                if (this._scheduleAssignRepository == null)
+                {
+                    this._scheduleAssignRepository = new ScheduleAssignRepository(this._dbContext);
+                }
+                return this._scheduleAssignRepository;
+            }
+        }
+
         public ReviewRepository ReviewRepository
         {
             get
@@ -55,7 +69,6 @@ namespace CCSystem.DAL.Infrastructures
                 return this._reviewRepository;
             }
         }
-
 
         public ReportRepository ReportRepository
         {

@@ -49,8 +49,7 @@ namespace CCSystem.API.Extentions
             services.AddScoped<IBookingDetailService, BookingDetailService>();
             services.AddScoped<IServiceDetailService, ServiceDetailService>();
             services.AddScoped<IPromotionService, PromotionService>();
-
-
+            services.AddScoped<IScheduleAssignService , ScheduleAssignService>();
 
             return services;
         }

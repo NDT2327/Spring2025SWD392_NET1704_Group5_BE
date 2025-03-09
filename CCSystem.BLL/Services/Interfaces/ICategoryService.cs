@@ -17,7 +17,7 @@ namespace CCSystem.BLL.Services.Interfaces
 
         Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync();
         Task<CategoryResponse?> GetCategoryByIdAsync(int id);
-        Task<CategoryResponse> CreateCategoryAsync(CategoryRequest request);
+        Task CreateCategoryAsync(CategoryRequest request);
         Task UpdateCategoryAsync(int id, CategoryRequest request);
         Task DeleteCategoryAsync(int id);
         //Task<Category> CreateCategoryAsync(CategoryRequest request);

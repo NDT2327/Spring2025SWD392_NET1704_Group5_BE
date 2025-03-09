@@ -112,7 +112,6 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception($"Lỗi khi tạo booking và booking details: {ex.Message}");
             }
         }
-    
 
         public async Task<Booking> GetBooking(int id)
         {

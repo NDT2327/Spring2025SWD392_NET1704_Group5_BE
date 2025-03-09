@@ -160,6 +160,10 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
             entity.HasKey(e => e.DetailId).HasName("PK__BookingD__830778592CFC65D8");
 
             entity.Property(e => e.DetailId).HasColumnName("detailId");
+            entity.Property(e => e.BookdetailStatus)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("bookdetailStatus");
             entity.Property(e => e.BookingId).HasColumnName("bookingId");
             entity.Property(e => e.IsAssign)
                 .HasDefaultValue(false)

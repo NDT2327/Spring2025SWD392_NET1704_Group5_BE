@@ -94,7 +94,7 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
-        public void UpdateBookingDetail(BookingDetail bookingDetail)
+        public async Task UpdateBookingDetail(BookingDetail bookingDetail)
         {
             try
             {

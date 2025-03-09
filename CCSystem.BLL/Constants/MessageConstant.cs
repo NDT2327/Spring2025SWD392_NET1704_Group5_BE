@@ -21,6 +21,8 @@ namespace CCSystem.BLL.Constants
             public const string NotExistBookingId = "Booking id does not exist in the system";
             public const string NotExistBookingDetailId = "Booking Detail id does not exist in the system";
             public const string NotExistServiceDetailId = "Service detail id does not exist in the system";
+            public const string NotExistAssignId = "Assign id does not exist in the system";
+
 
         }
 
@@ -80,6 +82,13 @@ namespace CCSystem.BLL.Constants
         public static class BookingMessage
         {
             public const string BookingIsPaid = "Booking is paid";
+
+        }
+
+        public static class ScheduleAssign
+        {
+            public const string AlreadyAssign = "Housekeeper already has an assigned task in this time slot";
+            public const string CreatedNewScheduleAssignSuccessfully = "Create a new Schedule Assignment Successfully";
 
         }
 

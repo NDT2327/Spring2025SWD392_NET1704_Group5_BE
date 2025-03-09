@@ -184,6 +184,12 @@ namespace CCSystem.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetailId"));
 
+                    b.Property<string>("BookdetailStatus")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("bookdetailStatus");
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int")
                         .HasColumnName("bookingId");

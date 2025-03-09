@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CCSystem.BLL.DTOs.Review;
+using CCSystem.BLL.Exceptions;
+using CCSystem.BLL.Utils;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
@@ -31,13 +33,32 @@ namespace CCSystem.BLL.Services
             return review == null ? null : _mapper.Map<ReviewResponse>(review);
         }
 
-        public async Task<ReviewResponse> AddReviewAsync(ReviewRequest reviewRequest)
+        public async Task AddReviewAsync(ReviewRequest reviewRequest)
         {
+            if (reviewRequest == null)
+            {
+                throw new ArgumentNullException(nameof(reviewRequest), "Request không được để trống.");
+            }
+
             var review = _mapper.Map<Review>(reviewRequest);
-            await _unitOfWork.ReviewRepository.AddAsync(review);
-            await _unitOfWork.CommitAsync(); 
-            return _mapper.Map<ReviewResponse>(review);
+
+            try
+            {
+                await _unitOfWork.ReviewRepository.AddAsync(review);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (BadRequestException ex)
+            {
+                string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
+                throw new BadRequestException(message);
+            }
+            catch (Exception ex)
+            {
+                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
+                throw new Exception(error);
+            }
         }
+
 
         public async Task UpdateReviewAsync(ReviewRequest reviewRequest, int reviewId)
         {

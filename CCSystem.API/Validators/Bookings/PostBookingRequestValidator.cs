@@ -12,7 +12,7 @@ namespace CCSystem.API.Validators.Bookings
             RuleFor(x => x.CustomerId)
                 .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.")
                 .NotEmpty().WithMessage("{PropertyName} must not be empty.")
-                .NotNull().WithMessage("{PropertyName} must not be null."); ;
+                .NotNull().WithMessage("{PropertyName} must not be null.");
 
             // Validate that Notes is not empty.
             RuleFor(x => x.Notes)
