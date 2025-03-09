@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CCSystem.BLL.DTOs.Accounts;
 using CCSystem.BLL.DTOs.Review;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Utils;
@@ -33,6 +34,25 @@ namespace CCSystem.BLL.Services
             return review == null ? null : _mapper.Map<ReviewResponse>(review);
         }
 
+        public async Task<IEnumerable<ReviewResponse>> GetReviewsByCustomerIdAsync(int customerId)
+        {
+            var reviews = await _unitOfWork.ReviewRepository.GetReviewsByCustomerIdAsync(customerId);
+
+            return reviews.Select(r => new ReviewResponse
+            {
+                ReviewId = r.ReviewId,
+                CustomerId = r.CustomerId,
+                DetailId = r.DetailId,
+                Rating = r.Rating ?? 0,
+                Comment = r.Comment,
+                ReviewDate = r.ReviewDate ?? DateTime.MinValue
+            }).ToList();
+        }
+        public async Task<List<ReviewResponse>> GetReviewsByDetailIdAsync(int detailId)
+        {
+            var reviews = await _unitOfWork.ReviewRepository.GetReviewsByDetailIdAsync(detailId);
+            return _mapper.Map<List<ReviewResponse>>(reviews);
+        }
         public async Task AddReviewAsync(ReviewRequest reviewRequest)
         {
             if (reviewRequest == null)
@@ -73,6 +93,7 @@ namespace CCSystem.BLL.Services
                 await _unitOfWork.CommitAsync();
             }
         }
+
 
         public async Task DeleteReviewAsync(int id)
         {

@@ -1,4 +1,5 @@
 ﻿using CCSystem.API.Constants;
+using CCSystem.BLL.DTOs.Accounts;
 using CCSystem.BLL.DTOs.Bookings;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
@@ -19,12 +20,14 @@ namespace CCSystem.API.Controllers
         private readonly IBookingService _bookingsService;
         private readonly IValidator<PostBookingRequest> _postBookingRequestValidator;
         private readonly IValidator<BookingIdRequest> _bookingsIdValidator;
+        private readonly IValidator<AccountIdRequest> _accountIdValidator;
 
-        public BookingsController(IBookingService bookingsService, IValidator<PostBookingRequest> postBookingRequestValidator, IValidator<BookingIdRequest> bookingsIdRequestValidator)
+        public BookingsController(IBookingService bookingsService, IValidator<PostBookingRequest> postBookingRequestValidator, IValidator<BookingIdRequest> bookingsIdRequestValidator, IValidator<AccountIdRequest> accountIdValidator)
         {
             this._bookingsService = bookingsService;
             this._postBookingRequestValidator = postBookingRequestValidator;
             this._bookingsIdValidator = bookingsIdRequestValidator;
+            this._accountIdValidator = accountIdValidator;
         }
 
         #region Create Booking With Details
@@ -75,8 +78,8 @@ namespace CCSystem.API.Controllers
                 throw new BadRequestException(errors);
             }
 
-            await _bookingsService.CreateBookingWithDetailsAsync(postBookingRequest);
-            return Ok(new { Message = "Booking created successfully" });
+            var response = await _bookingsService.CreateBookingWithDetailsAsync(postBookingRequest);
+            return Ok(new { Message = "Booking created successfully", Data = response.BookingId });
         }
         #endregion
 
@@ -115,5 +118,44 @@ namespace CCSystem.API.Controllers
 
         #endregion
 
+        #region Get Bookings by Customer Id
+        /// <summary>
+        /// Get Bookings by Customer Id
+        /// </summary>
+        [ProducesResponseType(typeof(BookingResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpGet(APIEndPointConstant.Booking.GetBookingByCusId)]
+
+        public async Task<IActionResult> GetBookingsByCustomer([FromRoute] AccountIdRequest cusId)
+        {
+            ValidationResult validationResult = await _accountIdValidator.ValidateAsync(cusId);
+            if (validationResult.IsValid == false)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            var reponses = await _bookingsService.GetBookingsByCustomer(cusId.Id);
+            return Ok(reponses);
+        }
+
+        #endregion
+        /// <summary>
+        /// Lấy thông tin đơn đặt chỗ theo mã khuyến mãi (PromotionCode).
+        /// </summary>
+        /// <param name="promotionCode">Mã khuyến mãi</param>
+        /// <returns>Thông tin đơn đặt chỗ</returns>
+        [HttpGet(APIEndPointConstant.Booking.GetBookingByPromotionCode)]
+        public async Task<IActionResult> GetByPromotionCode([FromRoute] string promotionCode)
+        {
+            var bookingDto = await _bookingsService.GetByPromotionCodeAsync(promotionCode);
+
+            if (bookingDto == null)
+                return NotFound($"Không tìm thấy Booking với PromotionCode: {promotionCode}");
+
+            return Ok(bookingDto);
+        }
     }
 }

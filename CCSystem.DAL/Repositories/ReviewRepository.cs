@@ -36,6 +36,23 @@ namespace CCSystem.DAL.Repositories
             await Task.CompletedTask;
         }
 
+
+
+
+        public async Task<IEnumerable<Review>> GetReviewsByCustomerIdAsync(int customerId)
+        {
+            return await _dbContext.Set<Review>()
+                .Where(r => r.CustomerId == customerId)
+                .ToListAsync();
+        }
+        public async Task<List<Review>> GetReviewsByDetailIdAsync(int detailId)
+        {
+            return await _dbContext.Reviews
+                .Where(r => r.DetailId == detailId)
+                .ToListAsync();
+        }
+
+
         public async Task DeleteAsync(int id)
         {
             var review = await _dbContext.Reviews.FindAsync(id);

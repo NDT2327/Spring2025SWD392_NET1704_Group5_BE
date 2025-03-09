@@ -24,6 +24,20 @@ namespace CCSystem.DAL.Repositories
         {
             return await _context.Reports.FindAsync(id);
         }
+        public async Task<IEnumerable<Report>> GetReportsByHousekeeperIdAsync(int housekeeperId)
+        {
+            return await _context.Set<Report>()
+                .Where(r => r.HousekeeperId == housekeeperId)
+                .ToListAsync();
+        }
+        public async Task<List<Report>> GetByAssignIdAsync(int assignId)
+        {
+            return await _context.Reports
+                .Include(r => r.Assign)
+                .Include(r => r.Housekeeper)
+                .Where(r => r.AssignId == assignId)
+                .ToListAsync();
+        }
 
         public async Task AddAsync(Report report)
         {

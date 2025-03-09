@@ -40,6 +40,21 @@ namespace CCSystem.API.Controllers
             var reviews = await _reviewService.GetAllReviewsAsync();
             return Ok(reviews);
         }
+        /// <summary>
+        /// Lấy danh sách đánh giá dựa trên CustomerId.
+        /// </summary>
+        /// <param name="id">ID của khách hàng</param>
+        /// <returns>Danh sách đánh giá nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
+        [HttpGet(APIEndPointConstant.Review.GetReviewByCustomerIdEndpoint)]
+        public async Task<IActionResult> GetReviewsByCustomerId([FromRoute] int id)
+        {
+            var reviews = await _reviewService.GetReviewsByCustomerIdAsync(id);
+            if (reviews == null || !reviews.Any())
+            {
+                return NotFound("No reviews found for this customer.");
+            }
+            return Ok(reviews);
+        }
 
         /// <summary>
         /// Lấy đánh giá theo ID.
@@ -56,6 +71,19 @@ namespace CCSystem.API.Controllers
             }
             return Ok(review);
         }
+
+        /// <summary>
+        /// Lấy danh sách đánh giá theo DetailId.
+        /// </summary>
+        /// <param name="detailId">ID của chi tiết đặt lịch</param>
+        /// <returns>Danh sách đánh giá nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
+        [HttpGet(APIEndPointConstant.Review.GetReviewByDetailIdEndpoint)]
+        public async Task<IActionResult> GetReviewsByDetailId([FromRoute] int detailId)
+        {
+            var reviews = await _reviewService.GetReviewsByDetailIdAsync(detailId);
+            return reviews.Any() ? Ok(reviews) : NotFound("No reviews found for this detail.");
+        }
+
 
         /// <summary>
         /// Tạo một đánh giá mới.

@@ -44,6 +44,8 @@
         {
             public const string ServiceEndpoint = ApiEndpoint + "/services";
             public const string SearchServiceEndpoint = ServiceEndpoint + "/search";
+            public const string UpdateServiceEndpoint = ServiceEndpoint + "/update" + "/{id}";
+            public const string DeleteServiceEndpoint = ServiceEndpoint + "/delete" + "/{serviceid}";
             public const string GetServiceByIdEndpoint = ServiceEndpoint + "/{id}";
             public const string GetByCategoryId = ServiceEndpoint + "/category" + "/{id}";
 
@@ -55,6 +57,9 @@
             public const string PaymentCallbackVnpay = PaymentEndpoint + "/PaymentCallbackVnpay";
             public const string PaymentIpnAction = ApiEndpoint + "/IpnAction";
             public const string PaymentRefund = ApiEndpoint + "/refund";
+            public const string GetPaymentByCustomerId = ApiEndpoint + "/customer" + "/{id}";
+            public const string GetPaymentByBookingId = ApiEndpoint + "/booking" + "/{id}";
+
 
         }
 
@@ -64,6 +69,8 @@
             public const string ReportEndpoint = ApiEndpoint + "/reports";
             public const string GetAllReportsEndpoint = ReportEndpoint + "/getallreports";
             public const string GetReportByIdEndpoint = ReportEndpoint + "/{id}";
+            public const string GetReportByHousekeeperIdEndpoint = ReportEndpoint +"/Housekeeper"+ "/{id}";
+            public const string GetReportByAssignIdEndpoint = ReportEndpoint + "/assign" + "/{id}";
             public const string CreateReportEndpoint = ReportEndpoint + "/createreport";
             public const string UpdateReportEndpoint = ReportEndpoint + "/updatereport/{id}";
             public const string DeleteReportEndpoint = ReportEndpoint + "/deletereport/{id}";
@@ -75,6 +82,8 @@
             public const string ReviewEndpoint = ApiEndpoint + "/reviews";
             public const string GetAllReviewsEndpoint = ReviewEndpoint + "/getallreviews";
             public const string GetReviewByIdEndpoint = ReviewEndpoint + "/{id}";
+            public const string GetReviewByCustomerIdEndpoint = ReviewEndpoint + "/customer" + "/{id}";
+            public const string GetReviewByDetailIdEndpoint = ReviewEndpoint + "/detail" + "/{detailId}";
             public const string CreateReviewEndpoint = ReviewEndpoint + "/createreview";
             public const string UpdateReviewEndpoint = ReviewEndpoint + "/updatereview/{id}";
             public const string DeleteReviewEndpoint = ReviewEndpoint + "/deletereview/{id}";
@@ -116,6 +125,9 @@
         {
             public const string BookingEndpoint = ApiEndpoint + "/bookings";
             public const string GetBookingById = BookingEndpoint + "/{id}";
+            public const string GetBookingByCusId = BookingEndpoint + "/customer" + "/{id}";
+            public const string GetBookingByPromotionCode = BookingEndpoint + "/promotion" + "/{promotionCode}"; 
+
 
         }
 
@@ -124,13 +136,18 @@
             public const string BookingDetailEndpoint = ApiEndpoint + "/bookingDetails";
             public const string GetBDetailByIdEndpoint = BookingDetailEndpoint + "/{id}";
             public const string GetBDetailByBookIdEndpoint = BookingDetailEndpoint + "/booking" + "/{id}";
+            public const string GetActiveBDetailEndpoint = BookingDetailEndpoint + "/active";
+            public const string GetBookingDetailByServiceId = BookingDetailEndpoint + "/service" + "/{id}";
+            public const string GetBookingDetailByServiceDetailId = BookingDetailEndpoint + "/servicedetail" + "/{id}";
+
         }
 
         public static class ScheduleAssign
         {
             public const string ScheduleAssignEndpoint = ApiEndpoint + "/scheduleAssigns";
             public const string GetScheduleAssignByIdEndpoint = ScheduleAssignEndpoint + "/{id}";
-
+            public const string GetScheduleAssignByHousekeeperIdEndpoint = ScheduleAssignEndpoint + "/housekeeper" + "/{id}";
+            public const string ChangeStatusEndpoint = ScheduleAssignEndpoint + "/status";
         }
     }
 }

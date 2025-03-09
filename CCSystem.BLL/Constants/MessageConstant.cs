@@ -89,7 +89,12 @@ namespace CCSystem.BLL.Constants
         {
             public const string AlreadyAssign = "Housekeeper already has an assigned task in this time slot";
             public const string CreatedNewScheduleAssignSuccessfully = "Create a new Schedule Assignment Successfully";
+            public const string StatusValidate = "Status request must ASSIGNED or CANCELLED or COMPLETED or INPROGRESS";
+        }
 
+        public static class PaymentMessage
+        {
+            public const string StatusMustSuccessOrFailedorPending = "Status request must SUCCESS or FAILED or PENDING";
         }
 
     }

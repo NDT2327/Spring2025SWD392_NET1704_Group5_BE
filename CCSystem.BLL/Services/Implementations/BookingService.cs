@@ -8,6 +8,7 @@ using CCSystem.BLL.Utils;
 using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace CCSystem.BLL.Services.Implementations
             this._bookDetailService = bookingDetailService;
         }
 
-        public async Task CreateBookingWithDetailsAsync(PostBookingRequest postBookingRequest)
+        public async Task<BookingResponse> CreateBookingWithDetailsAsync(PostBookingRequest postBookingRequest)
         {
             using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
@@ -39,11 +40,15 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
                 }
+                var promotion = await _unitOfWork.PromotionRepository.GetPromotionByCodeAsync(postBookingRequest.PromotionCode);
+                string? promotionCode = promotion?.Code;
+
+
                 // Tạo booking mới từ thông tin request (giả sử bạn có hàm tạo booking tương tự)
                 var booking = new Booking
                 {
                     CustomerId = postBookingRequest.CustomerId,
-                    PromotionCode = postBookingRequest.PromotionCode?? null,
+                    PromotionCode = promotionCode,
                     BookingDate = DateTime.UtcNow,
                     BookingStatus = BookingEnums.BookingStatus.PENDING.ToString(),
                     PaymentStatus = BookingEnums.PaymentStatus.PENDING.ToString(),
@@ -62,6 +67,15 @@ namespace CCSystem.BLL.Services.Implementations
                 // Với mỗi dịch vụ trong request, tạo booking detail tương ứng
                 foreach (var detail in postBookingRequest.BookingDetails)
                 {
+                    // Kiểm tra xem khách hàng đã đặt dịch vụ này vào cùng thời gian chưa
+                    var existingBookingDetail = await _unitOfWork.BookingDetailRepository
+                        .GetExistingBookingDetailAsync(postBookingRequest.CustomerId, detail.ServiceId, detail.ServiceDetailId, detail.ScheduleDate, detail.ScheduleTime);
+
+                    if (existingBookingDetail != null)
+                    {
+                        throw new BadRequestException("Customer has already booked this service at the selected date and time.");
+                    }
+
                     // Gán BookingId vừa tạo cho mỗi booking detail
                     var postBookingDetailRequest = new PostBookingDetailRequest
                     {
@@ -86,6 +100,49 @@ namespace CCSystem.BLL.Services.Implementations
                     totalAmount +=  bookingDetail.UnitPrice;
                 }
 
+                if (promotion != null)
+                {
+                    DateTime now = DateTime.UtcNow;
+
+                    // Kiểm tra thời gian hợp lệ của Promotion
+                    if (promotion.StartDate > now || promotion.EndDate < now)
+                    {
+                        throw new BadRequestException("Promotion is not valid at this time.");
+                    }
+
+                    // Kiểm tra điều kiện tối thiểu để áp dụng giảm giá
+                    if (promotion.MinOrderAmount.HasValue && totalAmount < promotion.MinOrderAmount.Value)
+                    {
+                        throw new BadRequestException($"Total amount must be at least {promotion.MinOrderAmount.Value} to use this promotion.");
+                    }
+
+                    decimal discount = 0;
+
+                    // Giảm giá cố định
+                    if (promotion.DiscountAmount.HasValue)
+                    {
+                        discount = promotion.DiscountAmount.Value;
+                    }
+
+                    // Giảm giá theo phần trăm
+                    if (promotion.DiscountPercent.HasValue)
+                    {
+                        decimal percentageDiscount = totalAmount * (decimal)(promotion.DiscountPercent.Value / 100.0);
+
+                        // Áp dụng giới hạn giảm tối đa (nếu có)
+                        if (promotion.MaxDiscountAmount.HasValue)
+                        {
+                            percentageDiscount = Math.Min(percentageDiscount, promotion.MaxDiscountAmount.Value);
+                        }
+
+                        // Lấy mức giảm giá lớn nhất giữa DiscountAmount và DiscountPercent
+                        discount = Math.Max(discount, percentageDiscount);
+                    }
+
+                    // Đảm bảo totalAmount không bị âm
+                    totalAmount = Math.Max(totalAmount - discount, 0);
+                }
+
                 // Cập nhật lại totalAmount cho booking
                 booking.TotalAmount = totalAmount;
                 await _unitOfWork.BookingRepository.UpdateAsync(booking);
@@ -93,6 +150,7 @@ namespace CCSystem.BLL.Services.Implementations
 
                 // Xác nhận transaction
                 await transaction.CommitAsync();
+                return _mapper.Map<BookingResponse>(booking);
 
             }
             catch (BadRequestException ex)
@@ -147,6 +205,35 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<List<BookingResponse>> GetBookingsByCustomer(int customerId)
+        {
+            try
+            {
+                var cus = await _unitOfWork.AccountRepository.GetByIdAsync(customerId);
+                if (cus == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
+                }
+                var bookings = await _unitOfWork.BookingRepository.GetBookingsByCustomer(cus.AccountId);
+
+                var responses = _mapper.Map<List<BookingResponse>>(bookings);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task<BookingResponse?> GetByPromotionCodeAsync(string promotionCode)
+        {
+            var booking = await _unitOfWork.BookingRepository.GetByPromotionCodeAsync(promotionCode);
+
+            if (booking == null)
+                return null; 
+
+            return _mapper.Map<BookingResponse>(booking);
         }
 
         public async Task UpdateBookingAsync(Booking booking)

@@ -4,8 +4,10 @@ using CCSystem.BLL.DTOs.BookingDetails;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +56,8 @@ namespace CCSystem.BLL.Services.Implementations
                     UnitPrice = postBookingDetailRequest.Quantity * serviceDetail.BasePrice.Value,
                     ServiceId = postBookingDetailRequest.ServiceId,
                     ServiceDetailId = postBookingDetailRequest.ServiceDetailId,
-                    IsAssign = false
+                    IsAssign = false,
+                    BookdetailStatus = BookingDetailEnums.BookingDetailStatus.PENDING.ToString(),
                 };
                 await _unitOfWork.BookingDetailRepository.CreateBookingDetailAsync(bookingDetail);
                 await _unitOfWork.CommitAsync();
@@ -77,6 +80,21 @@ namespace CCSystem.BLL.Services.Implementations
 
         }
 
+        public async Task<List<BookingDetailResponse>> GetActiveBookingDetail()
+        {
+            try
+            {
+                var bdetails = await _unitOfWork.BookingDetailRepository.GetActiveBookingDetailAsync();
+                var responses = _mapper.Map<List<BookingDetailResponse>>(bdetails);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
+        }
+
         public async Task<List<BookingDetailResponse>> GetBookDetailByBooking(int bookingId)
         {
             try
@@ -95,6 +113,17 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+        }
+        public async Task<List<BookingDetailResponse>> GetBookingDetailsByServiceIdAsync(int serviceId)
+        {
+            var bookingDetails = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByServiceId(serviceId);
+            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+        }
+
+        public async Task<List<BookingDetailResponse>> GetBookingDetailsByServiceDetailIdAsync(int serviceDetailId)
+        {
+            var bookingDetails = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByServiceDetailId(serviceDetailId);
+            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
         }
 
         public async Task<BookingDetailResponse> GetBookingDetailById(int id)

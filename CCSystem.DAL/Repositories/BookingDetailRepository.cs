@@ -1,4 +1,5 @@
 ﻿using CCSystem.DAL.DBContext;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -63,6 +64,38 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
+        public async Task<List<BookingDetail>> GetBookingDetailsByServiceId(int serviceId)
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.ServiceDetail)
+                    .Where(bd => bd.ServiceId == serviceId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<BookingDetail>> GetBookingDetailsByServiceDetailId(int serviceDetailId)
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
+                    .Where(bd => bd.ServiceDetailId == serviceDetailId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<BookingDetail> GetBookingDetailByBookingServiceServiceDetail(int bookingId, int serviceId, int serviceDetailId)
         {
             try
@@ -105,6 +138,39 @@ namespace CCSystem.DAL.Repositories
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<BookingDetail?> GetExistingBookingDetailAsync(int customerId, int serviceId, int serviceDetailId, DateOnly scheduleDate, TimeOnly scheduleTime)
+        {
+            return await _context.BookingDetails
+                .Include(b => b.Booking) // Join với Booking để lấy CustomerId
+                .Where(b => b.Booking.CustomerId == customerId
+                            && b.ScheduleDate == scheduleDate // Chuyển đổi DateTime -> DateOnly
+                            && b.ScheduleTime == scheduleTime // Chuyển đổi TimeSpan -> TimeOnly
+                            && b.ServiceId == serviceId
+                            && b.ServiceDetailId == serviceDetailId)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<BookingDetail>> GetActiveBookingDetailAsync()
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
+                    .Include(bd => bd.ServiceDetail)
+                    .Where(bd => bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.ASSIGNED.ToString() 
+                              && bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.COMPLETED.ToString()
+                              && bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.CANCELLED.ToString()
+                              && bd.IsAssign == false)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
     }
 }
