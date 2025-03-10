@@ -45,7 +45,7 @@ namespace CCSystem.BLL.Services.Implementations
 
                 if (existingAssignment)
                 {
-                    throw new ConflictException("This booking detail has already been assigned to a housekeeper!");
+                    throw new ConflictException(MessageConstant.ScheduleAssign.BookingAlreadyAssigned);
                 }
 
                 if (bDetail.IsAssign == true 
@@ -53,7 +53,7 @@ namespace CCSystem.BLL.Services.Implementations
                     || bDetail.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.COMPLETED.ToString()
                     || bDetail.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.CANCELLED.ToString())
                 {
-                    throw new ConflictException("Cannot assign this work!");
+                    throw new ConflictException(MessageConstant.ScheduleAssign.CannotAssignWork);
                 }    
                 var housekeeper = await _unitOfWork.AccountRepository.GetAccountAsync(request.HousekeeperId);
                 if (housekeeper == null || housekeeper.Status != AccountEnums.Status.ACTIVE.ToString())
@@ -62,13 +62,13 @@ namespace CCSystem.BLL.Services.Implementations
                 }
                 if(housekeeper.Role != AccountEnums.Role.HOUSEKEEPER.ToString())  
                 {
-                    throw new NotFoundException("Role is not allow to assign work");
+                    throw new NotFoundException(MessageConstant.ScheduleAssign.InvalidRole);
                 }
                 // Lấy serviceDetail từ bDetail
                 var serviceDetail = bDetail.ServiceDetail;
                 if (serviceDetail == null || serviceDetail.Duration == null)
                 {
-                    throw new NotFoundException("Service detail or duration is missing.");
+                    throw new NotFoundException(MessageConstant.ScheduleAssign.MissingServiceDetail);
                 }
 
                 var startTime = bDetail.ScheduleTime;
@@ -260,18 +260,18 @@ namespace CCSystem.BLL.Services.Implementations
                 var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(request.BookingDetailId);
                 if (bookingDetail == null)
                 {
-                    throw new NotFoundException("Booking detail not found.");
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingDetailId);
                 }
                 if (bookingDetail.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.COMPLETED.ToString())
                 {
-                    throw new BadRequestException("Booking detail was COMPLETED");
+                    throw new BadRequestException(MessageConstant.BookingDetailMessage.CompletedBookingDetail);
                 }
 
                 // Lấy thông tin Booking để kiểm tra xem khách hàng có khớp không
                 var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingDetail.BookingId);
                 if (booking == null)
                 {
-                    throw new NotFoundException("Booking not found.");
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
                 }
 
                 if (booking.CustomerId != request.CustomerId)
