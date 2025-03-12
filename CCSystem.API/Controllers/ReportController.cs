@@ -2,6 +2,7 @@
 using CCSystem.BLL.DTOs.Report;
 using CCSystem.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
+using static CCSystem.BLL.Constants.MessageConstant;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -31,7 +32,7 @@ public class ReportsController : ControllerBase
         try
         {
             await _reportService.CreateReportAsync(request);
-            return Ok(new { message = "Report created successfully" });
+            return Ok(new { message = ReportMessage.ReportCreated });
         }
         catch (Exception ex)
         {

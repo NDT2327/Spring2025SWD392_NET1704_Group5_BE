@@ -109,7 +109,6 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
-        // Xóa báo cáo
         public async Task<bool> DeleteReportAsync(int id)
         {
             var report = await _unitOfWork.ReportRepository.GetByIdAsync(id);

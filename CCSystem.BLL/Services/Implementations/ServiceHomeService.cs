@@ -31,7 +31,7 @@ namespace CCSystem.BLL.Services.Implementations
             bool isUpload = false;
             string imageUrl = "";
             string tempFilePath = "";
-            try
+            try { 
                     var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(request.CategoryId);
                 if (category == null)
                 {
