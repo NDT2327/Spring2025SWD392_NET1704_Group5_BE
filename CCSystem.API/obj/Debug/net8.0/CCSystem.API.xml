@@ -70,6 +70,28 @@
             <response code="404">If the assignment does not exist.</response>
             <response code="500">If an internal server error occurs.</response>
         </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.CompleteAssignmentAndNotifyCustomer(CCSystem.BLL.DTOs.ScheduleAssign.CompleteAssignmentRequest)">
+            <summary>
+            Completes an assignment and notifies the customer via email.
+            </summary>
+            <param name="request">The request object containing assignment and housekeeper information.</param>
+            <returns>A success message if the operation is completed successfully.</returns>
+            <response code="200">Assignment completed and customer notified successfully.</response>
+            <response code="400">If the assignment does not belong to the specified housekeeper.</response>
+            <response code="404">If the assignment or booking detail is not found.</response>
+            <response code="500">If an internal server error occurs.</response>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.ConfirmAssignment(CCSystem.BLL.DTOs.ScheduleAssign.ConfirmAssignmentRequest)">
+            <summary>
+            Confirms the completion of an assignment by the customer.
+            </summary>
+            <param name="request">The request object containing the assignment ID and customer confirmation.</param>
+            <returns>A success message if the assignment is confirmed successfully.</returns>
+            <response code="200">Assignment confirmed successfully.</response>
+            <response code="400">If the assignment cannot be confirmed.</response>
+            <response code="404">If the assignment does not exist.</response>
+            <response code="500">If an internal server error occurs.</response>
+        </member>
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.

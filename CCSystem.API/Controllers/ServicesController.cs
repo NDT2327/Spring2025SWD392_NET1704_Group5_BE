@@ -88,6 +88,7 @@ namespace CCSystem.API.Controllers
             });
         }
         #endregion
+
         [HttpPost(APIEndPointConstant.Service.UpdateServiceEndpoint)]
         public async Task<IActionResult> UpdateService(int id, [FromForm] PostServiceRequest request)
         {

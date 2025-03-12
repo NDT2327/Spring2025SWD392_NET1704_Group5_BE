@@ -82,7 +82,6 @@ namespace CCSystem.API.Controllers
         }
         #endregion
 
-
         #region Get Active Booking Detail
         /// <summary>
         /// Get Active booking detail information.
