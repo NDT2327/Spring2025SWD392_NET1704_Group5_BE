@@ -115,6 +115,11 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
             }
 
+            if (account.Status == nameof(AccountEnums.Status.INACTIVE))
+            {
+                return false; 
+            }
+
             account.Status = nameof(AccountEnums.Status.INACTIVE);// Change status to INACTIVE
             await _unitOfWork.AccountRepository.UpdateAsync(account);
             await _unitOfWork.CommitAsync();
@@ -128,7 +133,10 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
             }
-
+            if (account.Status == nameof(AccountEnums.Status.ACTIVE))
+            {
+                return false; 
+            }
             account.Status = nameof(AccountEnums.Status.ACTIVE);// Change status to ACTIVE
             await _unitOfWork.AccountRepository.UpdateAsync(account);
             await _unitOfWork.CommitAsync();

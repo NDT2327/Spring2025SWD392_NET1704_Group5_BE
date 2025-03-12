@@ -56,6 +56,9 @@ namespace CCSystem.BLL.Constants
             public const string InvalidRequest = "Invalid request data.";
             public const string AccountUpdatedSuccessfully = "Account updated successfully.";
             public const string UpdateError = "An error occurred while updating the account.";
+            public const string AccountAlreadyUnlocked = "Account is already unlocked.";
+            public const string AccountUnlockedSuccessfully = "Account unlocked successfully.";
+
         }
 
         public static class ReGenerationMessage
@@ -144,6 +147,11 @@ namespace CCSystem.BLL.Constants
 
         public static class ReportMessage
         {
+            public const string CreateFailed = "An error occurred while creating the report";
+            public const string UpdateFailed = "Failed to update report";
+            public const string UpdatedSuccessfully = "Report updated successfully";
+            public const string DeleteFailed = "Failed to delete report";
+            public const string DeletedSuccessfully = "Report deleted successfully";
             public const string ReportCreated = "Report created successfully.";
             public const string EmptyRequest = "Request cannot be empty.";
             public const string FailedToCreateReport = "Failed to create report.";

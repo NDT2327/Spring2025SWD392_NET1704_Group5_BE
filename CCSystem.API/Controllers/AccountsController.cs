@@ -1,5 +1,6 @@
 ﻿using CCSystem.API.Authorization;
 using CCSystem.API.Constants;
+using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.Accounts;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
@@ -115,9 +116,9 @@ namespace CCSystem.API.Controllers
             var result = await _accountService.UnlockAccount(accountId.Id);
             if (!result)
             {
-                return NotFound(new { message = AccountMessage.AccountNotFound });
+                return BadRequest(new { message = AccountMessage.AccountAlreadyUnlocked });
             }
-            return Ok(new { message = "Account unlocked successfully" });
+            return Ok(new { message = AccountMessage.AccountUnlockedSuccessfully });
         }
         #endregion
 
