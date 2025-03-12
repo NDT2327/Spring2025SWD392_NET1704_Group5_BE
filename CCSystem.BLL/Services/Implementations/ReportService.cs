@@ -7,6 +7,7 @@ using CCSystem.DAL.Models;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Repositories;
+using CCSystem.BLL.Constants;
 
 namespace CCSystem.BLL.Services.Implementations
 {
@@ -14,18 +15,16 @@ namespace CCSystem.BLL.Services.Implementations
     {
         private readonly UnitOfWork _unitOfWork;
 
-        // Constructor để sử dụng UnitOfWork
         public ReportService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = (UnitOfWork)unitOfWork;
         }
 
-        // Tạo báo cáo mới
         public async Task CreateReportAsync(ReportRequest request)
         {
             if (request == null)
             {
-                throw new ArgumentNullException(nameof(request), "Request không được để trống");
+                throw new ArgumentNullException(nameof(request), MessageConstant.ReportMessage.EmptyRequest);
             }
 
             var report = new Report
@@ -40,16 +39,15 @@ namespace CCSystem.BLL.Services.Implementations
             };
 
             try
-            {
-                // Thêm báo cáo vào repository
+            { // Add the new report to the repository
                 await _unitOfWork.ReportRepository.AddAsync(report);
 
-                // Cam kết thay đổi và kiểm tra nếu có lỗi
+                // Save changes to the database
                 await _unitOfWork.CommitAsync();
 
                 if (report.RecordId == 0)
                 {
-                    throw new InvalidOperationException("Không thể tạo báo cáo. RecordId không được gán.");
+                    throw new InvalidOperationException(MessageConstant.ReportMessage.FailedToCreateReport);
                 }
             }
             catch (BadRequestException ex)
@@ -65,27 +63,27 @@ namespace CCSystem.BLL.Services.Implementations
         }
 
 
-        // Cập nhật báo cáo
         public async Task UpdateReportAsync(int id, ReportRequest request)
         {
-            // Kiểm tra xem request có null không
             if (request == null)
             {
-                throw new ArgumentNullException(nameof(request), "Request không được null.");
+                throw new ArgumentNullException(nameof(request), MessageConstant.ReportMessage.EmptyRequest);
             }
 
+            // Retrieve the report by ID
             var report = await _unitOfWork.ReportRepository.GetByIdAsync(id);
             if (report == null)
             {
-                throw new NotFoundException("Không tìm thấy báo cáo với ID: " + id);
+                throw new NotFoundException(string.Format(MessageConstant.ReportMessage.ReportNotFound, id));
             }
 
-            // Kiểm tra các thuộc tính trong request có hợp lệ không
+            // Validate request properties
             if (request.HousekeeperId == 0 || request.AssignId == 0)
             {
-                throw new ArgumentException("HousekeeperId và AssignId phải có giá trị hợp lệ.");
+                throw new ArgumentException(MessageConstant.ReportMessage.InvalidHousekeeperOrAssignId);
             }
 
+            // Update report properties
             report.HousekeeperId = request.HousekeeperId;
             report.AssignId = request.AssignId;
             report.WorkDate = request.WorkDate;
@@ -117,24 +115,24 @@ namespace CCSystem.BLL.Services.Implementations
             var report = await _unitOfWork.ReportRepository.GetByIdAsync(id);
             if (report == null)
             {
-                return false;
+                return false;// Report not found
             }
 
+            // Delete the report
             await _unitOfWork.ReportRepository.DeleteAsync(id);
             await _unitOfWork.CommitAsync();
 
             return true;
         }
 
-        // Lấy báo cáo theo ID
         public async Task<ReportResponse> GetReportByIdAsync(int id)
         {
             var report = await _unitOfWork.ReportRepository.GetByIdAsync(id);
             if (report == null)
             {
-                return null; // Hoặc có thể ném exception tùy theo yêu cầu
+                return null; // throw an exception based on business logic
             }
-
+            // Map the report entity to a response DTO
             return new ReportResponse
             {
                 RecordId = report.RecordId,
@@ -150,7 +148,7 @@ namespace CCSystem.BLL.Services.Implementations
         public async Task<IEnumerable<ReportResponse>> GetReportsByHousekeeperIdAsync(int housekeeperId)
         {
             var reports = await _unitOfWork.ReportRepository.GetReportsByHousekeeperIdAsync(housekeeperId);
-
+            // Convert Report entities to ReportResponse DTOs
             return reports.Select(r => new ReportResponse
             {
                 RecordId = r.RecordId,
@@ -165,11 +163,11 @@ namespace CCSystem.BLL.Services.Implementations
         }
 
 
-        // Lấy tất cả báo cáo
         public async Task<IEnumerable<ReportResponse>> GetAllReportsAsync()
         {
             var reports = await _unitOfWork.ReportRepository.GetAllAsync();
 
+            // Convert Report entities to ReportResponse DTOs
             return reports.Select(report => new ReportResponse
             {
                 RecordId = report.RecordId,
@@ -186,6 +184,7 @@ namespace CCSystem.BLL.Services.Implementations
         {
             var reports = await _unitOfWork.ReportRepository.GetByAssignIdAsync(assignId);
 
+            // Convert Report entities to ReportResponse DTOs
             return reports.Select(report => new ReportResponse
             {
                 RecordId = report.RecordId,

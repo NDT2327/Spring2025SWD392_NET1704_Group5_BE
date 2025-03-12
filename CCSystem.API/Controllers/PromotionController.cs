@@ -10,6 +10,7 @@ using CCSystem.DAL.Repositories;
 using CCSystem.API.Validators.Promotions;
 using Microsoft.AspNetCore.Components;
 using CCSystem.BLL.Services.Implementations;
+using static CCSystem.BLL.Constants.MessageConstant;
 
 namespace CCSystem.API.Controllers
 {
@@ -58,7 +59,7 @@ namespace CCSystem.API.Controllers
             var promotion = await _promotionService.GetPromotionByCodeAsync(code);
             if (promotion == null)
             {
-                return NotFound(new { message = "Promotion not found." });
+                return NotFound(new { message = PromotionMessage.NotExistPromotion });
             }
             return Ok(promotion);
         }
@@ -75,7 +76,7 @@ namespace CCSystem.API.Controllers
         {
             if (request == null)
             {
-                return BadRequest(new { message = "Request body cannot be null" });
+                return BadRequest(new { message = PromotionMessage.InvalidRequest });
             }
 
             var validationResult = _postPromotionValidator.Validate(request);
@@ -117,18 +118,18 @@ namespace CCSystem.API.Controllers
                 var isUpdated = await _promotionService.UpdatePromotionAsync(code, request);
                 if (!isUpdated)
                 {
-                    return NotFound(new { message = "Promotion not found or no changes were made." });
+                    return NotFound(new { message = PromotionMessage.NotExistPromotion });
                 }
 
-                return Ok(new { message = "Promotion updated successfully." });
+                return Ok(new { message = PromotionMessage.PromotionUpdated });
             }
             catch (ValidationException ex)
             {
-                return BadRequest(new { message = "Validation failed", errors = ex.Errors });
+                return BadRequest(new { message = PromotionMessage.ValidationFailed, errors = ex.Errors });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error updating promotion", details = ex.Message });
+                return StatusCode(500, new { message = PromotionMessage.FailedToUpdatePromotion, details = ex.Message });
             }
         }
         #endregion
@@ -147,10 +148,10 @@ namespace CCSystem.API.Controllers
 
             if (!isDeleted)
             {
-                return NotFound(new { message = "Promotion not found" });
+                return NotFound(new { message = PromotionMessage.NotExistPromotion });
             }
 
-            return Ok(new { message = "Promotion deleted successfully" });
+            return Ok(new { message = PromotionMessage.PromotionDeleted });
         }
         #endregion
     }

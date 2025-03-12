@@ -24,6 +24,7 @@ namespace CCSystem.BLL.Constants
             public const string NotExistAssignId = "Assign id does not exist in the system";
 
 
+
         }
 
         public static class AuthenticationMessage
@@ -44,8 +45,17 @@ namespace CCSystem.BLL.Constants
 
         public static class AccountMessage
         {
+            public const string NoMatchingAccountsFound = "No accounts matching the criteria were found.";
             public const string AccountIdNotBelongYourAccount = "Account id does not belong to your account.";
             public const string AccountNoLongerActive = "Your account is no longer active.";
+            public const string InvalidDateOfBirth = "Invalid date values.";
+            public const string AccountNotExistOrAlreadyLocked = "Account does not exist or is already locked.";
+            public const string AccountLockedSuccessfully = "Account locked successfully.";
+            public const string InternalServerError = "An internal error occurred.";
+            public const string AccountNotFound = "Account not found.";
+            public const string InvalidRequest = "Invalid request data.";
+            public const string AccountUpdatedSuccessfully = "Account updated successfully.";
+            public const string UpdateError = "An error occurred while updating the account.";
         }
 
         public static class ReGenerationMessage
@@ -96,6 +106,52 @@ namespace CCSystem.BLL.Constants
         {
             public const string StatusMustSuccessOrFailedorPending = "Status request must SUCCESS or FAILED or PENDING";
         }
+        public static class ReviewMessage
+        {
+            public const string ValidationFailed = "Validation failed.";
+            public const string EmptyReviewRequest = "Review request cannot be empty.";
+            public const string NoReviewsFound = "No reviews found for this customer.";
+            public const string Success = "Reviews retrieved successfully.";
+            public const string UpdatedSuccessfully = "Review with ID {0} has been updated successfully.";
+            public const string CreatedSuccessfully = "Review created successfully.";
+            public const string CreateFailed = "An error occurred while creating the review.";
+            public const string DeletedSuccessfully = "Review with ID {0} deleted successfully.";
+            public const string DeleteFailed = "An error occurred while deleting the review.";
+        }
+        public static class CategoryMessage
+        {
+            public const string UpdateCategoryFailed = "Failed to update category.";
+            public const string CategoryNotFound = "Category not found.";
+            public const string Success = "Success";
+            public const string CategoryDeleted = "Category deleted successfully.";
+            public const string CategoryUpdated = "Category updated successfully.";
+            public const string CategoryCreated = "Category created successfully.";
+        }
+
+        public static class PromotionMessage
+            {
+            public const string PromotionUpdated = "Promotion updated successfully.";
+            public const string AlreadyExistPromotionCode = "Promotion code already exists in the system.";
+            public const string FailedToCreatePromotion = "Failed to create promotion.";
+            public const string NotExistPromotion = "Promotion not found.";
+            public const string FailedToUpdatePromotion = "Failed to update promotion.";
+            public const string InvalidRequest = "Request body cannot be null.";
+            public const string ValidationFailed = "Validation failed.";
+            public const string PromotionDeleted = "Promotion deleted successfully.";
+
+
+        }
+
+        public static class ReportMessage
+        {
+            public const string ReportCreated = "Report created successfully.";
+            public const string EmptyRequest = "Request cannot be empty.";
+            public const string FailedToCreateReport = "Failed to create report.";
+            public const string ReportNotFound = "Report with ID {0} not found.";
+            public const string InvalidHousekeeperOrAssignId = "HousekeeperId and AssignId must have valid values.";
+        }
+    }
+
 
     }
-}
+

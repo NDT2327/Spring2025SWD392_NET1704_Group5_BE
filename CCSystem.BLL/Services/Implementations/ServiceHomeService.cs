@@ -32,19 +32,16 @@ namespace CCSystem.BLL.Services.Implementations
             string imageUrl = "";
             string tempFilePath = "";
             try
-            {
-                var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(request.CategoryId);
+                    var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(request.CategoryId);
                 if (category == null)
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistCategoryId);
                 }
-
                 if (request.Image == null || request.Image.Length == 0)
                 {
                     throw new InvalidOperationException(MessageConstant.CommonMessage.NotExistFile);
                 }
                 tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName));
-                // Lưu file tạm thời
                 await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     await request.Image.CopyToAsync(stream);
@@ -104,44 +101,45 @@ namespace CCSystem.BLL.Services.Implementations
             string tempFilePath = "";
             try
             {
+                // Validate service existence
                 var service = await _unitOfWork.ServiceRepository.GetServiceAsync(serviceId);
                 if (service == null)
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistServiceId);
                 }
 
+                // Validate category existence
                 var category = await _unitOfWork.CategoryRepository.GetCategoryByIdAsync(request.CategoryId);
                 if (category == null)
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistCategoryId);
                 }
 
-                // Nếu có thay đổi hình ảnh
+                // Handle image update if provided
                 if (request.Image != null && request.Image.Length > 0)
                 {
-                    // Lưu tạm hình ảnh mới
+                    // Save new image temporarily
                     tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName));
                     await using (var stream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
                     {
                         await request.Image.CopyToAsync(stream);
                     }
 
-                    // Upload hình ảnh mới lên Firebase
+                    // Upload new image to Firebase
                     imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
                     if (!string.IsNullOrEmpty(imageUrl))
                     {
-                        // Xóa hình ảnh cũ nếu có
+                        // Delete old image if exists
                         if (!string.IsNullOrEmpty(service.Image))
                         {
                             await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(service.Image);
                         }
 
-                        // Cập nhật hình ảnh mới
                         service.Image = imageUrl;
                     }
                 }
 
-                // Cập nhật các thông tin dịch vụ còn lại
+                // Update service details
                 service.CategoryId = request.CategoryId;
                 service.ServiceName = request.ServiceName;
                 service.Description = request.Description;
@@ -150,7 +148,7 @@ namespace CCSystem.BLL.Services.Implementations
                 service.IsActive = request.IsActive ?? true;
                 service.UpdatedDate = DateTime.UtcNow;
 
-                // Lưu thay đổi
+                // Save changes
                 await _unitOfWork.ServiceRepository.Update(service);
                 await _unitOfWork.CommitAsync();
             }
@@ -166,7 +164,6 @@ namespace CCSystem.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
-                // Nếu có lỗi trong quá trình upload hình ảnh, xóa hình ảnh đã upload
                 if (isUpload && !string.IsNullOrEmpty(imageUrl))
                 {
                     await this._unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(imageUrl);
@@ -176,25 +173,21 @@ namespace CCSystem.BLL.Services.Implementations
             }
             finally
             {
-                // Xóa file tạm thời sau khi sử dụng
                 await FileUtils.SafeDeleteFileAsync(tempFilePath);
             }
         }
         public async Task DeleteServiceAsync(int serviceId)
         {
-            // Tìm dịch vụ trong cơ sở dữ liệu
             var service = await _unitOfWork.ServiceRepository.GetServiceAsync(serviceId);
 
             if (service == null)
             {
-                throw new KeyNotFoundException("Service not found");
+                throw new NotFoundException(MessageConstant.CommonMessage.NotExistServiceId);
             }
 
-            // Thực hiện xóa (cập nhật trạng thái)
             service.IsActive = false;
             service.UpdatedDate = DateTime.UtcNow;
 
-            // Cập nhật lại dịch vụ trong cơ sở dữ liệu
             await _unitOfWork.ServiceRepository.Update(service);
             await _unitOfWork.CommitAsync();
         }
