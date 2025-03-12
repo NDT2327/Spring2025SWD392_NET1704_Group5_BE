@@ -91,7 +91,8 @@ namespace CCSystem.API.Controllers
                     Currency = Currency.VND,
                     Language = DisplayLanguage.Vietnamese
                 };
-
+                payment.CreatedDate = paymentRequest.CreatedDate;
+                await _paymentService.UpdatePaymentAsync(payment);
                 var paymentUrl = _vnpay.GetPaymentUrl(paymentRequest);
                 return Created(paymentUrl, paymentUrl);
             }
