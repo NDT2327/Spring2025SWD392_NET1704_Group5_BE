@@ -37,6 +37,10 @@ public partial class Account
 
     public DateOnly? DateOfBirth { get; set; }
 
+    public string BankAccountNumber { get; set; }
+
+    public string BankName { get; set; }
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();

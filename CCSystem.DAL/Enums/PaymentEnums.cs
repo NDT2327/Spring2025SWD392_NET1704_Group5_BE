@@ -12,7 +12,9 @@ namespace CCSystem.DAL.Enums
         {
             SUCCESS,
             FAILED,
-            PENDING
+            PENDING,
+            REFUNDREQUESTED,
+            REFUNDED
         }
     }
 }

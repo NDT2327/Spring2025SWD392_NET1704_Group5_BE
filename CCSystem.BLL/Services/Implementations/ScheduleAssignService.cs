@@ -73,9 +73,10 @@ namespace CCSystem.BLL.Services.Implementations
 
                 var startTime = bDetail.ScheduleTime;
                 var endTime = startTime.AddMinutes(serviceDetail.Duration.Value); // Cộng thêm số phút
+                var date = bDetail.ScheduleDate;
 
                 // Kiểm tra Housekeeper đã có công việc trong khoảng thời gian này chưa
-                if (await IsOverlappingSchedule(request.HousekeeperId, startTime, endTime))
+                if (await IsOverlappingSchedule(request.HousekeeperId, startTime, endTime, date))
                 {
                     throw new ConflictException(MessageConstant.ScheduleAssign.AlreadyAssign);
                 }
@@ -84,7 +85,7 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     DetailId = request.DetailId,
                     HousekeeperId = request.HousekeeperId,
-                    AssignDate = DateOnly.FromDateTime(DateTime.Now),
+                    AssignDate = date,
                     StartTime = startTime,
                     EndTime = endTime,
                     Status = AssignEnums.Status.ASSIGNED.ToString(),
@@ -108,10 +109,10 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
-        private async Task<bool> IsOverlappingSchedule(int housekeeperId, TimeOnly startTime, TimeOnly endTime)
+        private async Task<bool> IsOverlappingSchedule(int housekeeperId, TimeOnly startTime, TimeOnly endTime, DateOnly date)
         {
             return await _unitOfWork.ScheduleAssignRepository.ExistsAsync(sa =>
-                sa.HousekeeperId == housekeeperId && 
+                sa.HousekeeperId == housekeeperId && sa.AssignDate == date &&
                 ((sa.Status == AssignEnums.Status.ASSIGNED.ToString()) || 
                  (sa.Status == AssignEnums.Status.INPROGRESS.ToString())) &&
                 ((startTime >= sa.StartTime && startTime < sa.EndTime) ||

@@ -48,6 +48,9 @@ namespace CCSystem.BLL.Constants
             public const string NoMatchingAccountsFound = "No accounts matching the criteria were found.";
             public const string AccountIdNotBelongYourAccount = "Account id does not belong to your account.";
             public const string AccountNoLongerActive = "Your account is no longer active.";
+
+            public const string InvalidRole = "Invalid Role";
+
             public const string InvalidDateOfBirth = "Invalid date values.";
             public const string AccountNotExistOrAlreadyLocked = "Account does not exist or is already locked.";
             public const string AccountLockedSuccessfully = "Account locked successfully.";
@@ -95,6 +98,8 @@ namespace CCSystem.BLL.Constants
         public static class BookingMessage
         {
             public const string BookingIsPaid = "Booking is paid";
+            public const string BookingIsExpired = "All services in Booking are expired, cannot be canceled!";
+            public const string IsNotRequestCanceled = "Booking has not been requested to be canceled!";
 
         }
 

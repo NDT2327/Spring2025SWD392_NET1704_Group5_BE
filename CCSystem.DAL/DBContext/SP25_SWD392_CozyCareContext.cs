@@ -75,7 +75,13 @@ public partial class SP25_SWD392_CozyCareContext : DbContext
             entity.Property(e => e.Avatar)
                 .HasMaxLength(255)
                 .HasColumnName("avatar");
-            entity.Property(e => e.CreatedDate)
+			entity.Property(e => e.BankAccountNumber)
+				.HasMaxLength(50)
+				.HasColumnName("bankAccountNumber");
+			entity.Property(e => e.BankName)
+				.HasMaxLength(100)
+				.HasColumnName("bankName");
+			entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("createdDate");
