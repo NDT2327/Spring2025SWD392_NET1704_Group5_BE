@@ -28,7 +28,7 @@ namespace CCSystem.BLL.Services.Implementations
             this._unitOfWork = (UnitOfWork)unitOfWork;
             this._mapper = mapper;
         }
-
+        // Fetch accounts based on search criteria
         public async Task<List<GetAccountResponse>> SearchAccountsAsync(AccountSearchRequest searchRequest)
         {
             var accounts = await _unitOfWork.AccountRepository.SearchAccountsAsync(
@@ -42,7 +42,7 @@ namespace CCSystem.BLL.Services.Implementations
             searchRequest.MinCreatedDate,
             searchRequest.MaxCreatedDate);
 
-            // Map danh sách Account sang AccountResponse
+            // Convert entity list to DTO list
             return _mapper.Map<List<GetAccountResponse>>(accounts);
         }
 
@@ -50,6 +50,7 @@ namespace CCSystem.BLL.Services.Implementations
         {
             try
             {
+                // Check if an active account exists for the given email
                 Account existedAccount = await this._unitOfWork.AccountRepository.GetActiveAccountAsync(email);
                 if (existedAccount == null)
                 {
@@ -59,6 +60,7 @@ namespace CCSystem.BLL.Services.Implementations
             }
             catch (Exception ex)
             {
+                // Handle unexpected errors
                 string error = ErrorUtil.GetErrorString("Exception", ex.Message);
                 throw new Exception(error);
             }
@@ -68,14 +70,19 @@ namespace CCSystem.BLL.Services.Implementations
         {
             try
             {
+                // Retrieve email from claims
                 Claim registeredEmailClaim = claims.First(x => x.Type == ClaimTypes.Email);
                 string email = registeredEmailClaim.Value;
 
+                // Fetch account by ID
                 Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(idAccount);
+
                 if (existedAccount is null)
                 {
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
                 }
+                // Ensure the requested account belongs to the authenticated user
+
                 if (existedAccount.Email.Equals(email) == false)
                 {
                     throw new BadRequestException(MessageConstant.AccountMessage.AccountIdNotBelongYourAccount);
@@ -101,28 +108,36 @@ namespace CCSystem.BLL.Services.Implementations
         }
         public async Task<bool> LockAccount(int accountId)
         {
+            // Fetch account by ID
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
             if (account == null)
             {
-                throw new NotFoundException($"Account with ID {accountId} not found.");
+                throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
             }
 
-            account.Status = nameof(AccountEnums.Status.INACTIVE);
+            if (account.Status == nameof(AccountEnums.Status.INACTIVE))
+            {
+                return false; 
+            }
+
+            account.Status = nameof(AccountEnums.Status.INACTIVE);// Change status to INACTIVE
             await _unitOfWork.AccountRepository.UpdateAsync(account);
             await _unitOfWork.CommitAsync();
 
             return true;
         }
-        //unlock
         public async Task<bool> UnlockAccount(int accountId)
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
             if (account == null)
             {
-                throw new NotFoundException($"Account with ID {accountId} not found.");
+                throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
             }
-
-            account.Status = nameof(AccountEnums.Status.ACTIVE);
+            if (account.Status == nameof(AccountEnums.Status.ACTIVE))
+            {
+                return false; 
+            }
+            account.Status = nameof(AccountEnums.Status.ACTIVE);// Change status to ACTIVE
             await _unitOfWork.AccountRepository.UpdateAsync(account);
             await _unitOfWork.CommitAsync();
             return true;
@@ -169,6 +184,7 @@ namespace CCSystem.BLL.Services.Implementations
 
         public async Task<GetAccountResponse> GetAccountByIdAsync(int idAccount)
         {
+            // Retrieve account details by ID
             Account existedAccount = await this._unitOfWork.AccountRepository.GetAccountAsync(idAccount);
             if (existedAccount is null)
             {
@@ -183,10 +199,9 @@ namespace CCSystem.BLL.Services.Implementations
             var account = await _unitOfWork.AccountRepository.GetAccountAsync(accountId);
             if (account == null)
             {
-                throw new NotFoundException("Account not found.");
+                throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
             }
-
-            // Xử lý Avatar nếu có
+            // Process avatar upload if provided
             if (request.Avatar != null && request.Avatar.Length > 0)
             {
                 string folderName = "account_avatars";
@@ -197,9 +212,11 @@ namespace CCSystem.BLL.Services.Implementations
                     await request.Avatar.CopyToAsync(stream);
                 }
                 string imageUrl = await _unitOfWork.FirebaseStorageRepository.UploadImageToFirebase(tempFilePath, folderName);
+
+                
                 if (!string.IsNullOrEmpty(imageUrl))
                 {
-                    // Kiểm tra Avatar cũ có hợp lệ trước khi xóa
+                    // Delete old avatar from Firebase if it exists
                     if (!string.IsNullOrEmpty(account.Avatar) && Uri.IsWellFormedUriString(account.Avatar, UriKind.Absolute))
                     {
                         await _unitOfWork.FirebaseStorageRepository.DeleteImageFromFirebase(account.Avatar);
@@ -208,8 +225,9 @@ namespace CCSystem.BLL.Services.Implementations
                     account.Avatar = imageUrl;
                 }
 
-                // Xóa file tạm
                 await FileUtils.SafeDeleteFileAsync(tempFilePath);
+
+                // Validate and update Date of Birth
                 if (request.Year.HasValue && request.Month.HasValue && request.Day.HasValue)
                 {
                     try
@@ -218,12 +236,12 @@ namespace CCSystem.BLL.Services.Implementations
                     }
                     catch
                     {
-                        throw new BadRequestException("Invalid date values.");
+                        throw new BadRequestException(MessageConstant.AccountMessage.InvalidDateOfBirth);
                     }
                 }
 
 
-                // Cập nhật các thông tin khác
+                // Update other account details
                 account.FullName = request.FullName;
                 account.Phone = request.Phone;
                 account.Address = request.Address;
@@ -231,9 +249,9 @@ namespace CCSystem.BLL.Services.Implementations
                 account.Rating = request.Rating;
                 account.Experience = request.Experience;
                 account.Status = request.Status;
-                account.UpdatedDate = DateTime.UtcNow; // Thêm ngày cập nhật
+                account.UpdatedDate = DateTime.UtcNow;  // Set last update timestamp
 
-                // Lưu thay đổi
+
                 await _unitOfWork.AccountRepository.UpdateAccount(account);
                 await _unitOfWork.CommitAsync();
             }

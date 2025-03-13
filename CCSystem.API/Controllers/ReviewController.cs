@@ -5,6 +5,7 @@ using CCSystem.API.Constants;
 using FluentValidation;
 using FluentValidation.Results;
 using AutoMapper;
+using static CCSystem.BLL.Constants.MessageConstant;
 
 namespace CCSystem.API.Controllers
 {
@@ -51,7 +52,7 @@ namespace CCSystem.API.Controllers
             var reviews = await _reviewService.GetReviewsByCustomerIdAsync(id);
             if (reviews == null || !reviews.Any())
             {
-                return NotFound("No reviews found for this customer.");
+                return NotFound(new { message = ReviewMessage.NoReviewsFound });
             }
             return Ok(reviews);
         }
@@ -67,7 +68,7 @@ namespace CCSystem.API.Controllers
             var review = await _reviewService.GetReviewByIdAsync(id);
             if (review == null)
             {
-                return NotFound($"Review with ID {id} not found.");
+                return NotFound(new { message = ReviewMessage.NoReviewsFound });
             }
             return Ok(review);
         }
@@ -81,7 +82,7 @@ namespace CCSystem.API.Controllers
         public async Task<IActionResult> GetReviewsByDetailId([FromRoute] int detailId)
         {
             var reviews = await _reviewService.GetReviewsByDetailIdAsync(detailId);
-            return reviews.Any() ? Ok(reviews) : NotFound("No reviews found for this detail.");
+            return reviews.Any() ? Ok(reviews) : NotFound(new { message = ReviewMessage.NoReviewsFound });
         }
 
 
@@ -95,7 +96,7 @@ namespace CCSystem.API.Controllers
         {
             if (reviewRequest == null)
             {
-                return BadRequest(new { message = "ReviewRequest cannot be null." });
+                return BadRequest(new { message = ReviewMessage.EmptyReviewRequest });
             }
 
             ValidationResult validationResult = await _validator.ValidateAsync(reviewRequest);
@@ -103,19 +104,19 @@ namespace CCSystem.API.Controllers
             {
                 return BadRequest(new
                 {
-                    message = "Validation failed.",
+                    message = ReviewMessage.ValidationFailed,
                     errors = validationResult.Errors.Select(e => e.ErrorMessage)
                 });
             }
 
             try
             {
-                await _reviewService.AddReviewAsync(reviewRequest); 
-                return Ok(new { message = "Review created successfully." }); 
+                await _reviewService.AddReviewAsync(reviewRequest);
+                return Ok(new { message = ReviewMessage.CreatedSuccessfully });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while creating the review.", error = ex.Message });
+                return StatusCode(500, new { message = ReviewMessage.CreateFailed, error = ex.Message });
             }
         }
         /// <summary>
@@ -131,13 +132,13 @@ namespace CCSystem.API.Controllers
             var existingReview = await _reviewService.GetReviewByIdAsync(id);
             if (existingReview == null)
             {
-                return NotFound($"Review with ID {id} not found.");
+                return NotFound(new { message = string.Format(ReviewMessage.NoReviewsFound, id) });
             }
 
             // Gọi service để cập nhật review
             await _reviewService.UpdateReviewAsync(reviewRequest, id);
 
-            return Ok($"Review with ID {id} has been updated successfully.");
+            return Ok(new { message = string.Format(ReviewMessage.UpdatedSuccessfully, id) });
         }
 
         /// <summary>
@@ -151,17 +152,17 @@ namespace CCSystem.API.Controllers
             var existingReview = await _reviewService.GetReviewByIdAsync(id);
             if (existingReview == null)
             {
-                return NotFound(new { message = $"Review with ID {id} not found." });
+                return NotFound(new { message = string.Format(ReviewMessage.NoReviewsFound, id) });
             }
 
             try
             {
-                await _reviewService.DeleteReviewAsync(id); 
-                return Ok(new { message = $"Review with ID {id} deleted successfully." });
+                await _reviewService.DeleteReviewAsync(id);
+                return Ok(new { message = string.Format(ReviewMessage.DeletedSuccessfully, id) });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while deleting the review.", error = ex.Message });
+                return StatusCode(500, new { message = ReviewMessage.DeleteFailed, error = ex.Message });
             }
         }
     }

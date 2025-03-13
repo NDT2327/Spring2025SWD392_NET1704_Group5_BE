@@ -21,6 +21,8 @@ using System.Threading.Tasks;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.DTOs.Category;
 using CCSystem.API.Constants;
+using static CCSystem.BLL.Constants.MessageConstant;
+using static CCSystem.API.Constants.APIEndPointConstant;
 
 namespace CCSystem.API.Controllers
 {
@@ -53,7 +55,7 @@ namespace CCSystem.API.Controllers
                 Console.WriteLine($"Category: {category.CategoryName}, Image: {category.ImageUrl}");
             }
 
-            return Ok(new { Message = "Success", Data = categories });
+            return Ok(new { message = CategoryMessage.Success, data = categories });
         }
 
         /// <summary>
@@ -66,12 +68,12 @@ namespace CCSystem.API.Controllers
 
             if (category == null)
             {
-                return NotFound(new { Message = "Category not found." });
+                return NotFound(new { message = CategoryMessage.CategoryNotFound });
             }
 
             Console.WriteLine($"[DEBUG] Fetched Category: {category.CategoryName}, ImageUrl: {category.ImageUrl}");
 
-            return Ok(new { Message = "Success", Data = category });
+            return Ok(new { message = CategoryMessage.Success, Data = category });
         }
 
         /// <summary>
@@ -82,7 +84,7 @@ namespace CCSystem.API.Controllers
         public async Task<IActionResult> CreateCategory([FromForm] CategoryRequest request)
         {
             await _categoryService.CreateCategoryAsync(request);
-            return Ok(new { Message = "Category created successfully." });
+            return Ok(new { message = CategoryMessage.CategoryCreated });
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace CCSystem.API.Controllers
         public async Task<IActionResult> UpdateCategory(int id, [FromForm] CategoryRequest request)
         {
             await _categoryService.UpdateCategoryAsync(id, request);
-            return Ok(new { Message = "Category updated successfully." });
+            return Ok(new { message = CategoryMessage.CategoryUpdated });
         }
 
         #region Delete Category
@@ -109,11 +111,11 @@ namespace CCSystem.API.Controllers
             var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
-                return NotFound(new { message = "Category not found" });
+                return NotFound(new { message = CategoryMessage.CategoryNotFound });
             }
 
             await _categoryService.DeleteCategoryAsync(id);
-            return Ok(new { message = "Category deleted successfully" });
+            return Ok(new { message = CategoryMessage.CategoryDeleted });
         }
         #endregion
 

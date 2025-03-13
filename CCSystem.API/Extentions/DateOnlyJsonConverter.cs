@@ -11,7 +11,7 @@ namespace CCSystem.API.Extentions
         public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             // Đọc chuỗi JSON và chuyển đổi sang DateOnly
-            var dateString = reader.GetString();
+                var dateString = reader.GetString();
             if (DateOnly.TryParseExact(dateString, Format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
             {
                 return date;
