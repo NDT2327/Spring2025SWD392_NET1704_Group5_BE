@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CCSystem.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66682ca4e6656940393d5f5b776288b9097e6eb0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9e72dd3d8c44e725706e5ed298514099ca4d50d")]
 [assembly: System.Reflection.AssemblyProductAttribute("CCSystem.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CCSystem.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
