@@ -171,6 +171,64 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
+        public async Task<bool> RescheduleBookingDetail(int detailId, DateOnly newDate, TimeOnly newTime)
+        {
+            var bookingDetail = await _context.BookingDetails
+                .Include(bd => bd.ScheduleAssignments)
+                .FirstOrDefaultAsync(bd => bd.DetailId == detailId);
 
+            if (bookingDetail == null)
+            {
+                return false;
+            }
+
+            // Kiểm tra thời gian chuyển lịch phải trước 24h
+            if ((bookingDetail.ScheduleDate.ToDateTime(newTime) - DateTime.Now).TotalHours < 24)
+            {
+                return false;
+            }
+
+            // Hủy lịch cũ
+            foreach (var assignment in bookingDetail.ScheduleAssignments)
+            {
+                assignment.Status = "CANCELLED";
+            }
+
+            // Cập nhật ngày, giờ và trạng thái
+            bookingDetail.ScheduleDate = newDate;
+            bookingDetail.ScheduleTime = newTime;
+            bookingDetail.BookdetailStatus = "WAITINGCONFIRM";
+
+            return true;
+        }
+        public async Task<bool> ConfirmReschedule(int detailId, bool isAccepted)
+        {
+            var bookingDetail = await _context.BookingDetails
+                .Include(bd => bd.ScheduleAssignments)
+                .FirstOrDefaultAsync(bd => bd.DetailId == detailId);
+
+            if (bookingDetail == null)
+            {
+                return false;
+            }
+
+            if (isAccepted)
+            {
+                foreach (var assignment in bookingDetail.ScheduleAssignments)
+                {
+                    assignment.StartTime = bookingDetail.ScheduleTime;
+                    assignment.EndTime = bookingDetail.ScheduleTime.AddHours(1);
+                    assignment.Status = "CONFIRMED";
+                }
+                bookingDetail.BookdetailStatus = "PENDING";
+            }
+            else
+            {
+                bookingDetail.BookdetailStatus = "CONFIRMED"; // Giữ lịch cũ
+            }
+
+            return true;
+        }
     }
 }
+

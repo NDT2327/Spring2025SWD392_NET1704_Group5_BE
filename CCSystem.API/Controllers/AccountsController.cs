@@ -1,5 +1,6 @@
 ﻿using CCSystem.API.Authorization;
 using CCSystem.API.Constants;
+using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.Accounts;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static CCSystem.BLL.Constants.MessageConstant;
 
 namespace CCSystem.API.Controllers
 {
@@ -57,7 +59,6 @@ namespace CCSystem.API.Controllers
         [HttpGet(APIEndPointConstant.Account.SearchAccountsEndpoint)]
         public async Task<IActionResult> SearchAccountsAsync([FromQuery] AccountSearchRequest searchRequest)
         {
-            // (Tùy chọn) Validate request tìm kiếm nếu có validator tương ứng
             ValidationResult validationResult = await this._searchAccountValidator.ValidateAsync(searchRequest);
             if (validationResult.IsValid == false)
             {
@@ -65,13 +66,11 @@ namespace CCSystem.API.Controllers
                 throw new BadRequestException(errors);
             }
 
-            // Gọi service để thực hiện tìm kiếm tài khoản theo các tiêu chí được truyền vào
             List<GetAccountResponse> accounts = await this._accountService.SearchAccountsAsync(searchRequest);
 
-            // Nếu cần, có thể kiểm tra thêm xem danh sách kết quả có rỗng hay không và ném NotFoundException nếu cần.
             if (accounts == null || accounts.Count == 0)
             {
-                throw new NotFoundException("Không tìm thấy tài khoản nào phù hợp với tiêu chí.");
+                throw new NotFoundException(AccountMessage.NoMatchingAccountsFound);
             }
 
             return Ok(accounts);
@@ -86,14 +85,21 @@ namespace CCSystem.API.Controllers
         /// <returns>Success message if locked</returns>
         [HttpPut(APIEndPointConstant.Account.LockAccountEndpoint)]
         [PermissionAuthorize(PermissionAuthorizeConstant.Admin)]
-        public async Task<IActionResult > LockAccount([FromRoute] AccountIdRequest accountId)
+        public async Task<IActionResult> LockAccount([FromRoute] AccountIdRequest accountId)
         {
-            var result = await _accountService.LockAccount(accountId.Id);
-            if (!result)
+            try
             {
-                return NotFound(new { message = "Account not found" });
+                var result = await _accountService.LockAccount(accountId.Id);
+                if (!result)
+                {
+                    return BadRequest(new { message = AccountMessage.AccountNotExistOrAlreadyLocked });
+                }
+                return Ok(new { message = AccountMessage.AccountLockedSuccessfully });
             }
-            return Ok(new { message = "Account locked successfully" });
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = AccountMessage.InternalServerError, error = ex.Message });
+            }
         }
         #endregion
 
@@ -110,9 +116,9 @@ namespace CCSystem.API.Controllers
             var result = await _accountService.UnlockAccount(accountId.Id);
             if (!result)
             {
-                return NotFound(new { message = "Account not found" });
+                return BadRequest(new { message = AccountMessage.AccountAlreadyUnlocked });
             }
-            return Ok(new { message = "Account unlocked successfully" });
+            return Ok(new { message = AccountMessage.AccountUnlockedSuccessfully });
         }
         #endregion
 
@@ -171,7 +177,7 @@ namespace CCSystem.API.Controllers
         {
             if (request == null)
             {
-                return BadRequest(new { message = "Invalid request data." });
+                return BadRequest(new { message = AccountMessage.InvalidRequest });
             }
 
             var validationResult = await _updateAccountValidator.ValidateAsync(request);
@@ -184,7 +190,7 @@ namespace CCSystem.API.Controllers
             try
             {
                 await _accountService.UpdateAccountAsync(id, request);
-                return Ok(new { message = "Account updated successfully." });
+                return Ok(new { message = AccountMessage.AccountUpdatedSuccessfully });
             }
             catch (NotFoundException ex)
             {
@@ -192,7 +198,7 @@ namespace CCSystem.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while updating the account.", error = ex.Message });
+                return StatusCode(500, new { message = AccountMessage.UpdateError, error = ex.Message });
             }
         }
 

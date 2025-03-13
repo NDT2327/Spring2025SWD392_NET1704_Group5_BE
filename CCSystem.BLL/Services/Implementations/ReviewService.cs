@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CCSystem.BLL.Constants;
 using CCSystem.BLL.DTOs.Accounts;
 using CCSystem.BLL.DTOs.Review;
 using CCSystem.BLL.Exceptions;
@@ -38,14 +39,15 @@ namespace CCSystem.BLL.Services
         {
             var reviews = await _unitOfWork.ReviewRepository.GetReviewsByCustomerIdAsync(customerId);
 
+            // Ensure safe mapping with default values for nullable fields
             return reviews.Select(r => new ReviewResponse
             {
                 ReviewId = r.ReviewId,
                 CustomerId = r.CustomerId,
                 DetailId = r.DetailId,
-                Rating = r.Rating ?? 0,
+                Rating = r.Rating ?? 0,// Default to 0 if null
                 Comment = r.Comment,
-                ReviewDate = r.ReviewDate ?? DateTime.MinValue
+                ReviewDate = r.ReviewDate ?? DateTime.MinValue// Default to MinValue if null
             }).ToList();
         }
         public async Task<List<ReviewResponse>> GetReviewsByDetailIdAsync(int detailId)
@@ -53,31 +55,33 @@ namespace CCSystem.BLL.Services
             var reviews = await _unitOfWork.ReviewRepository.GetReviewsByDetailIdAsync(detailId);
             return _mapper.Map<List<ReviewResponse>>(reviews);
         }
-        public async Task AddReviewAsync(ReviewRequest reviewRequest)
-        {
-            if (reviewRequest == null)
+            public async Task AddReviewAsync(ReviewRequest reviewRequest)
             {
-                throw new ArgumentNullException(nameof(reviewRequest), "Request không được để trống.");
-            }
+                if (reviewRequest == null)
+                {
+                // Ensure request is not null before processing
+                throw new ArgumentNullException(nameof(reviewRequest), MessageConstant.ReviewMessage.EmptyReviewRequest);
+                }
 
-            var review = _mapper.Map<Review>(reviewRequest);
+                var review = _mapper.Map<Review>(reviewRequest);
 
-            try
-            {
-                await _unitOfWork.ReviewRepository.AddAsync(review);
-                await _unitOfWork.CommitAsync();
-            }
-            catch (BadRequestException ex)
-            {
+                try
+                {
+                    await _unitOfWork.ReviewRepository.AddAsync(review);
+                    await _unitOfWork.CommitAsync();
+                }
+                catch (BadRequestException ex)
+                {
+                // Handle and wrap exceptions with meaningful messages
                 string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
-                throw new BadRequestException(message);
+                    throw new BadRequestException(message);
+                }
+                catch (NotFoundException ex)
+                {
+                    string message = ErrorUtil.GetErrorString("NotFoundException", ex.Message);
+                    throw new NotFoundException(message);
+                }
             }
-            catch (Exception ex)
-            {
-                string error = ErrorUtil.GetErrorString("Exception", ex.Message);
-                throw new Exception(error);
-            }
-        }
 
 
         public async Task UpdateReviewAsync(ReviewRequest reviewRequest, int reviewId)
@@ -85,10 +89,9 @@ namespace CCSystem.BLL.Services
             var review = await _unitOfWork.ReviewRepository.GetByIdAsync(reviewId);
             if (review != null)
             {
-                // Ánh xạ từ ReviewRequest sang Review
+                // Ensure only updated fields are mapped
                 _mapper.Map(reviewRequest, review);
 
-                // Cập nhật review trong repository
                 await _unitOfWork.ReviewRepository.UpdateAsync(review);
                 await _unitOfWork.CommitAsync();
             }
