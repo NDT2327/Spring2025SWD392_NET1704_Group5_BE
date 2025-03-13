@@ -1,4 +1,5 @@
 ﻿using CCSystem.DAL.DBContext;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -94,6 +95,20 @@ namespace CCSystem.DAL.Repositories
             }
 
             return payment;
+        }
+
+        public async Task<Payment?> GetSuccessfulPaymentByBookingIdAsync(int bookingId)
+        {
+            return await _context.Payments
+                .Where(p => p.BookingId == bookingId && p.Status == PaymentEnums.Status.SUCCESS.ToString())
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Payment?> GetRefundRequestedPaymentByBookingIdAsync(int bookingId)
+        {
+            return await _context.Payments
+                .Where(p => p.BookingId == bookingId && p.Status == PaymentEnums.Status.REFUNDREQUESTED.ToString())
+                .FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(Payment payment)

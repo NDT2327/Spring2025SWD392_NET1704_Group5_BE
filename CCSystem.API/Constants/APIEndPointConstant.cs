@@ -126,8 +126,9 @@
             public const string BookingEndpoint = ApiEndpoint + "/bookings";
             public const string GetBookingById = BookingEndpoint + "/{id}";
             public const string GetBookingByCusId = BookingEndpoint + "/customer" + "/{id}";
-            public const string GetBookingByPromotionCode = BookingEndpoint + "/promotion" + "/{promotionCode}"; 
-
+            public const string GetBookingByPromotionCode = BookingEndpoint + "/promotion" + "/{promotionCode}";
+            public const string RequestCancel = BookingEndpoint + "/request-cancel";
+            public const string ProcessRefund = BookingEndpoint + "/process-refund";
 
         }
 

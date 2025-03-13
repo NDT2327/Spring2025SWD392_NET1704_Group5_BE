@@ -46,6 +46,7 @@ namespace CCSystem.BLL.Constants
         {
             public const string AccountIdNotBelongYourAccount = "Account id does not belong to your account.";
             public const string AccountNoLongerActive = "Your account is no longer active.";
+            public const string InvalidRole = "Invalid Role";
         }
 
         public static class ReGenerationMessage
@@ -82,6 +83,8 @@ namespace CCSystem.BLL.Constants
         public static class BookingMessage
         {
             public const string BookingIsPaid = "Booking is paid";
+            public const string BookingIsExpired = "All services in Booking are expired, cannot be canceled!";
+            public const string IsNotRequestCanceled = "Booking has not been requested to be canceled!";
 
         }
 

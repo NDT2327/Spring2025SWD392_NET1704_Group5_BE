@@ -13,7 +13,8 @@ namespace CCSystem.DAL.Enums
             PENDING,
             CONFIRMED,
             COMPLETED,
-            CANCELED
+            CANCELED,
+            CANCELREQUESTED
         }
 
         public enum PaymentStatus
