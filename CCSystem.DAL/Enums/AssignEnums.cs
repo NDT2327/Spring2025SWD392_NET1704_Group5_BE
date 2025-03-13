@@ -13,7 +13,8 @@ namespace CCSystem.DAL.Enums
             ASSIGNED,
             INPROGRESS,
             COMPLETED,
-            CANCELLED
+            CANCELLED,
+            WAITINGCONFIRM
         }
     }
 }

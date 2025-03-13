@@ -10,6 +10,7 @@ using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -143,5 +144,104 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<RescheduleResponse> RescheduleBookingDetail(int detailId, RescheduleRequest request)
+        {
+            
+            var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(detailId);
+            if (bookingDetail == null)
+            {
+                throw new Exception(MessageConstant.BookingDetailMessage.BookingDetailNotFound);
+            }
+            var oldDateTime = bookingDetail.ScheduleDate.ToDateTime(bookingDetail.ScheduleTime);
+            var newDateTime = request.NewDate.ToDateTime(request.NewTime);
+            if (newDateTime < oldDateTime)
+            {
+                throw new Exception(MessageConstant.BookingDetailMessage.NewDateEarlierThanCurrent);
+            }
+            // Kiểm tra nếu thời gian mới trừ thời gian cũ nhỏ hơn 24 giờ
+            if ((newDateTime - oldDateTime).TotalHours > 24)
+            {
+                throw new Exception(MessageConstant.BookingDetailMessage.RescheduleMustBe24HoursApart);
+            }
+
+            // Cập nhật lịch
+            bookingDetail.ScheduleDate = request.NewDate;
+            bookingDetail.ScheduleTime = request.NewTime;
+            bookingDetail.BookdetailStatus = "WAITINGCONFIRM";
+
+            // Hủy lịch cũ
+            var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
+            if (assignments != null && assignments.Any())
+            {
+                foreach (var assignment in assignments)
+                {
+                    assignment.Status = "CANCELLED";
+                    await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
+                }
+            }
+
+            await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
+            await _unitOfWork.CommitAsync();
+
+            return new RescheduleResponse
+            {
+                DetailId = detailId,
+                ScheduleDate = request.NewDate,
+                ScheduleTime = request.NewTime,
+                Status = "WAITINGCONFIRM"
+            };
+        }
+
+        public async Task<ConfirmRescheduleResponse> ConfirmReschedule(int detailId, ConfirmRescheduleRequest request)
+        {
+            var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(detailId);
+            if (bookingDetail == null)
+            {
+                throw new Exception("Booking detail not found");
+            }
+            if (request.IsAccepted)
+            {
+                var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
+                if (assignments != null && assignments.Any())
+                {
+                    foreach (var assignment in assignments)
+                    {
+                        assignment.AssignDate = bookingDetail.ScheduleDate; 
+                        assignment.StartTime = bookingDetail.ScheduleTime;
+                        assignment.EndTime = bookingDetail.ScheduleTime.AddHours(1);
+                        assignment.Status = "WAITINGCONFIRM";
+                        await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
+                    }
+                }
+                bookingDetail.BookdetailStatus = "PENDING";
+            }
+            else
+            {
+
+                bookingDetail.BookdetailStatus = "CANCELLED";
+                bookingDetail.IsAssign = false;
+                var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
+                if (assignments != null && assignments.Any())
+                {
+                    foreach (var assignment in assignments)
+                    {
+                        assignment.Status = "CANCELLED"; // Hủy lịch
+                        await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
+                    }
+                }
+            
+        }
+
+            await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
+            await _unitOfWork.CommitAsync();
+
+            return new ConfirmRescheduleResponse
+            {
+                DetailId = detailId,
+                Message = request.IsAccepted ? "Reschedule confirmed" : "Reschedule rejected",
+                Status = bookingDetail.BookdetailStatus
+            };
+        }
     }
 }
+

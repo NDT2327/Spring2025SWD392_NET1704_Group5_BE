@@ -3,6 +3,7 @@ using CCSystem.BLL.DTOs.BookingDetails;
 using CCSystem.BLL.DTOs.Bookings;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
+using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using FluentValidation;
@@ -82,7 +83,6 @@ namespace CCSystem.API.Controllers
         }
         #endregion
 
-
         #region Get Active Booking Detail
         /// <summary>
         /// Get Active booking detail information.
@@ -126,7 +126,34 @@ namespace CCSystem.API.Controllers
             var bookingDetails = await _bookingDetailService.GetBookingDetailsByServiceDetailIdAsync(id);
             return bookingDetails.Count > 0 ? Ok(bookingDetails) : NotFound($"Không tìm thấy BookingDetails với ServiceDetailId: {id}");
         }
+        /// <summary>
+        /// API để đặt lại lịch hẹn của Booking Detail.
+        /// </summary>
+        /// <param name="detailId">ID của Booking Detail.</param>
+        /// <param name="request">Yêu cầu đặt lại lịch.</param>
+        /// <returns>Trả về thông tin đặt lại lịch.</returns>
+        [HttpPost(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
+        public async Task<IActionResult> RescheduleBookingDetail(int detailId, [FromBody] RescheduleRequest request)
+        {
+            var response = await _bookingDetailService.RescheduleBookingDetail(detailId, request);
+            return Ok(response);
+        }
 
+        /// <summary>
+        /// API để xác nhận việc đặt lại lịch hẹn.
+        /// </summary>
+        /// <param name="detailId">ID của Booking Detail.</param>
+        /// <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
+        /// <returns>Trả về trạng thái xác nhận.</returns>
+        [HttpPost(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
+        public async Task<IActionResult> ConfirmReschedule(int detailId, [FromBody] ConfirmRescheduleRequest request)
+        {
+            var response = await _bookingDetailService.ConfirmReschedule(detailId, request);
+            return Ok(response);
+        }
     }
+
+
 }
+
 

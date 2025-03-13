@@ -25,14 +25,17 @@ namespace CCSystem.API.Controllers
         private readonly IValidator<PostScheduleAssignRequest> _postScheduleAssignValidator;
         private readonly IValidator<AccountIdRequest> _accountIdValidator;
         private readonly IValidator<PatchAssignStatusRequest> _patchAssignStatusValidator;
-
-        public AssignsController(IScheduleAssignService scheduleAssignService, IValidator<AssignIdRequest> assignIdValidator, IValidator<PostScheduleAssignRequest> postScheduleAssignValidator, IValidator<AccountIdRequest> accountIdValidator, IValidator<PatchAssignStatusRequest> patchAssignStatusValidator)
+        private readonly IValidator<CompleteAssignmentRequest> _completeAssignmentValidator;
+        private readonly IValidator<ConfirmAssignmentRequest> _confirmAssignmentValidator;
+        public AssignsController(IScheduleAssignService scheduleAssignService, IValidator<AssignIdRequest> assignIdValidator, IValidator<PostScheduleAssignRequest> postScheduleAssignValidator, IValidator<AccountIdRequest> accountIdValidator, IValidator<PatchAssignStatusRequest> patchAssignStatusValidator, IValidator<CompleteAssignmentRequest> completeAssignmentValidator, IValidator<ConfirmAssignmentRequest> confirmAssignmentValidator)
         {
             this._scheduleAssignService = scheduleAssignService;
             this._assignIdValidator = assignIdValidator;
             this._postScheduleAssignValidator = postScheduleAssignValidator;
             this._accountIdValidator = accountIdValidator;
             this._patchAssignStatusValidator = patchAssignStatusValidator;
+            this._completeAssignmentValidator = completeAssignmentValidator;
+            this._confirmAssignmentValidator = confirmAssignmentValidator;
         }
 
         #region Get List Assigns
@@ -157,5 +160,66 @@ namespace CCSystem.API.Controllers
             return Ok(new { Message = "Assignment status updated successfully!" });
         }
         #endregion
+
+        #region Complete Assignment and Notify Customer
+        /// <summary>
+        /// Completes an assignment and notifies the customer via email.
+        /// </summary>
+        /// <param name="request">The request object containing assignment and housekeeper information.</param>
+        /// <returns>A success message if the operation is completed successfully.</returns>
+        /// <response code="200">Assignment completed and customer notified successfully.</response>
+        /// <response code="400">If the assignment does not belong to the specified housekeeper.</response>
+        /// <response code="404">If the assignment or booking detail is not found.</response>
+        /// <response code="500">If an internal server error occurs.</response>
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpPost(APIEndPointConstant.ScheduleAssign.CompleteAssignmentEndpoint)]
+        public async Task<IActionResult> CompleteAssignmentAndNotifyCustomer([FromBody] CompleteAssignmentRequest request)
+        {
+            ValidationResult validationResult = await _completeAssignmentValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            await _scheduleAssignService.CompleteAssignmentAndNotifyCustomer(request);
+            return Ok(new { Message = "Assignment completed and customer notified successfully!" });
+        }
+        #endregion
+
+        #region Confirm Assignment
+        /// <summary>
+        /// Confirms the completion of an assignment by the customer.
+        /// </summary>
+        /// <param name="request">The request object containing the assignment ID and customer confirmation.</param>
+        /// <returns>A success message if the assignment is confirmed successfully.</returns>
+        /// <response code="200">Assignment confirmed successfully.</response>
+        /// <response code="400">If the assignment cannot be confirmed.</response>
+        /// <response code="404">If the assignment does not exist.</response>
+        /// <response code="500">If an internal server error occurs.</response>
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpPost(APIEndPointConstant.ScheduleAssign.ConfirmAssignmentEndpoint)]
+        public async Task<IActionResult> ConfirmAssignment([FromBody] ConfirmAssignmentRequest request)
+        {
+            ValidationResult validationResult = await _confirmAssignmentValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                string errors = ErrorUtil.GetErrorsString(validationResult);
+                throw new BadRequestException(errors);
+            }
+
+            await _scheduleAssignService.ConfirmAssignment(request);
+            return Ok(new { Message = "Assignment confirmed successfully!" });
+        }
+        #endregion
+
     }
 }

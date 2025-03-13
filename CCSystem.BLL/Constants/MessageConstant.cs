@@ -102,7 +102,13 @@ namespace CCSystem.BLL.Constants
         {
             public const string AlreadyAssign = "Housekeeper already has an assigned task in this time slot";
             public const string CreatedNewScheduleAssignSuccessfully = "Create a new Schedule Assignment Successfully";
-            public const string StatusValidate = "Status request must ASSIGNED or CANCELLED or COMPLETED or INPROGRESS";
+            public const string StatusValidate = "Status request must ASSIGNED or CANCELLED or COMPLETED or INPROGRESS or WAITINGCONFIRM";
+
+            public const string BookingAlreadyAssigned = "This booking detail has already been assigned to a housekeeper!";
+            public const string CannotAssignWork = "Cannot assign this work!";
+            public const string NotExistHousekeeper = "Housekeeper does not exist or is not active.";
+            public const string InvalidRole = "Role is not allowed to assign work.";
+            public const string MissingServiceDetail = "Service detail or duration is missing.";
         }
 
         public static class PaymentMessage
@@ -158,8 +164,19 @@ namespace CCSystem.BLL.Constants
             public const string ReportNotFound = "Report with ID {0} not found.";
             public const string InvalidHousekeeperOrAssignId = "HousekeeperId and AssignId must have valid values.";
         }
+        public static class BookingDetailMessage
+        {
+            public const string CompletedBookingDetail = "Booking detail was COMPLETED";
+            public const string BookingDetailNotFound = "Booking detail not found";
+            public const string NewDateEarlierThanCurrent = "New schedule date cannot be earlier than the current schedule date.";
+            public const string RescheduleMustBe24HoursApart = "Rescheduling must be at least 24 hours apart from the previous schedule.";
+            public const string WaitingConfirmStatus = "WAITINGCONFIRM";
+            public const string CancelledStatus = "CANCELLED";
+        }
     }
 
+
+   
 
     }
 

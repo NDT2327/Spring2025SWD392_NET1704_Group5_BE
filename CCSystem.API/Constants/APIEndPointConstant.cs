@@ -139,7 +139,8 @@
             public const string GetActiveBDetailEndpoint = BookingDetailEndpoint + "/active";
             public const string GetBookingDetailByServiceId = BookingDetailEndpoint + "/service" + "/{id}";
             public const string GetBookingDetailByServiceDetailId = BookingDetailEndpoint + "/servicedetail" + "/{id}";
-
+            public const string RescheduleBookingDetail = BookingDetailEndpoint + "/reschedule" + "/{detailId}";
+            public const string ConfirmReschedule = BookingDetailEndpoint + "/confirm" + "/{detailId}";
         }
 
         public static class ScheduleAssign
@@ -148,6 +149,8 @@
             public const string GetScheduleAssignByIdEndpoint = ScheduleAssignEndpoint + "/{id}";
             public const string GetScheduleAssignByHousekeeperIdEndpoint = ScheduleAssignEndpoint + "/housekeeper" + "/{id}";
             public const string ChangeStatusEndpoint = ScheduleAssignEndpoint + "/status";
+            public const string CompleteAssignmentEndpoint = ScheduleAssignEndpoint + "/complete";
+            public const string ConfirmAssignmentEndpoint = ScheduleAssignEndpoint + "/confirm";
         }
     }
 }

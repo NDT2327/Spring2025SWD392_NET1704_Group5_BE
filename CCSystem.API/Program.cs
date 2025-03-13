@@ -17,11 +17,11 @@ using CCSystem.BLL.Profiles.Promotions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<SP25_SWD392_CozyCareContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbStore"));
+//builder.Services.AddDbContext<SP25_SWD392_CozyCareContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbStore"));
 
-});
+//});
 
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(opts => opts.SuppressModelStateInvalidFilter = true)
