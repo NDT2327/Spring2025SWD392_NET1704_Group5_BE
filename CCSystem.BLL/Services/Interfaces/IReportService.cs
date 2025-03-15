@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.Report;
+﻿using CCSystem.Infrastructure.DTOs.Report;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

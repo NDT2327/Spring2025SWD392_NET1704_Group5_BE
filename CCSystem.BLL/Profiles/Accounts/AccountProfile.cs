@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CCSystem.BLL.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.DAL.Models;
 using System;
 using System.Collections.Generic;

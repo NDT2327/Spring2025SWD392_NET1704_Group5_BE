@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.BookingDetails;
+﻿using CCSystem.Infrastructure.DTOs.BookingDetails;
 using FluentValidation;
 
 namespace CCSystem.API.Validators.BookingDetails

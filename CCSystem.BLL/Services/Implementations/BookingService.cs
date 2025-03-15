@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.BookingDetails;
-using CCSystem.BLL.DTOs.Bookings;
+using CCSystem.Infrastructure.DTOs.BookingDetails;
+using CCSystem.Infrastructure.DTOs.Bookings;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Enums;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;

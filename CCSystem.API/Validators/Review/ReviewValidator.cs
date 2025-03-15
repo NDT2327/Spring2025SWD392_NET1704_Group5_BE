@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using CCSystem.BLL.DTOs.Review;
+using CCSystem.Infrastructure.DTOs.Review;
 
 namespace CCSystem.API.Validators.Review
 {

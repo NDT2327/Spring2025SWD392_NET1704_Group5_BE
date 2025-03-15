@@ -1,8 +1,8 @@
-﻿using CCSystem.BLL.DTOs.Report;
+﻿using CCSystem.Infrastructure.DTOs.Report;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Utils;

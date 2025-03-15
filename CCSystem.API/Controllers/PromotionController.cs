@@ -1,6 +1,6 @@
 ﻿using CCSystem.API.Constants;
-using CCSystem.BLL.DTOs.Services;
-using CCSystem.BLL.DTOs.Promotions;
+using CCSystem.Infrastructure.DTOs.Services;
+using CCSystem.Infrastructure.DTOs.Promotions;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Services.Interfaces;
 using FluentValidation;

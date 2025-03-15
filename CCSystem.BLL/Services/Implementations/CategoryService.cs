@@ -1,13 +1,13 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using CCSystem.BLL.Services.Interfaces;
-using CCSystem.BLL.DTOs.Category;
+using CCSystem.Infrastructure.DTOs.Category;
 using CCSystem.DAL.Models;
 using System;
 using CCSystem.DAL.DBContext;
 
 using AutoMapper;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CCSystem.BLL.Exceptions;

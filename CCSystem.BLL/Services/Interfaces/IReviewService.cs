@@ -1,5 +1,5 @@
-﻿using CCSystem.BLL.DTOs.Accounts;
-using CCSystem.BLL.DTOs.Review;
+﻿using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.Review;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;

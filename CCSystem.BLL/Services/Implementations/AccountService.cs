@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Enums;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
 using Microsoft.AspNetCore.Http;

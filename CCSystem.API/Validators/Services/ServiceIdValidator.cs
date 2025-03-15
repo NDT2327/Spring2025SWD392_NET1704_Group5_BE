@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.Services;
+﻿using CCSystem.Infrastructure.DTOs.Services;
 using FluentValidation;
 
 namespace CCSystem.API.Validators.Services

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.ScheduleAssign;
+using CCSystem.Infrastructure.DTOs.ScheduleAssign;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Enums;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using System;
 using System.Collections.Generic;

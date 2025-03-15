@@ -1,5 +1,5 @@
 ﻿using CCSystem.API.Validators.BookingDetails;
-using CCSystem.BLL.DTOs.Bookings;
+using CCSystem.Infrastructure.DTOs.Bookings;
 using FluentValidation;
 
 namespace CCSystem.API.Validators.Bookings

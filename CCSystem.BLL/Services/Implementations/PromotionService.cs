@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Promotions;
+using CCSystem.Infrastructure.DTOs.Promotions;
 using CCSystem.BLL.Exceptions;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
 using System;

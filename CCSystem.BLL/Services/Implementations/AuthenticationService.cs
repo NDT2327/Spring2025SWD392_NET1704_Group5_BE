@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Accounts;
-using CCSystem.BLL.DTOs.AccountTokens;
-using CCSystem.BLL.DTOs.JWTs;
+using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.AccountTokens;
+using CCSystem.Infrastructure.DTOs.JWTs;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.BLL.Utils;
 using CCSystem.DAL.Enums;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Redis.Models;
 using Microsoft.AspNetCore.Identity.Data;
@@ -364,7 +364,7 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
-        public async Task ChangePasswordAsync(DTOs.Accounts.ResetPasswordRequest resetPassword)
+        public async Task ChangePasswordAsync(CCSystem.Infrastructure.DTOs.Accounts.ResetPasswordRequest resetPassword)
         {
             try
             {

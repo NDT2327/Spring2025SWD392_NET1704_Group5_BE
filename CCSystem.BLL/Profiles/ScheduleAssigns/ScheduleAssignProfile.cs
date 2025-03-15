@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CCSystem.BLL.DTOs.ScheduleAssign;
+using CCSystem.Infrastructure.DTOs.ScheduleAssign;
 using CCSystem.DAL.Models;
 using System;
 using System.Collections.Generic;

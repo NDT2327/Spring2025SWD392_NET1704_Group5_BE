@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Accounts;
-using CCSystem.BLL.DTOs.Review;
+using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.Review;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Utils;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
 using System.Collections.Generic;
