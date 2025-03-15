@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Payments;
+using CCSystem.Infrastructure.DTOs.Payments;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Enums;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -59,11 +59,11 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<IEnumerable<DTOs.Payments.PaymentResponse>> GetPaymentsByCustomerIdAsync(int customerId)
+        public async Task<IEnumerable<CCSystem.Infrastructure.DTOs.Payments.PaymentResponse>> GetPaymentsByCustomerIdAsync(int customerId)
         {
             var payments = await _unitOfWork.PaymentRepository.GetPaymentsByCustomerIdAsync(customerId);
 
-            return payments.Select(p => new DTOs.Payments.PaymentResponse
+            return payments.Select(p => new CCSystem.Infrastructure.DTOs.Payments.PaymentResponse
             {
                 PaymentId = p.PaymentId,
                 CustomerId = p.CustomerId,
@@ -78,14 +78,14 @@ namespace CCSystem.BLL.Services.Implementations
                 TransactionId = p.TransactionId
             }).ToList();
         }
-        public async Task<DTOs.Payments.PaymentResponse?> GetByBookingIdAsync(int bookingId)
+        public async Task<CCSystem.Infrastructure.DTOs.Payments.PaymentResponse?> GetByBookingIdAsync(int bookingId)
         {
             var payment = await _unitOfWork.PaymentRepository.GetByBookingIdAsync(bookingId);
 
             if (payment == null)
                 return null;
 
-            return new DTOs.Payments.PaymentResponse
+            return new CCSystem.Infrastructure.DTOs.Payments.PaymentResponse
             {
                 PaymentId = payment.PaymentId,
                 CustomerId = payment.CustomerId,

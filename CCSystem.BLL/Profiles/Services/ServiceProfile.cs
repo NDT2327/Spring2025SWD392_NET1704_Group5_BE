@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using CCSystem.BLL.DTOs.Services;
+using CCSystem.Infrastructure.DTOs.Services;
 using CCSystem.DAL.Models;
 
 namespace CCSystem.BLL.Profiles.Services

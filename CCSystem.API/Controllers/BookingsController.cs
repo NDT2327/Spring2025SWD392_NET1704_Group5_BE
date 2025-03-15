@@ -1,6 +1,6 @@
 ﻿using CCSystem.API.Constants;
-using CCSystem.BLL.DTOs.Accounts;
-using CCSystem.BLL.DTOs.Bookings;
+using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.Bookings;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Implementations;

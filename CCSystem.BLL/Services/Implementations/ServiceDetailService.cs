@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using CCSystem.BLL.DTOs.ServiceDetails;
+using CCSystem.Infrastructure.DTOs.ServiceDetails;
 using CCSystem.BLL.Services.Interfaces;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;

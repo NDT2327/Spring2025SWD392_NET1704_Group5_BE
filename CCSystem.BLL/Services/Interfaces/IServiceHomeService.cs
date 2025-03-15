@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CCSystem.BLL.DTOs.Services;
+using CCSystem.Infrastructure.DTOs.Services;
 
 namespace CCSystem.BLL.Services.Interfaces
 {

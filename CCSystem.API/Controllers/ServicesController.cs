@@ -2,8 +2,8 @@
 using CCSystem.API.Constants;
 using CCSystem.API.Validators.Services;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Category;
-using CCSystem.BLL.DTOs.Services;
+using CCSystem.Infrastructure.DTOs.Category;
+using CCSystem.Infrastructure.DTOs.Services;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;

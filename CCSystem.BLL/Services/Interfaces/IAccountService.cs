@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.Accounts;
+﻿using CCSystem.Infrastructure.DTOs.Accounts;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

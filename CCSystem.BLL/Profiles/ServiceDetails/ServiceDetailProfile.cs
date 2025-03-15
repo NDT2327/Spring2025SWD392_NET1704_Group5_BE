@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CCSystem.DAL.Models;
-using CCSystem.BLL.DTOs.ServiceDetails;
+using CCSystem.Infrastructure.DTOs.ServiceDetails;
 
 public class ServiceDetailProfile : Profile
 {

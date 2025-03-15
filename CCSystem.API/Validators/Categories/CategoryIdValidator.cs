@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.Category;
+﻿using CCSystem.Infrastructure.DTOs.Category;
 using FluentValidation;
 
 namespace CCSystem.API.Validators.Categories

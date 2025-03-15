@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CCSystem.BLL\CCSystem.BLL.csproj" />
+    <ProjectReference Include="..\CCSystem.Infrastructure\CCSystem.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

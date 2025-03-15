@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CCSystem.BLL.DTOs.Review;
+using CCSystem.Infrastructure.DTOs.Review;
 using CCSystem.DAL.Models;
 
 namespace CCSystem.BLL.Profiles

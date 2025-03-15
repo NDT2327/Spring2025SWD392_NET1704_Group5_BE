@@ -1,6 +1,6 @@
-﻿using CCSystem.BLL.DTOs.Accounts;
-using CCSystem.BLL.DTOs.AccountTokens;
-using CCSystem.BLL.DTOs.JWTs;
+﻿using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.AccountTokens;
+using CCSystem.Infrastructure.DTOs.JWTs;
 using Microsoft.AspNetCore.Identity.Data;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace CCSystem.BLL.Services.Interfaces
         public Task<AccountTokenResponse> ReGenerateTokensAsync(AccountTokenRequest accountTokenRequest, JWTAuth jwtAuth);
         public Task VerifyEmailToResetPasswordAsync(EmailVerificationRequest emailVerificationRequest);
         public Task ConfirmOTPCodeToResetPasswordAsync(OTPCodeVerificationRequest otpCodeVerificationRequest);
-        public Task ChangePasswordAsync(DTOs.Accounts.ResetPasswordRequest resetPassword);
+        public Task ChangePasswordAsync(CCSystem.Infrastructure.DTOs.Accounts.ResetPasswordRequest resetPassword);
 
     }
 }

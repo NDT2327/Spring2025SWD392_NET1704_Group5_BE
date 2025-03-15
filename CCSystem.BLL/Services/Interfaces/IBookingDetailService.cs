@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.BookingDetails;
+﻿using CCSystem.Infrastructure.DTOs.BookingDetails;
 using System;
 using System.Collections.Generic;
 using System.Linq;

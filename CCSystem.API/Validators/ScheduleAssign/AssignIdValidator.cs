@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.ScheduleAssign;
+﻿using CCSystem.Infrastructure.DTOs.ScheduleAssign;
 using FluentValidation;
 
 namespace CCSystem.API.Validators.ScheduleAssign

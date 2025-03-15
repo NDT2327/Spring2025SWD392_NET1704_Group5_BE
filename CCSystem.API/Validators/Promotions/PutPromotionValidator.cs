@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.Promotions;
+﻿using CCSystem.Infrastructure.DTOs.Promotions;
 using FluentValidation;
 
 namespace CCSystem.API.Validators.Promotions

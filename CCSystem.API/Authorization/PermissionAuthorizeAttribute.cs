@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using CCSystem.DAL.Enums;
 using CCSystem.BLL.Services.Interfaces;
-using CCSystem.BLL.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.Accounts;
 using System.IdentityModel.Tokens.Jwt;
 
 
