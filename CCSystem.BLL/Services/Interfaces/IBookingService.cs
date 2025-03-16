@@ -18,5 +18,7 @@ namespace CCSystem.BLL.Services.Interfaces
         Task<BookingResponse> GetByPromotionCodeAsync(string promotionCode);
         Task<bool> RequestCancelBooking(int bookingId, int customerId);
         Task<bool> ProcessRefundBooking(int bookingId, int staffId);
-    }
+        Task<List<BookingResponse>> GetCancelRequestedBookingsAsync();
+
+	}
 }

@@ -158,7 +158,7 @@ namespace CCSystem.BLL.Services.Implementations
 
                 }
 
-                payment.UpdatedDate = DateTime.UtcNow;
+                payment.UpdatedDate = DateTime.UtcNow.AddHours(7);
 
                 await _unitOfWork.PaymentRepository.UpdateAsync(payment);
                 await _unitOfWork.CommitAsync();

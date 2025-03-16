@@ -34,7 +34,7 @@ namespace CCSystem.API.Validators.Accounts
 
             RuleFor(x => x.Year)
         .NotNull().WithMessage("Year is required.")
-        .InclusiveBetween(1900, DateTime.UtcNow.Year).WithMessage("Year must be between 1900 and the current year.")
+        .InclusiveBetween(1900, DateTime.UtcNow.AddHours(7).Year).WithMessage("Year must be between 1900 and the current year.")
         .When(x => x.Month.HasValue || x.Day.HasValue); // Bắt buộc nếu Month hoặc Day có giá trị
 
             RuleFor(x => x.Month)

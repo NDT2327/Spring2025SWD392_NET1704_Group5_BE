@@ -43,7 +43,7 @@ namespace CCSystem.DAL.Repositories
             {
                 return await _context.Bookings
                     .Include(b => b.Customer)
-                    .Include(b => b.PromotionCode)
+                    .Include(b => b.PromotionCodeNavigation)
                     .ToListAsync();
             }
             catch (Exception ex)

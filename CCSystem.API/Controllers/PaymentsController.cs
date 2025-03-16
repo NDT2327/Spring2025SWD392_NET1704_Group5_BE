@@ -74,7 +74,7 @@ namespace CCSystem.API.Controllers
                     Amount = (decimal)booking.TotalAmount,
                     PaymentMethod = "VNPay",
                     Status = "PENDING",
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.UtcNow.AddHours(7),
                     TransactionId = Guid.NewGuid().ToString(),
                 };
                 await _paymentService.CreatePaymentAsync(payment);
@@ -131,7 +131,7 @@ namespace CCSystem.API.Controllers
                 {
                     // Cập nhật trạng thái thanh toán
                     payment.Status = "SUCCESS";
-                    payment.PaymentDate = DateTime.UtcNow;
+                    payment.PaymentDate = DateTime.UtcNow.AddHours(7);
 
                     // Cập nhật trạng thái Booking
                     var booking = await _bookingService.GetBooking(payment.BookingId);
@@ -217,7 +217,7 @@ namespace CCSystem.API.Controllers
                 payment.TransactionId = paymentResult.VnpayTransactionId.ToString();
                 payment.Status = paymentResult.IsSuccess ? "SUCCESS" : "FAILED";
                 payment.PaymentMethod = paymentResult.PaymentMethod;
-                payment.UpdatedDate = DateTime.UtcNow;
+                payment.UpdatedDate = DateTime.UtcNow.AddHours(7);
 
                 var booking = await _bookingService.GetBooking(payment.BookingId);
                 if (booking != null)

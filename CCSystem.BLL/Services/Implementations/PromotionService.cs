@@ -4,6 +4,7 @@ using CCSystem.Infrastructure.DTOs.Promotions;
 using CCSystem.BLL.Exceptions;
 using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Models;
+using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.Repositories;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,7 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 // Map request data to a new Promotion entity
                 var promotion = _mapper.Map<Promotion>(request); // This will now work
-                promotion.CreatedDate = DateTime.UtcNow; // Ensure CreatedDate is set
+                promotion.CreatedDate = DateTime.UtcNow.AddHours(7); // Ensure CreatedDate is set
 
                 // Save the new promotion to the database
                 await _unitOfWork.PromotionRepository.AddPromotionAsync(promotion);

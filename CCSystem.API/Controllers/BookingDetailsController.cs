@@ -104,12 +104,12 @@ namespace CCSystem.API.Controllers
 
             return Ok(activeBookingDetails);
         }
-        #endregion
+		#endregion
 
-        /// <summary>
-        /// Lấy danh sách BookingDetails theo ServicelId
-        /// </summary>
-        [HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceId)]
+		/// <summary>
+		/// Get list of BookingDetails by ServicelId
+		/// </summary>
+		[HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceId)]
 
         public async Task<IActionResult> GetBookingDetailsByServiceId(int id)
         {
@@ -117,35 +117,35 @@ namespace CCSystem.API.Controllers
             return bookingDetails.Count > 0 ? Ok(bookingDetails) : NotFound($"Không tìm thấy BookingDetails với ServiceId: {id}");
         }
 
-        /// <summary>
-        /// Lấy danh sách BookingDetails theo ServiceDetailId
-        /// </summary>
-        [HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceDetailId)]
+		/// <summary>
+		/// Get list of BookingDetails by ServiceDetailId
+		/// </summary>
+		[HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceDetailId)]
         public async Task<IActionResult> GetBookingDetailsByServiceDetailId(int id)
         {
             var bookingDetails = await _bookingDetailService.GetBookingDetailsByServiceDetailIdAsync(id);
             return bookingDetails.Count > 0 ? Ok(bookingDetails) : NotFound($"Không tìm thấy BookingDetails với ServiceDetailId: {id}");
         }
-        /// <summary>
-        /// API để đặt lại lịch hẹn của Booking Detail.
-        /// </summary>
-        /// <param name="detailId">ID của Booking Detail.</param>
-        /// <param name="request">Yêu cầu đặt lại lịch.</param>
-        /// <returns>Trả về thông tin đặt lại lịch.</returns>
-        [HttpPost(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
+		/// <summary>
+		/// Reschedule Booking Detail appointment.
+		/// </summary>
+		/// <param name="detailId">ID của Booking Detail.</param>
+		/// <param name="request">Yêu cầu đặt lại lịch.</param>
+		/// <returns>Trả về thông tin đặt lại lịch.</returns>
+		[HttpPost(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
         public async Task<IActionResult> RescheduleBookingDetail(int detailId, [FromBody] RescheduleRequest request)
         {
             var response = await _bookingDetailService.RescheduleBookingDetail(detailId, request);
             return Ok(response);
         }
 
-        /// <summary>
-        /// API để xác nhận việc đặt lại lịch hẹn.
-        /// </summary>
-        /// <param name="detailId">ID của Booking Detail.</param>
-        /// <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
-        /// <returns>Trả về trạng thái xác nhận.</returns>
-        [HttpPost(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
+		/// <summary>
+		/// Confirm rescheduling.
+		/// </summary>
+		/// <param name="detailId">ID của Booking Detail.</param>
+		/// <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
+		/// <returns>Trả về trạng thái xác nhận.</returns>
+		[HttpPost(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
         public async Task<IActionResult> ConfirmReschedule(int detailId, [FromBody] ConfirmRescheduleRequest request)
         {
             var response = await _bookingDetailService.ConfirmReschedule(detailId, request);

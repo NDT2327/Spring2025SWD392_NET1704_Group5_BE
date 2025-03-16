@@ -249,7 +249,7 @@ namespace CCSystem.BLL.Services.Implementations
                 account.Rating = request.Rating;
                 account.Experience = request.Experience;
                 account.Status = request.Status;
-                account.UpdatedDate = DateTime.UtcNow;  // Set last update timestamp
+                account.UpdatedDate = DateTime.UtcNow.AddHours(7);  // Set last update timestamp
 
 
                 await _unitOfWork.AccountRepository.UpdateAccount(account);

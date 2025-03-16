@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCSystem.DAL.Repositories
+namespace CCSystem.BLL.Services.Interfaces
 {
     public interface IPromotionService
     {

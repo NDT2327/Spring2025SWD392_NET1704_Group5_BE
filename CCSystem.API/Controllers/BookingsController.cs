@@ -159,21 +159,24 @@ namespace CCSystem.API.Controllers
             return Ok(bookingDto);
         }
 
-        /// <summary>
-        /// Khách hàng yêu cầu hủy Booking
-        /// </summary>
-        [HttpPost(APIEndPointConstant.Booking.RequestCancel)]
+		#region Customer requests to cancel Booking
+		/// <summary>
+		/// Customer requests to cancel Booking
+		/// </summary>
+		[HttpPost(APIEndPointConstant.Booking.RequestCancel)]
         public async Task<IActionResult> RequestCancelBooking(int bookingId, int customerId)
         {
                 bool success = await _bookingsService.RequestCancelBooking(bookingId, customerId);
                 return success ? Ok(new { message = "Yêu cầu hủy đã được gửi!" })
                                : BadRequest(new { message = "Không thể gửi yêu cầu hủy!" });
         }
+		#endregion
 
-        /// <summary>
-        /// Staff xử lý hoàn tiền và xác nhận hủy Booking
-        /// </summary>
-        [HttpPost(APIEndPointConstant.Booking.ProcessRefund)]
+		#region Staff processes refunds and confirms cancellations
+		/// <summary>
+		/// Staff processes refunds and confirms cancellations
+		/// </summary>
+		[HttpPost(APIEndPointConstant.Booking.ProcessRefund)]
         public async Task<IActionResult> ProcessRefundBooking(int bookingId, [FromQuery] int staffId)
         {
                 bool success = await _bookingsService.ProcessRefundBooking(bookingId, staffId);
@@ -181,5 +184,27 @@ namespace CCSystem.API.Controllers
                                : BadRequest(new { message = "Không thể hoàn tiền!" });
             
         }
-    }
+		#endregion
+
+		#region Get Cancel Requested Bookings
+		/// <summary>
+		/// Retrieves a list of bookings that are in cancellation requested status.
+		/// </summary>
+		/// <returns>A list of cancellation requested bookings.</returns>
+		/// <response code="200">Cancellation requested bookings returned successfully.</response>
+		/// <response code="404">No cancellation requested bookings found.</response>
+		/// <response code="500">If an internal server error occurs.</response>
+		[ProducesResponseType(typeof(List<BookingResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+		[ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+		[Produces(MediaTypeConstant.ApplicationJson)]
+		[HttpGet(APIEndPointConstant.Booking.GetCancelRequestedBookingsEndpoint)]
+		public async Task<IActionResult> GetCancelRequestedBookings()
+		{
+			var bookings = await _bookingsService.GetCancelRequestedBookingsAsync();
+			return Ok(bookings);
+		}
+		#endregion
+
+	}
 }
