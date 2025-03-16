@@ -140,26 +140,26 @@ namespace CCSystem.API.Controllers
         /// <summary>
         /// Reschedule Booking Detail appointment.
         /// </summary>
-        /// <param name="detailId">ID của Booking Detail.</param>
+        /// <param name="id">ID của Booking Detail.</param>
         /// <param name="request">Yêu cầu đặt lại lịch.</param>
         /// <returns>Trả về thông tin đặt lại lịch.</returns>
         [HttpPost(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
-        public async Task<IActionResult> RescheduleBookingDetail(int detailId, [FromBody] RescheduleRequest request)
+        public async Task<IActionResult> RescheduleBookingDetail(int id, [FromBody] RescheduleRequest request)
         {
-            var response = await _bookingDetailService.RescheduleBookingDetail(detailId, request);
+            var response = await _bookingDetailService.RescheduleBookingDetail(id, request);
             return Ok(response);
         }
 
 		/// <summary>
 		/// Confirm rescheduling.
 		/// </summary>
-		/// <param name="detailId">ID của Booking Detail.</param>
+		/// <param name="id">ID của Booking Detail.</param>
 		/// <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
 		/// <returns>Trả về trạng thái xác nhận.</returns>
 		[HttpPost(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
-        public async Task<IActionResult> ConfirmReschedule(int detailId, [FromBody] ConfirmRescheduleRequest request)
+        public async Task<IActionResult> ConfirmReschedule(int id, [FromBody] ConfirmRescheduleRequest request)
         {
-            var response = await _bookingDetailService.ConfirmReschedule(detailId, request);
+            var response = await _bookingDetailService.ConfirmReschedule(id, request);
             return Ok(response);
         }
     }

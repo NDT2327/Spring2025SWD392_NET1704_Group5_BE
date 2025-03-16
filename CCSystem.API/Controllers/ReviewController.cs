@@ -76,12 +76,12 @@ namespace CCSystem.API.Controllers
         /// <summary>
         /// Lấy danh sách đánh giá theo DetailId.
         /// </summary>
-        /// <param name="detailId">ID của chi tiết đặt lịch</param>
+        /// <param name="id">ID của chi tiết đặt lịch</param>
         /// <returns>Danh sách đánh giá nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
         [HttpGet(APIEndPointConstant.Review.GetReviewByDetailIdEndpoint)]
-        public async Task<IActionResult> GetReviewsByDetailId([FromRoute] int detailId)
+        public async Task<IActionResult> GetReviewsByDetailId([FromRoute] int id)
         {
-            var reviews = await _reviewService.GetReviewsByDetailIdAsync(detailId);
+            var reviews = await _reviewService.GetReviewsByDetailIdAsync(id);
             return reviews.Any() ? Ok(reviews) : NotFound(new { message = ReviewMessage.NoReviewsFound });
         }
 
