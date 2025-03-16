@@ -171,6 +171,14 @@ namespace CCSystem.DAL.Repositories
             }
         }
 
+        public async Task<List<BookingDetail>> GetAllAsync()
+        {
+            return await _context.BookingDetails
+                .Include(bd => bd.Service) 
+                .Include(bd => bd.ServiceDetail) 
+                .ToListAsync();
+        }
+
         public async Task<bool> RescheduleBookingDetail(int detailId, DateOnly newDate, TimeOnly newTime)
         {
             var bookingDetail = await _context.BookingDetails

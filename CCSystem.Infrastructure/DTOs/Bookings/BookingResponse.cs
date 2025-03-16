@@ -20,7 +20,7 @@ namespace CCSystem.Infrastructure.DTOs.Bookings
 
         public decimal TotalAmount { get; set; }
 
-        public string BookingStatus { get; set; }
+        public string BookingStatus { get; set; }       
 
         public string PaymentStatus { get; set; }
 
