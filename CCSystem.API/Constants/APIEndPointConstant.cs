@@ -126,8 +126,9 @@
             public const string BookingEndpoint = ApiEndpoint + "/bookings";
             public const string GetBookingById = BookingEndpoint + "/{id}";
             public const string GetBookingByCusId = BookingEndpoint + "/customer" + "/{id}";
-            public const string GetBookingByPromotionCode = BookingEndpoint + "/promotion" + "/{promotionCode}"; 
-
+            public const string GetBookingByPromotionCode = BookingEndpoint + "/promotion" + "/{promotionCode}";
+            public const string RequestCancel = BookingEndpoint + "/request-cancel";
+            public const string ProcessRefund = BookingEndpoint + "/process-refund";
 
         }
 
@@ -139,7 +140,8 @@
             public const string GetActiveBDetailEndpoint = BookingDetailEndpoint + "/active";
             public const string GetBookingDetailByServiceId = BookingDetailEndpoint + "/service" + "/{id}";
             public const string GetBookingDetailByServiceDetailId = BookingDetailEndpoint + "/servicedetail" + "/{id}";
-
+            public const string RescheduleBookingDetail = BookingDetailEndpoint + "/reschedule" + "/{detailId}";
+            public const string ConfirmReschedule = BookingDetailEndpoint + "/confirm" + "/{detailId}";
         }
 
         public static class ScheduleAssign

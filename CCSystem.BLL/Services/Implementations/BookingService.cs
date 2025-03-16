@@ -9,6 +9,7 @@ using CCSystem.DAL.Enums;
 using CCSystem.DAL.Infrastructures;
 using CCSystem.DAL.Models;
 using CCSystem.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,12 +93,12 @@ namespace CCSystem.BLL.Services.Implementations
                     await _bookDetailService.CreateBookingDetailAsync(postBookingDetailRequest);
                     var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailByBookingServiceServiceDetail(
                         booking.BookingId, detail.ServiceId, detail.ServiceDetailId);
-                    if (bookingDetail == null )
+                    if (bookingDetail == null)
                     {
                         throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingDetailId);
-                    }    
+                    }
                     // Tính tổng tiền (có thể thay đổi logic tính giá theo nghiệp vụ)
-                    totalAmount +=  bookingDetail.UnitPrice;
+                    totalAmount += bookingDetail.UnitPrice;
                 }
 
                 if (promotion != null)
@@ -231,10 +232,158 @@ namespace CCSystem.BLL.Services.Implementations
             var booking = await _unitOfWork.BookingRepository.GetByPromotionCodeAsync(promotionCode);
 
             if (booking == null)
-                return null; 
+                return null;
 
             return _mapper.Map<BookingResponse>(booking);
         }
+
+        public async Task<bool> RequestCancelBooking(int bookingId, int customerId)
+        {
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var booking = await _unitOfWork.BookingRepository.GetBookingByIdAndCustomer(bookingId, customerId);
+
+                if (booking == null)
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
+
+                var now = DateTime.UtcNow;
+                bool allExpired = true;
+                decimal refundAmount = 0;
+
+                var bookingDetails = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByBooking(booking.BookingId);
+
+                foreach (var detail in bookingDetails)
+                {
+                    DateTime scheduleDateTime = detail.ScheduleDate.ToDateTime(detail.ScheduleTime);
+
+                    // Nếu vẫn còn hiệu lực, cộng vào tiền hoàn
+                    if ((scheduleDateTime - now).TotalHours > 24)
+                    {
+                        refundAmount += detail.UnitPrice;
+                        allExpired = false;
+                    }
+                    detail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.CANCELREQUESTED.ToString();
+                    await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(detail);
+
+                }
+
+                if (allExpired)
+                {
+                    throw new Exception(MessageConstant.BookingMessage.BookingIsExpired);
+                }
+
+                // Cập nhật trạng thái Booking
+                booking.BookingStatus = BookingEnums.BookingStatus.CANCELREQUESTED.ToString();
+
+                // Nếu có thanh toán trước, tạo giao dịch hoàn tiền
+                var payment = await _unitOfWork.PaymentRepository.GetSuccessfulPaymentByBookingIdAsync(booking.BookingId);
+                if (payment != null && refundAmount > 0)
+                {
+                    var refundPayment = new Payment
+                    {
+                        CustomerId = booking.CustomerId,
+                        BookingId = booking.BookingId,
+                        Amount = refundAmount,
+                        PaymentMethod = payment.PaymentMethod,
+                        Status = PaymentEnums.Status.REFUNDREQUESTED.ToString(),
+                        CreatedDate = DateTime.Now,
+                        Notes = "Yêu cầu hoàn tiền cho các dịch vụ chưa hết hạn"
+                    };
+                    await _unitOfWork.PaymentRepository.AddAsync(refundPayment);
+                }
+                await _unitOfWork.BookingRepository.UpdateAsync(booking);
+                await _unitOfWork.CommitAsync();
+                await transaction.CommitAsync();
+
+                // Gửi thông báo cho Staff xử lý
+                //await _notificationService.NotifyStaffAsync($"Yêu cầu hủy Booking #{bookingId} cần xử lý!");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Hoàn tác tất cả thay đổi nếu có lỗi
+                await transaction.RollbackAsync();
+                throw new Exception($"Lỗi khi tạo booking và booking details: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> ProcessRefundBooking(int bookingId, int staffId)
+        {
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId);
+
+                if (booking == null)
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
+
+                if (booking.BookingStatus != BookingEnums.BookingStatus.CANCELREQUESTED.ToString())
+                    throw new NotFoundException(MessageConstant.BookingMessage.IsNotRequestCanceled);
+
+                var staff = await _unitOfWork.AccountRepository.GetByIdAsync(staffId);
+                if (staff == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistAccountId);
+                }
+                if (staff.Role != AccountEnums.Role.STAFF.ToString())
+                {
+                    throw new NotFoundException(MessageConstant.AccountMessage.InvalidRole);
+                }
+
+                var details = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByBooking(booking.BookingId);
+
+                // Cập nhật trạng thái các BookingDetail đã yêu cầu hủy
+                foreach (var detail in details.Where(d => d.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.CANCELREQUESTED.ToString()))
+                {
+                    detail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.CANCELLED.ToString();
+
+                    // Nếu có phân công Housekeeper, cập nhật trạng thái `ScheduleAssignment`
+                    var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detail.DetailId);
+                    foreach (var assign in assignments)
+                    {
+                        assign.Status = AssignEnums.Status.CANCELLED.ToString();
+                        await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assign);
+                    }
+                    await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(detail);
+                }
+
+                // Cập nhật trạng thái hoàn tiền
+                var refundPayment = await _unitOfWork.PaymentRepository.GetRefundRequestedPaymentByBookingIdAsync(booking.BookingId);
+                if (refundPayment != null)
+                {
+                    refundPayment.Status = PaymentEnums.Status.REFUNDED.ToString();
+                    refundPayment.UpdatedDate = DateTime.UtcNow;
+                }
+                else
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistPaymentId);
+                }
+
+
+                booking.BookingStatus = BookingEnums.BookingStatus.CANCELED.ToString();
+                booking.PaymentStatus = BookingEnums.PaymentStatus.REFUNDED.ToString();
+
+                await _unitOfWork.PaymentRepository.UpdateAsync(refundPayment);
+                await _unitOfWork.BookingRepository.UpdateAsync(booking);
+
+                await _unitOfWork.CommitAsync();
+                await transaction.CommitAsync();
+
+                // Gửi thông báo cho khách hàng
+                //await _notificationService.NotifyCustomerAsync(booking.CustomerId, $"Booking #{bookingId} đã được hoàn tiền!");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Hoàn tác tất cả thay đổi nếu có lỗi
+                await transaction.RollbackAsync();
+                throw new Exception($"Lỗi khi tạo booking và booking details: {ex.Message}");
+            }
+        }
+
 
         public async Task UpdateBookingAsync(Booking booking)
         {
@@ -254,5 +403,7 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
+
+
     }
 }

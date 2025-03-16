@@ -59,8 +59,8 @@ namespace CCSystem.API.Validators.Accounts
                 .When(x => x.Rating.HasValue); // Chỉ kiểm tra nếu Rating không null
 
             RuleFor(x => x.Experience)
-                .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} cannot be negative.")
-                .When(x => x.Experience.HasValue); // Chỉ kiểm tra nếu Experience không null
+     .NotNull().WithMessage("{PropertyName} is required.") // Bắt buộc nhập
+     .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} cannot be negative.");
 
             RuleFor(x => x.Status)
                   .NotNull().WithMessage("{PropertyName} is required.")

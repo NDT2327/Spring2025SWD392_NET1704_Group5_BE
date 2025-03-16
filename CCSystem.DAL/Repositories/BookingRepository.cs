@@ -57,7 +57,7 @@ namespace CCSystem.DAL.Repositories
             try
             {
                 return await _context.Bookings
-                    .Include(b => b.Customer)
+                    //.Include(b => b.Customer)
                     .FirstOrDefaultAsync(b => b.BookingId == bookingId);
             }
             catch (Exception ex)
@@ -68,8 +68,8 @@ namespace CCSystem.DAL.Repositories
         public async Task<Booking> GetByPromotionCodeAsync(string promotionCode)
         {
             return await _context.Bookings
-                .Include(b => b.Payments)  
-                .Include(b => b.Customer)  
+                .Include(b => b.Payments)
+                .Include(b => b.Customer)
                 .FirstOrDefaultAsync(b => b.PromotionCode == promotionCode);
         }
 
@@ -83,6 +83,14 @@ namespace CCSystem.DAL.Repositories
             {
                 throw new Exception("Error updating booking", ex);
             }
+        }
+
+        public async Task<Booking> GetBookingByIdAndCustomer(int bookingId, int customerId)
+        {
+
+            return await _context.Bookings
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId && b.CustomerId == customerId);
+
         }
 
         //public async Task DeleteAsync(int bookingId)

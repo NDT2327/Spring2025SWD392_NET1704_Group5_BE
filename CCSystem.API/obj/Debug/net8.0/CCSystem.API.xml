@@ -293,6 +293,22 @@
             Lấy danh sách BookingDetails theo ServiceDetailId
             </summary>
         </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.RescheduleBookingDetail(System.Int32,CCSystem.BLL.DTOs.BookingDetails.RescheduleRequest)">
+            <summary>
+            API để đặt lại lịch hẹn của Booking Detail.
+            </summary>
+            <param name="detailId">ID của Booking Detail.</param>
+            <param name="request">Yêu cầu đặt lại lịch.</param>
+            <returns>Trả về thông tin đặt lại lịch.</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.ConfirmReschedule(System.Int32,CCSystem.BLL.DTOs.BookingDetails.ConfirmRescheduleRequest)">
+            <summary>
+            API để xác nhận việc đặt lại lịch hẹn.
+            </summary>
+            <param name="detailId">ID của Booking Detail.</param>
+            <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
+            <returns>Trả về trạng thái xác nhận.</returns>
+        </member>
         <member name="M:CCSystem.API.Controllers.BookingsController.CreateBookingWithDetailsAsync(CCSystem.BLL.DTOs.Bookings.PostBookingRequest)">
             <summary>
             Create a booking along with its booking details.
@@ -350,6 +366,16 @@
             </summary>
             <param name="promotionCode">Mã khuyến mãi</param>
             <returns>Thông tin đơn đặt chỗ</returns>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingsController.RequestCancelBooking(System.Int32,System.Int32)">
+            <summary>
+            Khách hàng yêu cầu hủy Booking
+            </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingsController.ProcessRefundBooking(System.Int32,System.Int32)">
+            <summary>
+            Staff xử lý hoàn tiền và xác nhận hủy Booking
+            </summary>
         </member>
         <member name="T:CCSystem.API.Controllers.CategoryController">
             <summary>

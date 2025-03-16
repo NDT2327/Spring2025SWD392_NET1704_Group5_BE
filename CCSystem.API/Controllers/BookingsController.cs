@@ -142,6 +142,7 @@ namespace CCSystem.API.Controllers
         }
 
         #endregion
+
         /// <summary>
         /// Lấy thông tin đơn đặt chỗ theo mã khuyến mãi (PromotionCode).
         /// </summary>
@@ -156,6 +157,29 @@ namespace CCSystem.API.Controllers
                 return NotFound($"Không tìm thấy Booking với PromotionCode: {promotionCode}");
 
             return Ok(bookingDto);
+        }
+
+        /// <summary>
+        /// Khách hàng yêu cầu hủy Booking
+        /// </summary>
+        [HttpPost(APIEndPointConstant.Booking.RequestCancel)]
+        public async Task<IActionResult> RequestCancelBooking(int bookingId, int customerId)
+        {
+                bool success = await _bookingsService.RequestCancelBooking(bookingId, customerId);
+                return success ? Ok(new { message = "Yêu cầu hủy đã được gửi!" })
+                               : BadRequest(new { message = "Không thể gửi yêu cầu hủy!" });
+        }
+
+        /// <summary>
+        /// Staff xử lý hoàn tiền và xác nhận hủy Booking
+        /// </summary>
+        [HttpPost(APIEndPointConstant.Booking.ProcessRefund)]
+        public async Task<IActionResult> ProcessRefundBooking(int bookingId, [FromQuery] int staffId)
+        {
+                bool success = await _bookingsService.ProcessRefundBooking(bookingId, staffId);
+                return success ? Ok(new { message = "Hoàn tiền và hủy Booking thành công!" })
+                               : BadRequest(new { message = "Không thể hoàn tiền!" });
+            
         }
     }
 }
