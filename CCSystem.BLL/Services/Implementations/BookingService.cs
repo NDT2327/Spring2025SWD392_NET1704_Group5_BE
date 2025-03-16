@@ -423,7 +423,23 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
-
+        public async Task<List<BookingResponse>> GetAllBookingAsync()
+        {
+            var bookings = await _unitOfWork.BookingRepository.GetAllBookingAsync();
+            return bookings.Select(b => new BookingResponse
+            {
+                BookingId = b.BookingId,
+                CustomerId = b.CustomerId,
+                Email = b.Customer.Email,
+                PromotionCode = b.PromotionCode,
+                BookingDate = b.BookingDate,
+                TotalAmount = b.TotalAmount,
+                BookingStatus = b.BookingStatus,
+                PaymentStatus = b.PaymentStatus,
+                Notes = b.Notes,
+                PaymentMethod = b.PaymentMethod
+            }).ToList();
+        }
 
     }
 }

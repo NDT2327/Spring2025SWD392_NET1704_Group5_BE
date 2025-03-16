@@ -12,6 +12,7 @@ namespace CCSystem.BLL.Services.Interfaces
     {
         Task<Booking> GetBooking(int id);
         Task<BookingResponse> GetBookingById(int id);
+        Task<List<BookingResponse>> GetAllBookingAsync();
         Task UpdateBookingAsync(Booking booking);
         Task<BookingResponse> CreateBookingWithDetailsAsync(PostBookingRequest postBookingRequest);
         Task<List<BookingResponse>> GetBookingsByCustomer(int customerId);

@@ -144,6 +144,18 @@ namespace CCSystem.API.Controllers
         #endregion
 
         /// <summary>
+        /// API lấy danh sách tất cả các bookings.
+        /// </summary>
+        /// <returns>Danh sách bookings dưới dạng HTTP 200 OK.</returns>
+        [HttpGet(APIEndPointConstant.Booking.GetAllBookingsEndpoint)]
+
+        public async Task<IActionResult> GetAllBooking()
+        {
+            var bookings = await _bookingsService.GetAllBookingAsync();
+            return Ok(bookings);
+        }
+
+        /// <summary>
         /// Lấy thông tin đơn đặt chỗ theo mã khuyến mãi (PromotionCode).
         /// </summary>
         /// <param name="promotionCode">Mã khuyến mãi</param>

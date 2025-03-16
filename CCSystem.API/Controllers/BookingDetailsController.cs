@@ -126,13 +126,24 @@ namespace CCSystem.API.Controllers
             var bookingDetails = await _bookingDetailService.GetBookingDetailsByServiceDetailIdAsync(id);
             return bookingDetails.Count > 0 ? Ok(bookingDetails) : NotFound($"Không tìm thấy BookingDetails với ServiceDetailId: {id}");
         }
-		/// <summary>
-		/// Reschedule Booking Detail appointment.
-		/// </summary>
-		/// <param name="detailId">ID của Booking Detail.</param>
-		/// <param name="request">Yêu cầu đặt lại lịch.</param>
-		/// <returns>Trả về thông tin đặt lại lịch.</returns>
-		[HttpPost(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
+        /// <summary>
+        /// API lấy danh sách tất cả các chi tiết đặt lịch (BookingDetail).
+        /// </summary>
+        /// <returns>Danh sách BookingDetail dưới dạng HTTP 200 OK.</returns>
+        [HttpGet(APIEndPointConstant.BookingDetail.GetAllBDetailEndpoint)]
+        public async Task<IActionResult> GetAllBookingDetail()
+        {
+            var bookingDetails = await _bookingDetailService.GetAllAsync();
+            return Ok(bookingDetails);
+        }
+
+        /// <summary>
+        /// Reschedule Booking Detail appointment.
+        /// </summary>
+        /// <param name="detailId">ID của Booking Detail.</param>
+        /// <param name="request">Yêu cầu đặt lại lịch.</param>
+        /// <returns>Trả về thông tin đặt lại lịch.</returns>
+        [HttpPost(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
         public async Task<IActionResult> RescheduleBookingDetail(int detailId, [FromBody] RescheduleRequest request)
         {
             var response = await _bookingDetailService.RescheduleBookingDetail(detailId, request);
