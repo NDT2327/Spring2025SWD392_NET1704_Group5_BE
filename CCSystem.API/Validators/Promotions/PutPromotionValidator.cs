@@ -20,7 +20,7 @@ namespace CCSystem.API.Validators.Promotions
                 .LessThan(x => x.EndDate).WithMessage("Start Date must be before End Date.");
 
             RuleFor(x => x.EndDate)
-                .GreaterThan(DateTime.UtcNow).WithMessage("End Date must be in the future.");
+                .GreaterThan(DateTime.UtcNow.AddHours(7)).WithMessage("End Date must be in the future.");
 
             RuleFor(x => x.MinOrderAmount)
                 .GreaterThanOrEqualTo(0).WithMessage("Min Order Amount must be non-negative.");

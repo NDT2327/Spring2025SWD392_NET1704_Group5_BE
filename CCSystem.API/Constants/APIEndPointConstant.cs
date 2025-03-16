@@ -129,10 +129,11 @@
             public const string GetBookingByPromotionCode = BookingEndpoint + "/promotion" + "/{promotionCode}";
             public const string RequestCancel = BookingEndpoint + "/request-cancel";
             public const string ProcessRefund = BookingEndpoint + "/process-refund";
+			public const string GetCancelRequestedBookingsEndpoint = BookingEndpoint + "/cancel-booking";
 
-        }
+		}
 
-        public static class BookingDetail
+		public static class BookingDetail
         {
             public const string BookingDetailEndpoint = ApiEndpoint + "/bookingDetails";
             public const string GetBDetailByIdEndpoint = BookingDetailEndpoint + "/{id}";
@@ -152,7 +153,12 @@
             public const string ChangeStatusEndpoint = ScheduleAssignEndpoint + "/status";
             public const string CompleteAssignmentEndpoint = ScheduleAssignEndpoint + "/complete";
             public const string ConfirmAssignmentEndpoint = ScheduleAssignEndpoint + "/confirm";
-        }
-    }
+            public const string HousekeeperRequestCancelEndpoint = ScheduleAssignEndpoint + "housekeeper-request-cancel";
+			public const string GetRequestCancelEndpoint = ScheduleAssignEndpoint + "cancel-requests";
+            public const string ConfirmHousekeeperCancelEndpoint = ScheduleAssignEndpoint + "confirm-housekeeper-cancel";
+
+
+		}
+	}
 }
   

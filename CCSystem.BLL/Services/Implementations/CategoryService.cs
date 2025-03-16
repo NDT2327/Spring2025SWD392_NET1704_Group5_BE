@@ -38,8 +38,8 @@ namespace CCSystem.BLL.Service
                 Description = category.Description,
                 ImageUrl = category.Image,   
                 IsActive = category.IsActive ?? false,
-                CreatedDate = category.CreatedDate ?? DateTime.UtcNow,
-                UpdatedDate = category.UpdatedDate ?? DateTime.UtcNow
+                CreatedDate = category.CreatedDate ?? DateTime.UtcNow.AddHours(7),
+                UpdatedDate = category.UpdatedDate ?? DateTime.UtcNow.AddHours(7)
             });
 
             return response;
@@ -60,8 +60,8 @@ namespace CCSystem.BLL.Service
                 Description = category.Description,
                 ImageUrl = category.Image,
                 IsActive = category.IsActive ?? false,
-                CreatedDate = category.CreatedDate ?? DateTime.UtcNow,
-                UpdatedDate = category.UpdatedDate ?? DateTime.UtcNow
+                CreatedDate = category.CreatedDate ?? DateTime.UtcNow.AddHours(7),
+                UpdatedDate = category.UpdatedDate ?? DateTime.UtcNow.AddHours(7)
             };
 
             return response;

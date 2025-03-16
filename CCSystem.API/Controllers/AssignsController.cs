@@ -27,7 +27,9 @@ namespace CCSystem.API.Controllers
         private readonly IValidator<PatchAssignStatusRequest> _patchAssignStatusValidator;
         private readonly IValidator<CompleteAssignmentRequest> _completeAssignmentValidator;
         private readonly IValidator<ConfirmAssignmentRequest> _confirmAssignmentValidator;
-        public AssignsController(IScheduleAssignService scheduleAssignService, IValidator<AssignIdRequest> assignIdValidator, IValidator<PostScheduleAssignRequest> postScheduleAssignValidator, IValidator<AccountIdRequest> accountIdValidator, IValidator<PatchAssignStatusRequest> patchAssignStatusValidator, IValidator<CompleteAssignmentRequest> completeAssignmentValidator, IValidator<ConfirmAssignmentRequest> confirmAssignmentValidator)
+        private readonly IValidator<CancelAssignmentRequest> _cancelAssignmentValidator;
+        private readonly IValidator<ConfirmCancelAssignmentRequest> _confirmCancelAssignmentValidator;
+        public AssignsController(IScheduleAssignService scheduleAssignService, IValidator<AssignIdRequest> assignIdValidator, IValidator<PostScheduleAssignRequest> postScheduleAssignValidator, IValidator<AccountIdRequest> accountIdValidator, IValidator<PatchAssignStatusRequest> patchAssignStatusValidator, IValidator<CompleteAssignmentRequest> completeAssignmentValidator, IValidator<ConfirmAssignmentRequest> confirmAssignmentValidator, IValidator<CancelAssignmentRequest> cancelAssignmentValidator, IValidator<ConfirmCancelAssignmentRequest> confirmCancelAssignmentValidator)
         {
             this._scheduleAssignService = scheduleAssignService;
             this._assignIdValidator = assignIdValidator;
@@ -36,6 +38,8 @@ namespace CCSystem.API.Controllers
             this._patchAssignStatusValidator = patchAssignStatusValidator;
             this._completeAssignmentValidator = completeAssignmentValidator;
             this._confirmAssignmentValidator = confirmAssignmentValidator;
+            this._cancelAssignmentValidator = cancelAssignmentValidator;
+            this._confirmCancelAssignmentValidator = confirmCancelAssignmentValidator;
         }
 
         #region Get List Assigns
@@ -219,7 +223,81 @@ namespace CCSystem.API.Controllers
             await _scheduleAssignService.ConfirmAssignment(request);
             return Ok(new { Message = "Assignment confirmed successfully!" });
         }
-        #endregion
+		#endregion
 
-    }
+		#region Housekeeper request cancel
+		/// <summary>
+		/// Allows a housekeeper to request cancellation of an assignment.
+		/// </summary>
+		/// <param name="request">The request object containing assignment details.</param>
+		/// <returns>A success message if the request is submitted successfully.</returns>
+		/// <response code="200">Cancellation request submitted successfully.</response>
+		/// <response code="400">If the request data is invalid.</response>
+		/// <response code="500">If an internal server error occurs.</response>
+		[ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+		[Produces(MediaTypeConstant.ApplicationJson)]
+		[HttpPost(APIEndPointConstant.ScheduleAssign.HousekeeperRequestCancelEndpoint)]
+		public async Task<IActionResult> RequestCancel([FromBody] CancelAssignmentRequest request)
+		{
+			ValidationResult validationResult = await _cancelAssignmentValidator.ValidateAsync(request);
+			if (!validationResult.IsValid)
+			{
+				string errors = ErrorUtil.GetErrorsString(validationResult);
+				throw new BadRequestException(errors);
+			}
+
+			await _scheduleAssignService.RequestCancel(request);
+			return Ok(new { message = "Cancellation request submitted successfully." });
+		}
+		#endregion
+
+		#region Get request Cancel
+		/// <summary>
+		/// Retrieves all cancellation requests made by housekeepers.
+		/// </summary>
+		/// <returns>A list of cancellation requests.</returns>
+		/// <response code="200">Returns the list of cancellation requests.</response>
+		/// <response code="500">If an internal server error occurs.</response>
+		[ProducesResponseType(typeof(List<ScheduleAssignmentResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+		[Produces(MediaTypeConstant.ApplicationJson)]
+		[HttpGet(APIEndPointConstant.ScheduleAssign.GetRequestCancelEndpoint)]
+		public async Task<IActionResult> GetCancelRequests()
+		{
+			var cancelRequests = await _scheduleAssignService.GetCancelRequests();
+			return Ok(cancelRequests);
+		}
+		#endregion
+
+		#region Confirm housekeeper Cancel
+		/// <summary>
+		/// Confirms and processes a housekeeper's cancellation request.
+		/// </summary>
+		/// <param name="request">The request object containing cancellation details.</param>
+		/// <returns>A success message if the cancellation is processed successfully.</returns>
+		/// <response code="200">Cancellation request processed successfully.</response>
+		/// <response code="400">If the request data is invalid.</response>
+		/// <response code="500">If an internal server error occurs.</response>
+		[ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+		[Produces(MediaTypeConstant.ApplicationJson)]
+		[HttpPost(APIEndPointConstant.ScheduleAssign.ConfirmHousekeeperCancelEndpoint)]
+		public async Task<IActionResult> ConfirmCancel([FromBody] ConfirmCancelAssignmentRequest request)
+		{
+			ValidationResult validationResult = await _confirmCancelAssignmentValidator.ValidateAsync(request);
+			if (!validationResult.IsValid)
+			{
+				string errors = ErrorUtil.GetErrorsString(validationResult);
+				throw new BadRequestException(errors);
+			}
+
+			await _scheduleAssignService.ConfirmCancelRequest(request);
+			return Ok(new { message = "Cancellation request processed successfully." });
+		}
+		#endregion
+
+	}
 }

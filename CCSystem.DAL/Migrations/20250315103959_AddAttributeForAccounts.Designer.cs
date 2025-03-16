@@ -4,6 +4,7 @@ using CCSystem.DAL.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSystem.DAL.Migrations
 {
     [DbContext(typeof(SP25_SWD392_CozyCareContext))]
-    partial class SP25_SWD392_CozyCareContextModelSnapshot : ModelSnapshot
+    [Migration("20250315103959_AddAttributeForAccounts")]
+    partial class AddAttributeForAccounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

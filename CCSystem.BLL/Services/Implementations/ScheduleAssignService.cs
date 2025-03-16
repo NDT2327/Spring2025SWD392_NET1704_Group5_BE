@@ -312,5 +312,89 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
-    }
+		public async Task RequestCancel(CancelAssignmentRequest request)
+		{
+			try
+			{
+				var assign = await _unitOfWork.ScheduleAssignRepository.GetByIdAsync(request.AssignmentId);
+				if (assign == null)
+				{
+					throw new NotFoundException(MessageConstant.CommonMessage.NotExistAssignId);
+				}
+
+				if (assign.HousekeeperId != request.HousekeeperId)
+				{
+					throw new BadRequestException(MessageConstant.ScheduleAssign.UnauthorizedCancelRequest);
+				}
+
+				if (assign.Status != AssignEnums.Status.ASSIGNED.ToString())
+				{
+					throw new BadRequestException(MessageConstant.ScheduleAssign.RequestCancelNotAllowed);
+				}
+
+				assign.Status = AssignEnums.Status.REQUESTCANCEL.ToString();
+				assign.Notes = request.Reason;
+
+				await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assign);
+				await _unitOfWork.CommitAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task<List<ScheduleAssignmentResponse>> GetCancelRequests()
+		{
+			try
+			{
+				var cancelRequests = await _unitOfWork.ScheduleAssignRepository.GetByStatusAsync(AssignEnums.Status.REQUESTCANCEL.ToString());
+				var responses = _mapper.Map<List<ScheduleAssignmentResponse>>(cancelRequests);
+				return responses;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task ConfirmCancelRequest(ConfirmCancelAssignmentRequest request)
+		{
+			try
+			{
+				var assign = await _unitOfWork.ScheduleAssignRepository.GetByIdAsync(request.AssignmentId);
+				if (assign == null)
+				{
+					throw new NotFoundException(MessageConstant.CommonMessage.NotExistAssignId);
+				}
+
+				if (assign.Status != AssignEnums.Status.REQUESTCANCEL.ToString())
+				{
+					throw new BadRequestException(MessageConstant.ScheduleAssign.AssignmentNotInCancelRequest);
+				}
+
+				if (request.IsApproved)
+				{
+					assign.Status = AssignEnums.Status.CANCELLED.ToString();
+					var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(assign.DetailId);
+					if (bookingDetail != null)
+					{
+						bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.PENDING.ToString();
+						await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
+					}
+				}
+				else
+				{
+					assign.Status = AssignEnums.Status.ASSIGNED.ToString();
+				}
+
+				await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assign);
+				await _unitOfWork.CommitAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+	}
 }
