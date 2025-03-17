@@ -1,12 +1,12 @@
 ﻿using CCSystem.API.Constants;
 using CCSystem.API.Extentions;
 using CCSystem.API.Middlewares;
-using CCSystem.BLL.DTOs.JWTs;
+using CCSystem.Infrastructure.DTOs.JWTs;
 using CCSystem.BLL.Service;
 using CCSystem.BLL.Services.Implementations;
 using CCSystem.BLL.Services.Interfaces;
 using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Infrastructures;
+using CCSystem.Infrastructure.Infrastructures;
 using CCSystem.DAL.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;

@@ -16,40 +16,40 @@
             </summary>
             
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.SearchAccountsAsync(CCSystem.BLL.DTOs.Accounts.AccountSearchRequest)" -->
-        <member name="M:CCSystem.API.Controllers.AccountsController.LockAccount(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.SearchAccountsAsync(CCSystem.Infrastructure.DTOs.Accounts.AccountSearchRequest)" -->
+        <member name="M:CCSystem.API.Controllers.AccountsController.LockAccount(CCSystem.Infrastructure.DTOs.Accounts.AccountIdRequest)">
             <summary>
             Lock an account by accountId
             </summary>
             <param name="accountId">Account ID to lock</param>
             <returns>Success message if locked</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.AccountsController.UnlockAccount(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+        <member name="M:CCSystem.API.Controllers.AccountsController.UnlockAccount(CCSystem.Infrastructure.DTOs.Accounts.AccountIdRequest)">
             <summary>
             Unlock an account by accountId
             </summary>
             <param name="accountId">Account ID to unlock</param>
             <returns>Success message if unlocked</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)" -->
-        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccounts(CCSystem.BLL.DTOs.Accounts.AccountsListRequest)" -->
-        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.UpdateAccount(System.Int32,CCSystem.BLL.DTOs.Accounts.UpdateAccountRequest)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccountProfile(CCSystem.Infrastructure.DTOs.Accounts.AccountIdRequest)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.GetAccounts(CCSystem.Infrastructure.DTOs.Accounts.AccountsListRequest)" -->
+        <!-- Badly formed XML comment ignored for member "M:CCSystem.API.Controllers.AccountsController.UpdateAccount(System.Int32,CCSystem.Infrastructure.DTOs.Accounts.UpdateAccountRequest)" -->
         <member name="M:CCSystem.API.Controllers.AssignsController.GetListAsync">
             <summary>
              Get list of Assign
              </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.AssignsController.GetById(CCSystem.BLL.DTOs.ScheduleAssign.AssignIdRequest)">
+        <member name="M:CCSystem.API.Controllers.AssignsController.GetById(CCSystem.Infrastructure.DTOs.ScheduleAssign.AssignIdRequest)">
             <summary>
              Get Assign By Id
              </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.AssignsController.PostAssignHousekeeper(CCSystem.BLL.DTOs.ScheduleAssign.PostScheduleAssignRequest)">
+        <member name="M:CCSystem.API.Controllers.AssignsController.PostAssignHousekeeper(CCSystem.Infrastructure.DTOs.ScheduleAssign.PostScheduleAssignRequest)">
             <summary>
             Assign housekeeper in work
              </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.AssignsController.GetAssignsByHousekeeper(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+        <member name="M:CCSystem.API.Controllers.AssignsController.GetAssignsByHousekeeper(CCSystem.Infrastructure.DTOs.Accounts.AccountIdRequest)">
             <summary>
             Retrieves schedule assignments for a given housekeeper.
             </summary>
@@ -59,7 +59,7 @@
             <response code="404">If the housekeeper does not exist.</response>
             <response code="500">If there is an internal server error.</response>
         </member>
-        <member name="M:CCSystem.API.Controllers.AssignsController.ChangeAssignStatus(CCSystem.BLL.DTOs.ScheduleAssign.PatchAssignStatusRequest)">
+        <member name="M:CCSystem.API.Controllers.AssignsController.ChangeAssignStatus(CCSystem.Infrastructure.DTOs.ScheduleAssign.PatchAssignStatusRequest)">
             <summary>
             Updates the status of an assignment.
             </summary>
@@ -70,7 +70,7 @@
             <response code="404">If the assignment does not exist.</response>
             <response code="500">If an internal server error occurs.</response>
         </member>
-        <member name="M:CCSystem.API.Controllers.AssignsController.CompleteAssignmentAndNotifyCustomer(CCSystem.BLL.DTOs.ScheduleAssign.CompleteAssignmentRequest)">
+        <member name="M:CCSystem.API.Controllers.AssignsController.CompleteAssignmentAndNotifyCustomer(CCSystem.Infrastructure.DTOs.ScheduleAssign.CompleteAssignmentRequest)">
             <summary>
             Completes an assignment and notifies the customer via email.
             </summary>
@@ -81,7 +81,7 @@
             <response code="404">If the assignment or booking detail is not found.</response>
             <response code="500">If an internal server error occurs.</response>
         </member>
-        <member name="M:CCSystem.API.Controllers.AssignsController.ConfirmAssignment(CCSystem.BLL.DTOs.ScheduleAssign.ConfirmAssignmentRequest)">
+        <member name="M:CCSystem.API.Controllers.AssignsController.ConfirmAssignment(CCSystem.Infrastructure.DTOs.ScheduleAssign.ConfirmAssignmentRequest)">
             <summary>
             Confirms the completion of an assignment by the customer.
             </summary>
@@ -92,7 +92,7 @@
             <response code="404">If the assignment does not exist.</response>
             <response code="500">If an internal server error occurs.</response>
         </member>
-        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.BLL.DTOs.Accounts.AccountRegisterRequest)">
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.Infrastructure.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.
             </summary>
@@ -121,7 +121,7 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
             <exception cref="T:System.Exception">Throw Error about the system.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostLoginAsync(CCSystem.BLL.DTOs.Accounts.AccountLoginRequest)">
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostLoginAsync(CCSystem.Infrastructure.DTOs.Accounts.AccountLoginRequest)">
              <summary>
              Login to access into the system by your account.
              </summary>
@@ -149,7 +149,7 @@
              <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
              <exception cref="T:System.Exception">Throw Error about the system.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostVerifyEmail(CCSystem.BLL.DTOs.Accounts.EmailVerificationRequest)">
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostVerifyEmail(CCSystem.Infrastructure.DTOs.Accounts.EmailVerificationRequest)">
              <summary>
              Verify email before resetting password.
              </summary>
@@ -173,7 +173,7 @@
              <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
              <exception cref="T:System.Exception">Throw Error about the system.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostConfirmOTPCode(CCSystem.BLL.DTOs.Accounts.OTPCodeVerificationRequest)">
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostConfirmOTPCode(CCSystem.Infrastructure.DTOs.Accounts.OTPCodeVerificationRequest)">
              <summary>
              Compare sent OTP Code in the system with receiver's OTP Code. 
              </summary>
@@ -200,7 +200,7 @@
              <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw Error about request data that are not found.</exception>
              <exception cref="T:System.Exception">Throw Error about the system.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PutResetPasswordAsync(CCSystem.BLL.DTOs.Accounts.ResetPasswordRequest)">
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PutResetPasswordAsync(CCSystem.Infrastructure.DTOs.Accounts.ResetPasswordRequest)">
              <summary>
              A new password will be updated after the email is verified before.
              </summary>
@@ -226,7 +226,7 @@
              <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw Error about request data and logic bussiness.</exception>
              <exception cref="T:System.Exception">Throw Error about the system.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostReGenerateTokensAsync(CCSystem.BLL.DTOs.AccountTokens.AccountTokenRequest)">
+        <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostReGenerateTokensAsync(CCSystem.Infrastructure.DTOs.AccountTokens.AccountTokenRequest)">
              <summary>
              Re-generate pair token from the old pair token that are provided by the MBKC system before.
              </summary>
@@ -253,7 +253,7 @@
              <exception cref="T:CCSystem.BLL.Exceptions.BadRequestException">Throw Error about request data and logic bussiness.</exception>
              <exception cref="T:System.Exception">Throw Error about the system.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailByIdAsync(CCSystem.BLL.DTOs.BookingDetails.BookingDetailIdRequest)">
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailByIdAsync(CCSystem.Infrastructure.DTOs.BookingDetails.BookingDetailIdRequest)">
             <summary>
             Retrieves detailed information of a booking detail by its Id.
             </summary>
@@ -267,7 +267,7 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no booking detail exists with the provided Id.</exception>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailByBookingId(CCSystem.BLL.DTOs.Bookings.BookingIdRequest)">
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailByBookingId(CCSystem.Infrastructure.DTOs.Bookings.BookingIdRequest)">
             <summary>
             Get detailed information from a booking Id.
             </summary>
@@ -293,7 +293,7 @@
             Lấy danh sách BookingDetails theo ServiceDetailId
             </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.BookingDetailsController.RescheduleBookingDetail(System.Int32,CCSystem.BLL.DTOs.BookingDetails.RescheduleRequest)">
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.RescheduleBookingDetail(System.Int32,CCSystem.Infrastructure.DTOs.BookingDetails.RescheduleRequest)">
             <summary>
             API để đặt lại lịch hẹn của Booking Detail.
             </summary>
@@ -301,7 +301,7 @@
             <param name="request">Yêu cầu đặt lại lịch.</param>
             <returns>Trả về thông tin đặt lại lịch.</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.BookingDetailsController.ConfirmReschedule(System.Int32,CCSystem.BLL.DTOs.BookingDetails.ConfirmRescheduleRequest)">
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.ConfirmReschedule(System.Int32,CCSystem.Infrastructure.DTOs.BookingDetails.ConfirmRescheduleRequest)">
             <summary>
             API để xác nhận việc đặt lại lịch hẹn.
             </summary>
@@ -309,7 +309,7 @@
             <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
             <returns>Trả về trạng thái xác nhận.</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.BookingsController.CreateBookingWithDetailsAsync(CCSystem.BLL.DTOs.Bookings.PostBookingRequest)">
+        <member name="M:CCSystem.API.Controllers.BookingsController.CreateBookingWithDetailsAsync(CCSystem.Infrastructure.DTOs.Bookings.PostBookingRequest)">
             <summary>
             Create a booking along with its booking details.
             </summary>
@@ -341,7 +341,7 @@
             <response code="404">Not found error if customer or booking detail not found.</response>
             <response code="500">Internal server error.</response>
         </member>
-        <member name="M:CCSystem.API.Controllers.BookingsController.GetBookingByIdAsync(CCSystem.BLL.DTOs.Bookings.BookingIdRequest)">
+        <member name="M:CCSystem.API.Controllers.BookingsController.GetBookingByIdAsync(CCSystem.Infrastructure.DTOs.Bookings.BookingIdRequest)">
             <summary>
             Retrieves detailed information of a booking by its Id.
             </summary>
@@ -355,7 +355,7 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no booking exists with the provided Id.</exception>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.BookingsController.GetBookingsByCustomer(CCSystem.BLL.DTOs.Accounts.AccountIdRequest)">
+        <member name="M:CCSystem.API.Controllers.BookingsController.GetBookingsByCustomer(CCSystem.Infrastructure.DTOs.Accounts.AccountIdRequest)">
             <summary>
             Get Bookings by Customer Id
             </summary>
@@ -398,12 +398,12 @@
             Get category by ID.
             </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.CategoryController.CreateCategory(CCSystem.BLL.DTOs.Category.CategoryRequest)">
+        <member name="M:CCSystem.API.Controllers.CategoryController.CreateCategory(CCSystem.Infrastructure.DTOs.Category.CategoryRequest)">
             <summary>
             Create a new category.
             </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.CategoryController.UpdateCategory(System.Int32,CCSystem.BLL.DTOs.Category.CategoryRequest)">
+        <member name="M:CCSystem.API.Controllers.CategoryController.UpdateCategory(System.Int32,CCSystem.Infrastructure.DTOs.Category.CategoryRequest)">
             <summary>
             Update a category.
             </summary>
@@ -415,7 +415,7 @@
             <param name="id">Category Id</param>
             <returns>No content</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.CategoryController.GetSearchCategoryAsync(CCSystem.BLL.DTOs.Category.SearchCategoryRequest)">
+        <member name="M:CCSystem.API.Controllers.CategoryController.GetSearchCategoryAsync(CCSystem.Infrastructure.DTOs.Category.SearchCategoryRequest)">
             <summary>
             Search categories
             </summary>
@@ -427,7 +427,7 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw error if related data are not found.</exception>
             <exception cref="T:System.Exception">Throw error for unexpected system issues.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.PaymentController.CreatePaymentUrl(CCSystem.BLL.DTOs.Payments.CreatePaymentRequest)">
+        <member name="M:CCSystem.API.Controllers.PaymentController.CreatePaymentUrl(CCSystem.Infrastructure.DTOs.Payments.CreatePaymentRequest)">
             <summary>
             Tạo url thanh toán
             </summary>
@@ -461,7 +461,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.PaymentController.UpdatePaymentWithBooking(System.Int32,CCSystem.BLL.DTOs.Payments.PutPaymentWithBooking)">
+        <member name="M:CCSystem.API.Controllers.PaymentController.UpdatePaymentWithBooking(System.Int32,CCSystem.Infrastructure.DTOs.Payments.PutPaymentWithBooking)">
             <summary>
             Update payment details and synchronize with the corresponding booking.
             </summary>
@@ -473,7 +473,7 @@
             <response code="404">Payment or booking not found.</response>
             <response code="500">An internal server error occurred.</response>
         </member>
-        <member name="M:CCSystem.API.Controllers.PromotionController.#ctor(CCSystem.DAL.Repositories.IPromotionService,FluentValidation.IValidator{CCSystem.BLL.DTOs.Promotions.PostPromotionRequest},FluentValidation.IValidator{CCSystem.BLL.DTOs.Promotions.PutPromotionRequest})">
+        <member name="M:CCSystem.API.Controllers.PromotionController.#ctor(CCSystem.DAL.Repositories.IPromotionService,FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.Promotions.PostPromotionRequest},FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.Promotions.PutPromotionRequest})">
             <summary>
             Controller for managing promotions.
             </summary>
@@ -491,13 +491,13 @@
             </summary>
             
         </member>
-        <member name="M:CCSystem.API.Controllers.PromotionController.CreatePromotion(CCSystem.BLL.DTOs.Promotions.PostPromotionRequest)">
+        <member name="M:CCSystem.API.Controllers.PromotionController.CreatePromotion(CCSystem.Infrastructure.DTOs.Promotions.PostPromotionRequest)">
             <summary>
             Create a promotion.
             </summary>  
             
         </member>
-        <member name="M:CCSystem.API.Controllers.PromotionController.UpdatePromotion(System.String,CCSystem.BLL.DTOs.Promotions.PutPromotionRequest)">
+        <member name="M:CCSystem.API.Controllers.PromotionController.UpdatePromotion(System.String,CCSystem.Infrastructure.DTOs.Promotions.PutPromotionRequest)">
             <summary>
             Update a promotion.
             </summary>
@@ -514,7 +514,7 @@
             Controller quản lý đánh giá (Review).
             </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.ReviewController.#ctor(CCSystem.BLL.Services.IReviewService,FluentValidation.IValidator{CCSystem.BLL.DTOs.Review.ReviewRequest},AutoMapper.IMapper)">
+        <member name="M:CCSystem.API.Controllers.ReviewController.#ctor(CCSystem.BLL.Services.IReviewService,FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.Review.ReviewRequest},AutoMapper.IMapper)">
             <summary>
             Khởi tạo ReviewController với các dịch vụ liên quan.
             </summary>
@@ -549,14 +549,14 @@
             <param name="detailId">ID của chi tiết đặt lịch</param>
             <returns>Danh sách đánh giá nếu có, hoặc lỗi 404 nếu không tìm thấy</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.ReviewController.CreateReview(CCSystem.BLL.DTOs.Review.ReviewRequest)">
+        <member name="M:CCSystem.API.Controllers.ReviewController.CreateReview(CCSystem.Infrastructure.DTOs.Review.ReviewRequest)">
             <summary>
             Tạo một đánh giá mới.
             </summary>
             <param name="reviewRequest">Thông tin đánh giá</param>
             <returns>Trả về NoContent nếu thành công</returns>
         </member>
-        <member name="M:CCSystem.API.Controllers.ReviewController.UpdateReview(System.Int32,CCSystem.BLL.DTOs.Review.ReviewRequest)">
+        <member name="M:CCSystem.API.Controllers.ReviewController.UpdateReview(System.Int32,CCSystem.Infrastructure.DTOs.Review.ReviewRequest)">
             <summary>
             Cập nhật đánh giá theo ID.
             </summary>
@@ -576,7 +576,7 @@
             Controller for managing service details.
             </summary>
         </member>
-        <member name="M:CCSystem.API.Controllers.ServiceDetailController.#ctor(CCSystem.BLL.Services.Interfaces.IServiceDetailService,FluentValidation.IValidator{CCSystem.BLL.DTOs.ServiceDetails.PostServiceDetailRequest},FluentValidation.IValidator{CCSystem.BLL.DTOs.ServiceDetails.PutServiceDetailRequest})">
+        <member name="M:CCSystem.API.Controllers.ServiceDetailController.#ctor(CCSystem.BLL.Services.Interfaces.IServiceDetailService,FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.ServiceDetails.PostServiceDetailRequest},FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.ServiceDetails.PutServiceDetailRequest})">
             <summary>
             Controller for managing service details.
             </summary>
@@ -588,13 +588,13 @@
             
             <param name="id">The Id of the service detail to retrieve.</param>
         </member>
-        <member name="M:CCSystem.API.Controllers.ServiceDetailController.CreateServiceDetail(CCSystem.BLL.DTOs.ServiceDetails.PostServiceDetailRequest)">
+        <member name="M:CCSystem.API.Controllers.ServiceDetailController.CreateServiceDetail(CCSystem.Infrastructure.DTOs.ServiceDetails.PostServiceDetailRequest)">
              <summary>
              Create a service detail.
              </summary>
             
         </member>
-        <member name="M:CCSystem.API.Controllers.ServiceDetailController.UpdateServiceDetail(System.Int32,CCSystem.BLL.DTOs.ServiceDetails.PutServiceDetailRequest)">
+        <member name="M:CCSystem.API.Controllers.ServiceDetailController.UpdateServiceDetail(System.Int32,CCSystem.Infrastructure.DTOs.ServiceDetails.PutServiceDetailRequest)">
             <summary>
             Update a service detail.
             </summary>
@@ -606,7 +606,7 @@
             </summary>
             
         </member>
-        <member name="M:CCSystem.API.Controllers.ServicesController.PostCreateServiceAsync(CCSystem.BLL.DTOs.Services.PostServiceRequest)">
+        <member name="M:CCSystem.API.Controllers.ServicesController.PostCreateServiceAsync(CCSystem.Infrastructure.DTOs.Services.PostServiceRequest)">
             <summary>
             Create new service.
             </summary>
@@ -635,7 +635,7 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Throw error when related data are not found.</exception>
             <exception cref="T:System.Exception">Throw error about the system.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.ServicesController.GetSearchServiceAsync(CCSystem.BLL.DTOs.Services.SearchServiceRequest)">
+        <member name="M:CCSystem.API.Controllers.ServicesController.GetSearchServiceAsync(CCSystem.Infrastructure.DTOs.Services.SearchServiceRequest)">
              <summary>
              Search services based on given criteria.
              </summary>
@@ -674,7 +674,7 @@
             <response code="500">An error occurred in the system.</response>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.ServicesController.GetServiceByIdAsync(CCSystem.BLL.DTOs.Services.ServiceIdRequest)">
+        <member name="M:CCSystem.API.Controllers.ServicesController.GetServiceByIdAsync(CCSystem.Infrastructure.DTOs.Services.ServiceIdRequest)">
             <summary>
             Retrieves detailed information of a service by its Id.
             </summary>
@@ -688,7 +688,7 @@
             <exception cref="T:CCSystem.BLL.Exceptions.NotFoundException">Thrown when no service exists with the provided Id.</exception>
             <exception cref="T:System.Exception">Throws a system exception if an error occurs.</exception>
         </member>
-        <member name="M:CCSystem.API.Controllers.ServicesController.GetServicesByCategoryIdAsync(CCSystem.BLL.DTOs.Category.CategoryIdRequest)">
+        <member name="M:CCSystem.API.Controllers.ServicesController.GetServicesByCategoryIdAsync(CCSystem.Infrastructure.DTOs.Category.CategoryIdRequest)">
              <summary>
              Retrieves a list of services based on the specified category id.
              </summary>
@@ -710,13 +710,13 @@
             </summary>
             <param name="reportService">Service báo cáo</param>
         </member>
-        <member name="M:ReportsController.CreateReportAsync(CCSystem.BLL.DTOs.Report.ReportRequest)">
+        <member name="M:ReportsController.CreateReportAsync(CCSystem.Infrastructure.DTOs.Report.ReportRequest)">
             <summary>
             Tạo một báo cáo mới.
             </summary>
             <param name="request">Thông tin báo cáo</param>
         </member>
-        <member name="M:ReportsController.UpdateReport(System.Int32,CCSystem.BLL.DTOs.Report.ReportRequest)">
+        <member name="M:ReportsController.UpdateReport(System.Int32,CCSystem.Infrastructure.DTOs.Report.ReportRequest)">
             <summary>
             Cập nhật báo cáo theo ID.
             </summary>

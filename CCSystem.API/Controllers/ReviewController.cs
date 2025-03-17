@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CCSystem.BLL.DTOs.Review;
+using CCSystem.Infrastructure.DTOs.Review;
 using CCSystem.BLL.Services;
 using CCSystem.API.Constants;
 using FluentValidation;

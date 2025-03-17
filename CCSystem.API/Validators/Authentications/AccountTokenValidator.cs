@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.AccountTokens;
+﻿using CCSystem.Infrastructure.DTOs.AccountTokens;
 using FluentValidation;
 
 namespace CCSystem.API.Validators.Authentications

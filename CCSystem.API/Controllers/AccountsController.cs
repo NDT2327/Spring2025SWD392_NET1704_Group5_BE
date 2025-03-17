@@ -1,7 +1,7 @@
 ﻿using CCSystem.API.Authorization;
 using CCSystem.API.Constants;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;

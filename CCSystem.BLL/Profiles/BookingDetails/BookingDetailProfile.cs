@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CCSystem.BLL.DTOs.BookingDetails;
+using CCSystem.Infrastructure.DTOs.BookingDetails;
 using CCSystem.DAL.Models;
 using System;
 using System.Collections.Generic;

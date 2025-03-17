@@ -1,8 +1,8 @@
 ﻿using Azure.Core;
 using CCSystem.API.Constants;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Payments;
-using CCSystem.BLL.DTOs.Services;
+using CCSystem.Infrastructure.DTOs.Payments;
+using CCSystem.Infrastructure.DTOs.Services;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Implementations;

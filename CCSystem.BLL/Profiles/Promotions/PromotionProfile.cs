@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CCSystem.BLL.DTOs.Promotions;
+using CCSystem.Infrastructure.DTOs.Promotions;
 using CCSystem.DAL.Models;
 using System;
 using System.Collections.Generic;

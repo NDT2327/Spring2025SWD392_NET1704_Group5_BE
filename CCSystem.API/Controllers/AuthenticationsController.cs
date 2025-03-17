@@ -1,9 +1,9 @@
 ﻿using CCSystem.API.Authorization;
 using CCSystem.API.Constants;
 using CCSystem.BLL.Constants;
-using CCSystem.BLL.DTOs.Accounts;
-using CCSystem.BLL.DTOs.AccountTokens;
-using CCSystem.BLL.DTOs.JWTs;
+using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Infrastructure.DTOs.AccountTokens;
+using CCSystem.Infrastructure.DTOs.JWTs;
 using CCSystem.BLL.Errors;
 using CCSystem.BLL.Exceptions;
 using CCSystem.BLL.Services.Interfaces;
@@ -28,11 +28,11 @@ namespace CCSystem.API.Controllers
         private IValidator<AccountRegisterRequest> _accountRegisterRequestValidator;
         private IValidator<EmailVerificationRequest> _emailVerificationValidator;
         private IValidator<OTPCodeVerificationRequest> _otpCodeVerificationValidator;
-        private IValidator<BLL.DTOs.Accounts.ResetPasswordRequest> _resetPasswordValidator;
+        private IValidator<CCSystem.Infrastructure.DTOs.Accounts.ResetPasswordRequest> _resetPasswordValidator;
 
 
         public AuthenticationsController(IAuthenticationService authenticationService, IOptions<JWTAuth> jwtAuthOptions,
-            IValidator<AccountLoginRequest> accountRequestValidator, IValidator<AccountTokenRequest> accountTokenRequestValidator, IValidator<AccountRegisterRequest> accountRegisterRequestValidator, IValidator<EmailVerificationRequest> emailVerificationValidator, IValidator<OTPCodeVerificationRequest> otpCodeVerificationValidator, IValidator<BLL.DTOs.Accounts.ResetPasswordRequest> resetPasswordValidator)
+            IValidator<AccountLoginRequest> accountRequestValidator, IValidator<AccountTokenRequest> accountTokenRequestValidator, IValidator<AccountRegisterRequest> accountRegisterRequestValidator, IValidator<EmailVerificationRequest> emailVerificationValidator, IValidator<OTPCodeVerificationRequest> otpCodeVerificationValidator, IValidator<CCSystem.Infrastructure.DTOs.Accounts.ResetPasswordRequest> resetPasswordValidator)
         {
             this._authenticationService = authenticationService;
             this._jwtAuthOptions = jwtAuthOptions;
@@ -275,7 +275,7 @@ namespace CCSystem.API.Controllers
         [Consumes(MediaTypeConstant.ApplicationJson)]
         [Produces(MediaTypeConstant.ApplicationJson)]
         [HttpPut(APIEndPointConstant.Authentication.PasswordResetation)]
-        public async Task<IActionResult> PutResetPasswordAsync([FromBody] BLL.DTOs.Accounts.ResetPasswordRequest resetPassword)
+        public async Task<IActionResult> PutResetPasswordAsync([FromBody] CCSystem.Infrastructure.DTOs.Accounts.ResetPasswordRequest resetPassword)
         {
             ValidationResult validationResult = await this._resetPasswordValidator.ValidateAsync(resetPassword);
             if (validationResult.IsValid == false)

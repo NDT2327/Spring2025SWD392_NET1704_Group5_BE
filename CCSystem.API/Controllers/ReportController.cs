@@ -1,5 +1,5 @@
 ﻿using CCSystem.API.Constants;
-using CCSystem.BLL.DTOs.Report;
+using CCSystem.Infrastructure.DTOs.Report;
 using CCSystem.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using static CCSystem.BLL.Constants.MessageConstant;

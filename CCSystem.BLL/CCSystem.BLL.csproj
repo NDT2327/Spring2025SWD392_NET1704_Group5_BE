@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CCSystem.DAL\CCSystem.DAL.csproj" />
+    <ProjectReference Include="..\CCSystem.Infrastructure\CCSystem.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

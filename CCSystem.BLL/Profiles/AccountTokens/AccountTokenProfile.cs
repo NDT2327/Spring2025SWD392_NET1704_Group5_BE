@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CCSystem.BLL.DTOs.AccountTokens;
+using CCSystem.Infrastructure.DTOs.AccountTokens;
 using CCSystem.DAL.Redis.Models;
 using System;
 using System.Collections.Generic;

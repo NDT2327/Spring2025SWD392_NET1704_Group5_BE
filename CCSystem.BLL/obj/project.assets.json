@@ -3882,6 +3882,20 @@
         "runtime": {
           "bin/placeholder/CCSystem.DAL.dll": {}
         }
+      },
+      "CCSystem.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "CCSystem.DAL": "1.0.0",
+          "Microsoft.AspNetCore.Mvc": "2.3.0"
+        },
+        "compile": {
+          "bin/placeholder/CCSystem.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CCSystem.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -10712,6 +10726,11 @@
       "type": "project",
       "path": "../CCSystem.DAL/CCSystem.DAL.csproj",
       "msbuildProject": "../CCSystem.DAL/CCSystem.DAL.csproj"
+    },
+    "CCSystem.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../CCSystem.Infrastructure/CCSystem.Infrastructure.csproj",
+      "msbuildProject": "../CCSystem.Infrastructure/CCSystem.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -10719,6 +10738,7 @@
       "AutoMapper >= 12.0.1",
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.1",
       "CCSystem.DAL >= 1.0.0",
+      "CCSystem.Infrastructure >= 1.0.0",
       "FluentValidation >= 11.11.0",
       "FluentValidation.AspNetCore >= 11.3.0",
       "Magick.NET.Core >= 14.4.0",
@@ -10755,6 +10775,9 @@
           "projectReferences": {
             "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj": {
               "projectPath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.DAL\\CCSystem.DAL.csproj"
+            },
+            "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.Infrastructure\\CCSystem.Infrastructure.csproj": {
+              "projectPath": "D:\\FPTU\\Spring2025\\SWD392\\Spring2025SWD392_NET1704_Group5_BE\\CCSystem.Infrastructure\\CCSystem.Infrastructure.csproj"
             }
           }
         }

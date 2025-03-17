@@ -1,4 +1,4 @@
-﻿using CCSystem.BLL.DTOs.Payments;
+﻿using CCSystem.Infrastructure.DTOs.Payments;
 using CCSystem.DAL.Enums;
 using FluentValidation;
 

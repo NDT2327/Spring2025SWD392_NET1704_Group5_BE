@@ -14,3 +14,5 @@ D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\De
 D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\refint\CCSystem.BLL.dll
 D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\CCSystem.BLL.pdb
 D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\obj\Debug\net8.0\ref\CCSystem.BLL.dll
+D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\bin\Debug\net8.0\CCSystem.Infrastructure.dll
+D:\FPTU\Spring2025\SWD392\Spring2025SWD392_NET1704_Group5_BE\CCSystem.BLL\bin\Debug\net8.0\CCSystem.Infrastructure.pdb
