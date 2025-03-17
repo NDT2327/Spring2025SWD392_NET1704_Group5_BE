@@ -180,12 +180,12 @@ namespace CCSystem.API.Controllers
                 return BadRequest(new { message = AccountMessage.InvalidRequest });
             }
 
-            var validationResult = await _updateAccountValidator.ValidateAsync(request);
-            if (!validationResult.IsValid)
-            {
-                string errors = ErrorUtil.GetErrorsString(validationResult);
-                return BadRequest(new { message = errors });
-            }
+            //var validationResult = await _updateAccountValidator.ValidateAsync(request);
+            //if (!validationResult.IsValid)
+            //{
+            //    string errors = ErrorUtil.GetErrorsString(validationResult);
+            //    return BadRequest(new { message = errors });
+            //}
 
             try
             {

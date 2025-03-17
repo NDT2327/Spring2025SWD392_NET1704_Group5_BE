@@ -143,7 +143,7 @@ namespace CCSystem.API.Controllers
         /// <param name="id">ID của Booking Detail.</param>
         /// <param name="request">Yêu cầu đặt lại lịch.</param>
         /// <returns>Trả về thông tin đặt lại lịch.</returns>
-        [HttpPost(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
+        [HttpPut(APIEndPointConstant.BookingDetail.RescheduleBookingDetail)]
         public async Task<IActionResult> RescheduleBookingDetail(int id, [FromBody] RescheduleRequest request)
         {
             var response = await _bookingDetailService.RescheduleBookingDetail(id, request);
@@ -156,7 +156,7 @@ namespace CCSystem.API.Controllers
 		/// <param name="id">ID của Booking Detail.</param>
 		/// <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
 		/// <returns>Trả về trạng thái xác nhận.</returns>
-		[HttpPost(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
+		[HttpPut(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
         public async Task<IActionResult> ConfirmReschedule(int id, [FromBody] ConfirmRescheduleRequest request)
         {
             var response = await _bookingDetailService.ConfirmReschedule(id, request);

@@ -8,7 +8,7 @@ namespace CCSystem.BLL.Services
     {
         Task CreateReportAsync(ReportRequest request);
         Task UpdateReportAsync(int id, ReportRequest request);
-        Task<bool> DeleteReportAsync(int id);
+        Task<bool> DeleteReportAsync(int id, string newStatus);
         Task<ReportResponse> GetReportByIdAsync(int id);
         Task<List<ReportResponse>> GetByAssignIdAsync(int assignId);
         Task<IEnumerable<ReportResponse>> GetAllReportsAsync();
