@@ -88,8 +88,13 @@ namespace CCSystem.API.Controllers
             });
         }
         #endregion
-
-        [HttpPost(APIEndPointConstant.Service.UpdateServiceEndpoint)]
+        /// <summary>
+        /// Cập nhật thông tin dịch vụ dựa trên ID.
+        /// </summary>
+        /// <param name="id">ID của dịch vụ cần cập nhật.</param>
+        /// <param name="request">Dữ liệu mới của dịch vụ.</param>
+        /// <returns>Trả về kết quả thành công hoặc lỗi.</returns>
+        [HttpPut(APIEndPointConstant.Service.UpdateServiceEndpoint)]
         public async Task<IActionResult> UpdateService(int id, [FromForm] PostServiceRequest request)
         {
             try
@@ -121,12 +126,17 @@ namespace CCSystem.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = ex.Message });
             }
         }
-        [HttpPost(APIEndPointConstant.Service.DeleteServiceEndpoint)]
-        public async Task<IActionResult> DeleteService(int serviceid)
+        /// <summary>
+        /// Vô hiệu hóa dịch vụ bằng cách đặt IsActive = false.
+        /// </summary>
+        /// <param name="id">ID của dịch vụ cần vô hiệu hóa.</param>
+        /// <returns>Trả về kết quả thành công hoặc lỗi.</returns>
+        [HttpPut(APIEndPointConstant.Service.DeleteServiceEndpoint)]
+        public async Task<IActionResult> DeleteService(int id)
         {
             try
             {
-                await _serviceHomeService.DeleteServiceAsync(serviceid);
+                await _serviceHomeService.DeleteServiceAsync(id);
                 return Ok(new { Message = "Service deleted successfully" });
             }
             catch (NotFoundException ex)
