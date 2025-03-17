@@ -120,7 +120,7 @@ namespace CCSystem.DAL.Repositories
             }
 
             service.IsActive = false;
-            service.UpdatedDate = DateTime.UtcNow;
+            service.UpdatedDate = DateTime.UtcNow.AddHours(7);
 
             _context.Services.Update(service);
             await _context.SaveChangesAsync();

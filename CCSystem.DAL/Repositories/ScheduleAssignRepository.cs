@@ -77,5 +77,11 @@ namespace CCSystem.DAL.Repositories
                 .ToListAsync();
         }
 
-    }
+		public async Task<List<ScheduleAssignment>> GetByStatusAsync(string status)
+		{
+			return await _context.ScheduleAssignments.Where(sa => sa.Status == status).ToListAsync();
+		}
+
+
+	}
 }

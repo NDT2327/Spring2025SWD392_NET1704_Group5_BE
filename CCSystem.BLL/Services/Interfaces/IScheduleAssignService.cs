@@ -18,5 +18,9 @@ namespace CCSystem.BLL.Services.Interfaces
         Task ChangeAssignStatus(PatchAssignStatusRequest request);
         Task CompleteAssignmentAndNotifyCustomer(CompleteAssignmentRequest request);
         Task ConfirmAssignment(ConfirmAssignmentRequest request);
-    }
+        Task RequestCancel(CancelAssignmentRequest request);
+        Task<List<ScheduleAssignmentResponse>> GetCancelRequests();
+        Task ConfirmCancelRequest(ConfirmCancelAssignmentRequest request);
+
+	}
 }

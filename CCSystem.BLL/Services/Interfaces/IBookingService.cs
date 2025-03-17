@@ -12,11 +12,14 @@ namespace CCSystem.BLL.Services.Interfaces
     {
         Task<Booking> GetBooking(int id);
         Task<BookingResponse> GetBookingById(int id);
+        Task<List<BookingResponse>> GetAllBookingAsync();
         Task UpdateBookingAsync(Booking booking);
         Task<BookingResponse> CreateBookingWithDetailsAsync(PostBookingRequest postBookingRequest);
         Task<List<BookingResponse>> GetBookingsByCustomer(int customerId);
         Task<BookingResponse> GetByPromotionCodeAsync(string promotionCode);
         Task<bool> RequestCancelBooking(int bookingId, int customerId);
         Task<bool> ProcessRefundBooking(int bookingId, int staffId);
-    }
+        Task<List<BookingResponse>> GetCancelRequestedBookingsAsync();
+
+	}
 }

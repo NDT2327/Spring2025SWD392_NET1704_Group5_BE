@@ -11,6 +11,7 @@
           "AutoMapper": "12.0.1",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "CCSystem.DAL": "1.0.0",
+          "CCSystem.Infrastructure": "1.0.0",
           "FluentValidation": "11.11.0",
           "FluentValidation.AspNetCore": "11.3.0",
           "Magick.NET.Core": "14.4.0",
@@ -2116,6 +2117,18 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "CCSystem.Infrastructure/1.0.0": {
+        "dependencies": {
+          "CCSystem.DAL": "1.0.0",
+          "Microsoft.AspNetCore.Mvc": "2.3.0"
+        },
+        "runtime": {
+          "CCSystem.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -3638,6 +3651,11 @@
       "hashPath": "vnpay.net.8.5.0.nupkg.sha512"
     },
     "CCSystem.DAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CCSystem.Infrastructure/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

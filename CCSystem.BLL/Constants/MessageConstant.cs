@@ -100,8 +100,10 @@ namespace CCSystem.BLL.Constants
             public const string BookingIsPaid = "Booking is paid";
             public const string BookingIsExpired = "All services in Booking are expired, cannot be canceled!";
             public const string IsNotRequestCanceled = "Booking has not been requested to be canceled!";
+            public const string NoCancelRequestsFound = "No CancelRequests has been found";
 
-        }
+
+		}
 
         public static class ScheduleAssign
         {
@@ -114,7 +116,12 @@ namespace CCSystem.BLL.Constants
             public const string NotExistHousekeeper = "Housekeeper does not exist or is not active.";
             public const string InvalidRole = "Role is not allowed to assign work.";
             public const string MissingServiceDetail = "Service detail or duration is missing.";
-        }
+			public const string RequestCancelNotAllowed = "Cannot request cancellation for this assignment.";
+			public const string AssignmentNotInCancelRequest = "This assignment is not in cancellation request status.";
+			public const string UnauthorizedCancelRequest = "You are not allowed to cancel this assignment.";
+			public const string CancelRequestSubmitted = "Cancellation request submitted successfully.";
+			public const string CancelRequestProcessed = "Cancellation request processed successfully.";
+		}
 
         public static class PaymentMessage
         {

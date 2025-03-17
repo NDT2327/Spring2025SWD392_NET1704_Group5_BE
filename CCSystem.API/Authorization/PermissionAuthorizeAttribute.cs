@@ -67,7 +67,7 @@ namespace CCSystem.API.Authorization
                 }
                 var expiredClaim = long.Parse(context.HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
                 var expiredDate = DateUtil.ConvertUnixTimeToDateTime(expiredClaim);
-                if (expiredDate <= DateTime.UtcNow)
+                if (expiredDate <= DateTime.UtcNow.AddHours(7))
                 {
                     context.Result = new ObjectResult("Unauthorized")
                     {

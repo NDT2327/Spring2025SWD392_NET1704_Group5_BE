@@ -168,7 +168,7 @@ namespace CCSystem.BLL.Services.Implementations
                 //Check 3: check accessToken expried?
                 var utcExpiredDate = long.Parse(tokenVerification.Claims.First(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
                 var expiredDate = DateUtil.ConvertUnixTimeToDateTime(utcExpiredDate);
-                if (expiredDate > DateTime.UtcNow)
+                if (expiredDate > DateTime.UtcNow.AddHours(7))
                 {
                     throw new BadRequestException(MessageConstant.ReGenerationMessage.NotExpiredAccessToken);
                 }
@@ -199,7 +199,7 @@ namespace CCSystem.BLL.Services.Implementations
                 }
 
                 //Check 6: refresh token is expired
-                if (accountTokenRedisModel.ExpiredDate < DateTime.UtcNow)
+                if (accountTokenRedisModel.ExpiredDate < DateTime.UtcNow.AddHours(7))
                 {
                     throw new BadRequestException(MessageConstant.ReGenerationMessage.ExpiredRefreshToken);
                 }
@@ -244,7 +244,7 @@ namespace CCSystem.BLL.Services.Implementations
                         new Claim("role", accountResponse.Role),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddHours(1),
+                    Expires = DateTime.UtcNow.AddHours(7).AddHours(1),
                     SigningCredentials = credentials
                 };
 
@@ -256,7 +256,7 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     JWTId = token.Id,
                     RefreshToken = refreshToken,
-                    ExpiredDate = DateTime.UtcNow.AddDays(5),
+                    ExpiredDate = DateTime.UtcNow.AddHours(7).AddDays(5),
                     AccountId = accountResponse.AccountId
                 };
 

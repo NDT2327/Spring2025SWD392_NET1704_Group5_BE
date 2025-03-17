@@ -41,6 +41,16 @@ namespace CCSystem.DAL.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("avatar");
 
+                    b.Property<string>("BankAccountNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("bankAccountNumber");
+
+                    b.Property<string>("BankName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("bankName");
+
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")

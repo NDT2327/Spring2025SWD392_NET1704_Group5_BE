@@ -61,8 +61,8 @@ namespace CCSystem.BLL.Services.Implementations
                     Duration = request.Duration,
                     Price = request.Price,
                     IsActive = request.IsActive ?? true,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.UtcNow.AddHours(7),
+                    UpdatedDate = DateTime.UtcNow.AddHours(7),
                 };
 
                 await _unitOfWork.ServiceRepository.CreateServiceAsync(service);
@@ -146,7 +146,7 @@ namespace CCSystem.BLL.Services.Implementations
                 service.Price = request.Price;
                 service.Duration = request.Duration;
                 service.IsActive = request.IsActive ?? true;
-                service.UpdatedDate = DateTime.UtcNow;
+                service.UpdatedDate = DateTime.UtcNow.AddHours(7);
 
                 // Save changes
                 await _unitOfWork.ServiceRepository.Update(service);
@@ -186,7 +186,7 @@ namespace CCSystem.BLL.Services.Implementations
             }
 
             service.IsActive = false;
-            service.UpdatedDate = DateTime.UtcNow;
+            service.UpdatedDate = DateTime.UtcNow.AddHours(7);
 
             await _unitOfWork.ServiceRepository.Update(service);
             await _unitOfWork.CommitAsync();

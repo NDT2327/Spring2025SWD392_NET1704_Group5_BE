@@ -92,6 +92,34 @@
             <response code="404">If the assignment does not exist.</response>
             <response code="500">If an internal server error occurs.</response>
         </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.RequestCancel(CCSystem.Infrastructure.DTOs.ScheduleAssign.CancelAssignmentRequest)">
+            <summary>
+            Allows a housekeeper to request cancellation of an assignment.
+            </summary>
+            <param name="request">The request object containing assignment details.</param>
+            <returns>A success message if the request is submitted successfully.</returns>
+            <response code="200">Cancellation request submitted successfully.</response>
+            <response code="400">If the request data is invalid.</response>
+            <response code="500">If an internal server error occurs.</response>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.GetCancelRequests">
+            <summary>
+            Retrieves all cancellation requests made by housekeepers.
+            </summary>
+            <returns>A list of cancellation requests.</returns>
+            <response code="200">Returns the list of cancellation requests.</response>
+            <response code="500">If an internal server error occurs.</response>
+        </member>
+        <member name="M:CCSystem.API.Controllers.AssignsController.ConfirmCancel(CCSystem.Infrastructure.DTOs.ScheduleAssign.ConfirmCancelAssignmentRequest)">
+            <summary>
+            Confirms and processes a housekeeper's cancellation request.
+            </summary>
+            <param name="request">The request object containing cancellation details.</param>
+            <returns>A success message if the cancellation is processed successfully.</returns>
+            <response code="200">Cancellation request processed successfully.</response>
+            <response code="400">If the request data is invalid.</response>
+            <response code="500">If an internal server error occurs.</response>
+        </member>
         <member name="M:CCSystem.API.Controllers.AuthenticationsController.PostRegisterAsync(CCSystem.Infrastructure.DTOs.Accounts.AccountRegisterRequest)">
             <summary>
             Register a new account into the system.
@@ -285,17 +313,23 @@
         </member>
         <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailsByServiceId(System.Int32)">
             <summary>
-            Lấy danh sách BookingDetails theo ServicelId
+            Get list of BookingDetails by ServicelId
             </summary>
         </member>
         <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetBookingDetailsByServiceDetailId(System.Int32)">
             <summary>
-            Lấy danh sách BookingDetails theo ServiceDetailId
+            Get list of BookingDetails by ServiceDetailId
             </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingDetailsController.GetAllBookingDetail">
+            <summary>
+            API lấy danh sách tất cả các chi tiết đặt lịch (BookingDetail).
+            </summary>
+            <returns>Danh sách BookingDetail dưới dạng HTTP 200 OK.</returns>
         </member>
         <member name="M:CCSystem.API.Controllers.BookingDetailsController.RescheduleBookingDetail(System.Int32,CCSystem.Infrastructure.DTOs.BookingDetails.RescheduleRequest)">
             <summary>
-            API để đặt lại lịch hẹn của Booking Detail.
+            Reschedule Booking Detail appointment.
             </summary>
             <param name="detailId">ID của Booking Detail.</param>
             <param name="request">Yêu cầu đặt lại lịch.</param>
@@ -303,7 +337,7 @@
         </member>
         <member name="M:CCSystem.API.Controllers.BookingDetailsController.ConfirmReschedule(System.Int32,CCSystem.Infrastructure.DTOs.BookingDetails.ConfirmRescheduleRequest)">
             <summary>
-            API để xác nhận việc đặt lại lịch hẹn.
+            Confirm rescheduling.
             </summary>
             <param name="detailId">ID của Booking Detail.</param>
             <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
@@ -360,6 +394,12 @@
             Get Bookings by Customer Id
             </summary>
         </member>
+        <member name="M:CCSystem.API.Controllers.BookingsController.GetAllBooking">
+            <summary>
+            API lấy danh sách tất cả các bookings.
+            </summary>
+            <returns>Danh sách bookings dưới dạng HTTP 200 OK.</returns>
+        </member>
         <member name="M:CCSystem.API.Controllers.BookingsController.GetByPromotionCode(System.String)">
             <summary>
             Lấy thông tin đơn đặt chỗ theo mã khuyến mãi (PromotionCode).
@@ -369,13 +409,22 @@
         </member>
         <member name="M:CCSystem.API.Controllers.BookingsController.RequestCancelBooking(System.Int32,System.Int32)">
             <summary>
-            Khách hàng yêu cầu hủy Booking
+            Customer requests to cancel Booking
             </summary>
         </member>
         <member name="M:CCSystem.API.Controllers.BookingsController.ProcessRefundBooking(System.Int32,System.Int32)">
             <summary>
-            Staff xử lý hoàn tiền và xác nhận hủy Booking
+            Staff processes refunds and confirms cancellations
             </summary>
+        </member>
+        <member name="M:CCSystem.API.Controllers.BookingsController.GetCancelRequestedBookings">
+            <summary>
+            Retrieves a list of bookings that are in cancellation requested status.
+            </summary>
+            <returns>A list of cancellation requested bookings.</returns>
+            <response code="200">Cancellation requested bookings returned successfully.</response>
+            <response code="404">No cancellation requested bookings found.</response>
+            <response code="500">If an internal server error occurs.</response>
         </member>
         <member name="T:CCSystem.API.Controllers.CategoryController">
             <summary>
@@ -473,7 +522,7 @@
             <response code="404">Payment or booking not found.</response>
             <response code="500">An internal server error occurred.</response>
         </member>
-        <member name="M:CCSystem.API.Controllers.PromotionController.#ctor(CCSystem.DAL.Repositories.IPromotionService,FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.Promotions.PostPromotionRequest},FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.Promotions.PutPromotionRequest})">
+        <member name="M:CCSystem.API.Controllers.PromotionController.#ctor(CCSystem.BLL.Services.Interfaces.IPromotionService,FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.Promotions.PostPromotionRequest},FluentValidation.IValidator{CCSystem.Infrastructure.DTOs.Promotions.PutPromotionRequest})">
             <summary>
             Controller for managing promotions.
             </summary>

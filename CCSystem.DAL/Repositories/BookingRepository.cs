@@ -43,7 +43,7 @@ namespace CCSystem.DAL.Repositories
             {
                 return await _context.Bookings
                     .Include(b => b.Customer)
-                    .Include(b => b.PromotionCode)
+                    .Include(b => b.PromotionCodeNavigation)
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -92,6 +92,35 @@ namespace CCSystem.DAL.Repositories
                 .FirstOrDefaultAsync(b => b.BookingId == bookingId && b.CustomerId == customerId);
 
         }
+
+        public async Task<List<Booking>> GetAllBookingAsync()
+        {
+            try
+            {
+                return await _context.Bookings
+                    .Include(b => b.Customer)  
+                    .Select(b => new Booking
+                    {
+                        BookingId = b.BookingId,
+                        CustomerId = b.CustomerId,
+                        Customer = new Account { Email = b.Customer.Email },
+                        PromotionCode = b.PromotionCode,
+                        BookingDate = b.BookingDate,
+                        TotalAmount = b.TotalAmount,
+                        BookingStatus = b.BookingStatus,
+                        PaymentStatus = b.PaymentStatus,
+                        Notes = b.Notes,
+                        PaymentMethod = b.PaymentMethod
+                    })
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving all bookings", ex);
+            }
+        }
+
+
 
         //public async Task DeleteAsync(int bookingId)
         //{

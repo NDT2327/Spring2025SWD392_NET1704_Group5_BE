@@ -86,7 +86,19 @@ namespace CCSystem.BLL.Services.Implementations
             try
             {
                 var bdetails = await _unitOfWork.BookingDetailRepository.GetActiveBookingDetailAsync();
-                var responses = _mapper.Map<List<BookingDetailResponse>>(bdetails);
+
+				// Lấy thời gian hiện tại dưới dạng DateTime
+				var currentDateTime = DateTime.UtcNow.AddHours(7);
+
+				// Lọc các booking details có thời gian chưa qua
+				var filteredDetails = bdetails.Where(bd =>
+				{
+					// Chuyển ScheduleDate và ScheduleTime thành DateTime để so sánh
+					var scheduleDateTime = bd.ScheduleDate.ToDateTime(bd.ScheduleTime); // Tạo DateTime từ DateOnly và TimeOnly
+					return scheduleDateTime > currentDateTime; // So sánh với thời gian hiện tại
+				}).ToList();
+
+				var responses = _mapper.Map<List<BookingDetailResponse>>(filteredDetails);
                 return responses;
             }
             catch (Exception ex)
@@ -190,6 +202,25 @@ namespace CCSystem.BLL.Services.Implementations
                 ScheduleTime = request.NewTime,
                 Status = "WAITINGCONFIRM"
             };
+        }
+
+        public async Task<List<BookingDetailResponse>> GetAllAsync()
+        {
+            var bookingDetails = await _unitOfWork.BookingDetailRepository.GetAllAsync();
+
+            return bookingDetails.Select(bd => new BookingDetailResponse
+            {
+                DetailId = bd.DetailId,
+                BookingId = bd.BookingId,
+                ServiceId = bd.ServiceId,
+                ScheduleDate = bd.ScheduleDate,
+                ScheduleTime = bd.ScheduleTime,
+                Quantity = bd.Quantity,
+                UnitPrice = bd.UnitPrice,
+                ServiceDetailId = bd.ServiceDetailId,
+                IsAssign = bd.IsAssign,
+                BookdetailStatus = bd.BookdetailStatus
+            }).ToList();
         }
 
         public async Task<ConfirmRescheduleResponse> ConfirmReschedule(int detailId, ConfirmRescheduleRequest request)

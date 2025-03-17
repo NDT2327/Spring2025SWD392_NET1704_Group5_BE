@@ -50,7 +50,7 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     CustomerId = postBookingRequest.CustomerId,
                     PromotionCode = promotionCode,
-                    BookingDate = DateTime.UtcNow,
+                    BookingDate = DateTime.UtcNow.AddHours(7),
                     BookingStatus = BookingEnums.BookingStatus.PENDING.ToString(),
                     PaymentStatus = BookingEnums.PaymentStatus.PENDING.ToString(),
                     Notes = postBookingRequest.Notes,
@@ -103,7 +103,7 @@ namespace CCSystem.BLL.Services.Implementations
 
                 if (promotion != null)
                 {
-                    DateTime now = DateTime.UtcNow;
+                    DateTime now = DateTime.UtcNow.AddHours(7);
 
                     // Kiểm tra thời gian hợp lệ của Promotion
                     if (promotion.StartDate > now || promotion.EndDate < now)
@@ -247,7 +247,7 @@ namespace CCSystem.BLL.Services.Implementations
                 if (booking == null)
                     throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingId);
 
-                var now = DateTime.UtcNow;
+                var now = DateTime.UtcNow.AddHours(7);
                 bool allExpired = true;
                 decimal refundAmount = 0;
 
@@ -354,7 +354,7 @@ namespace CCSystem.BLL.Services.Implementations
                 if (refundPayment != null)
                 {
                     refundPayment.Status = PaymentEnums.Status.REFUNDED.ToString();
-                    refundPayment.UpdatedDate = DateTime.UtcNow;
+                    refundPayment.UpdatedDate = DateTime.UtcNow.AddHours(7);
                 }
                 else
                 {
@@ -384,8 +384,28 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
+		public async Task<List<BookingResponse>> GetCancelRequestedBookingsAsync()
+		{
+			try
+			{
+				var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
 
-        public async Task UpdateBookingAsync(Booking booking)
+                // Lọc ra các booking có trạng thái là CANCELREQUESTED
+                var cancelRequestedBookings = bookings
+                    .Where(b => b.BookingStatus == BookingEnums.BookingStatus.CANCELREQUESTED.ToString())
+                    .ToList();
+
+				var responses = _mapper.Map<List<BookingResponse>>(cancelRequestedBookings);
+				return responses;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+
+		public async Task UpdateBookingAsync(Booking booking)
         {
             try
             {
@@ -403,7 +423,23 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
-
+        public async Task<List<BookingResponse>> GetAllBookingAsync()
+        {
+            var bookings = await _unitOfWork.BookingRepository.GetAllBookingAsync();
+            return bookings.Select(b => new BookingResponse
+            {
+                BookingId = b.BookingId,
+                CustomerId = b.CustomerId,
+                Email = b.Customer.Email,
+                PromotionCode = b.PromotionCode,
+                BookingDate = b.BookingDate,
+                TotalAmount = b.TotalAmount,
+                BookingStatus = b.BookingStatus,
+                PaymentStatus = b.PaymentStatus,
+                Notes = b.Notes,
+                PaymentMethod = b.PaymentMethod
+            }).ToList();
+        }
 
     }
 }
