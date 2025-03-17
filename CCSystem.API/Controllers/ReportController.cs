@@ -73,13 +73,15 @@ public class ReportsController : ControllerBase
         return Ok(new { message = ReportMessage.UpdatedSuccessfully });
     }
     /// <summary>
-    /// Xóa báo cáo theo ID.
+    /// Cập nhật trạng thái của báo cáo thay vì xóa.
     /// </summary>
-    /// <param name="id">ID báo cáo</param>
-    [HttpDelete(APIEndPointConstant.Report.DeleteReportEndpoint)]
-    public async Task<IActionResult> DeleteReport(int id)
+    /// <param name="id">ID của báo cáo cần cập nhật.</param>
+    /// <param name="newStatus">Trạng thái mới của báo cáo.</param>
+    /// <returns>Trả về kết quả của quá trình cập nhật.</returns>
+    [HttpPut(APIEndPointConstant.Report.DeleteReportEndpoint)]
+    public async Task<IActionResult> DeleteReport(int id, [FromBody] string newStatus)
     {
-        var result = await _reportService.DeleteReportAsync(id);
+        var result = await _reportService.DeleteReportAsync(id, newStatus);
 
         if (!result)
         {

@@ -50,17 +50,21 @@ namespace CCSystem.DAL.Repositories
 
         public async Task UpdateAsync(Report report)
         {
-            _context.Reports.Update(report);
+            _context.Reports.Update(report) ;
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, string newStatus)
         {
             var report = await _context.Reports.FindAsync(id);
-            if (report != null)
+            if (report == null)
             {
-                _context.Reports.Remove(report);
+                throw new KeyNotFoundException($"Report with ID {id} not found.");
             }
+
+            report.TaskStatus = newStatus; 
+            _context.Reports.Update(report); 
+            await _context.SaveChangesAsync(); 
         }
     }
 }

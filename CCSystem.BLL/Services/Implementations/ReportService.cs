@@ -109,16 +109,15 @@ namespace CCSystem.BLL.Services.Implementations
             }
         }
 
-        public async Task<bool> DeleteReportAsync(int id)
+        public async Task<bool> DeleteReportAsync(int id, string newStatus)
         {
             var report = await _unitOfWork.ReportRepository.GetByIdAsync(id);
             if (report == null)
             {
-                return false;// Report not found
+                return false; 
             }
 
-            // Delete the report
-            await _unitOfWork.ReportRepository.DeleteAsync(id);
+            await _unitOfWork.ReportRepository.DeleteAsync(id, newStatus);
             await _unitOfWork.CommitAsync();
 
             return true;

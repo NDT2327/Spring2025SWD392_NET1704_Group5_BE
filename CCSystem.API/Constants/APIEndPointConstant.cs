@@ -45,7 +45,7 @@
             public const string ServiceEndpoint = ApiEndpoint + "/services";
             public const string SearchServiceEndpoint = ServiceEndpoint + "/search";
             public const string UpdateServiceEndpoint = ServiceEndpoint + "/update" + "/{id}";
-            public const string DeleteServiceEndpoint = ServiceEndpoint + "/delete" + "/{serviceid}";
+            public const string DeleteServiceEndpoint = ServiceEndpoint + "/delete" + "/{id}";
             public const string GetServiceByIdEndpoint = ServiceEndpoint + "/{id}";
             public const string GetByCategoryId = ServiceEndpoint + "/category" + "/{id}";
 
@@ -83,7 +83,7 @@
             public const string GetAllReviewsEndpoint = ReviewEndpoint + "/getallreviews";
             public const string GetReviewByIdEndpoint = ReviewEndpoint + "/{id}";
             public const string GetReviewByCustomerIdEndpoint = ReviewEndpoint + "/customer" + "/{id}";
-            public const string GetReviewByDetailIdEndpoint = ReviewEndpoint + "/detail" + "/{detailId}";
+            public const string GetReviewByDetailIdEndpoint = ReviewEndpoint + "/detail" + "/{id}";
             public const string CreateReviewEndpoint = ReviewEndpoint + "/createreview";
             public const string UpdateReviewEndpoint = ReviewEndpoint + "/updatereview/{id}";
             public const string DeleteReviewEndpoint = ReviewEndpoint + "/deletereview/{id}";
@@ -143,8 +143,8 @@
             public const string GetActiveBDetailEndpoint = BookingDetailEndpoint + "/active";
             public const string GetBookingDetailByServiceId = BookingDetailEndpoint + "/service" + "/{id}";
             public const string GetBookingDetailByServiceDetailId = BookingDetailEndpoint + "/servicedetail" + "/{id}";
-            public const string RescheduleBookingDetail = BookingDetailEndpoint + "/reschedule" + "/{detailId}";
-            public const string ConfirmReschedule = BookingDetailEndpoint + "/confirm" + "/{detailId}";
+            public const string RescheduleBookingDetail = BookingDetailEndpoint + "/reschedule" + "/{id}";
+            public const string ConfirmReschedule = BookingDetailEndpoint + "/confirm" + "/{id}";
         }
 
         public static class ScheduleAssign
