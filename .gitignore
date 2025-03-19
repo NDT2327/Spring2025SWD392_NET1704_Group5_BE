@@ -1,6 +1,10 @@
 # Ignore Visual Studio files  
+bin/
+obj/
 .vs/
-
+*.user
+*.suo
+*.sln.docstates
 CCSystem.API/obj/
 CCSystem.BLL/obj/
 CCSystem.DAL/obj/

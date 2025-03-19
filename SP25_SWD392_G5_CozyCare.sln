@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSystem.BLL", "CCSystem.BL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSystem.API", "CCSystem.API\CCSystem.API.csproj", "{BAF00569-4021-4AC5-A4AB-2DB6C4B14FD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSystem.Infrastructure", "CCSystem.Infrastructure\CCSystem.Infrastructure.csproj", "{7B6F6D6E-B2BB-46F6-9498-35DE9E07D244}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSystem.Infrastructure", "CCSystem.Infrastructure\CCSystem.Infrastructure.csproj", "{7B6F6D6E-B2BB-46F6-9498-35DE9E07D244}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSystem.Presentation", "CCSystem.Presentation\CCSystem.Presentation.csproj", "{410FAF9C-47FD-49F4-A8CF-59E296011A04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7B6F6D6E-B2BB-46F6-9498-35DE9E07D244}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6F6D6E-B2BB-46F6-9498-35DE9E07D244}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B6F6D6E-B2BB-46F6-9498-35DE9E07D244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{410FAF9C-47FD-49F4-A8CF-59E296011A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{410FAF9C-47FD-49F4-A8CF-59E296011A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{410FAF9C-47FD-49F4-A8CF-59E296011A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{410FAF9C-47FD-49F4-A8CF-59E296011A04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

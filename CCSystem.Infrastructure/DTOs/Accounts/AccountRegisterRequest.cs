@@ -17,7 +17,7 @@ namespace CCSystem.Infrastructure.DTOs.Accounts
         public string Phone { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public AccountEnums.Role? Role { get; set; }
+        public AccountEnums.Role? Role { get; set; } = AccountEnums.Role.CUSTOMER;
 
     }
 }

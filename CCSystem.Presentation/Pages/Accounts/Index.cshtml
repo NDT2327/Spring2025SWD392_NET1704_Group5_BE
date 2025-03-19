@@ -1,0 +1,117 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Accounts.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+@if (Model.Accounts == null || !Model.Accounts.Any())
+{
+    <p>No Account</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Role)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Experience)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].CreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].UpdatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Avatar)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].DateOfBirth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accounts[0].BankName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Accounts)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Experience)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Avatar)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BankName)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.AccountId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.AccountId">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.AccountId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

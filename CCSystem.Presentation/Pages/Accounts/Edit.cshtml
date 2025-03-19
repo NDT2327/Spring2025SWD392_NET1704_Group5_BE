@@ -1,0 +1,88 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Accounts.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+@if(TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<h4>Account</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Account.Address" class="control-label"></label>
+                <input asp-for="Account.Address" class="form-control" />
+                <span asp-validation-for="Account.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Phone" class="control-label"></label>
+                <input asp-for="Account.Phone" class="form-control" />
+                <span asp-validation-for="Account.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Rating" class="control-label"></label>
+                <input asp-for="Account.Rating" class="form-control" />
+                <span asp-validation-for="Account.Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Experience" class="control-label"></label>
+                <input asp-for="Account.Experience" class="form-control" />
+                <span asp-validation-for="Account.Experience" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.FullName" class="control-label"></label>
+                <input asp-for="Account.FullName" class="form-control" />
+                <span asp-validation-for="Account.FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Status" class="control-label"></label>
+                <input asp-for="Account.Status" class="form-control" />
+                <span asp-validation-for="Account.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Avatar" class="control-label"></label>
+                <input asp-for="Account.Avatar" class="form-control" />
+                <span asp-validation-for="Account.Avatar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Gender" class="control-label"></label>
+                <input asp-for="Account.Gender" class="form-control" />
+                <span asp-validation-for="Account.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Year" class="control-label"></label>
+                <input asp-for="Account.Year" class="form-control" />
+                <span asp-validation-for="Account.Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Month" class="control-label"></label>
+                <input asp-for="Account.Month" class="form-control" />
+                <span asp-validation-for="Account.Month" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Day" class="control-label"></label>
+                <input asp-for="Account.Day" class="form-control" />
+                <span asp-validation-for="Account.Day" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

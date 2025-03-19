@@ -1,0 +1,12 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Authentications.LoginModel
+<h2>Login</h2>
+<form method="post">
+    <label>Email</label>
+    <input type="email" asp-for="LoginRequest.Email" class="form-control" required/>
+
+    <label>Password:</label>
+    <input type="password" asp-for="LoginRequest.Password" class="form-control" required/>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
