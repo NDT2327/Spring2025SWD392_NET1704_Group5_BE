@@ -27,7 +27,7 @@ namespace CCSystem.Presentation.Pages.Accounts
         [BindProperty]
         public IFormFile? AvatarFile { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             var account = await _accountService.GetAccountByIdAsync(id);
             if(account == null) return NotFound();
@@ -52,7 +52,7 @@ namespace CCSystem.Presentation.Pages.Accounts
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(string id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (!ModelState.IsValid)
             {
