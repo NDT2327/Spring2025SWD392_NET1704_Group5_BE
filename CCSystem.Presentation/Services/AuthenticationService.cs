@@ -16,7 +16,7 @@ namespace CCSystem.Presentation.Services
         }
 
         //register
-        public async Task<AccountResponse> RegisterAsync(AccountRegisterRequest request)
+        public async Task<AccountResponse?> RegisterAsync(AccountRegisterRequest request)
         {
             var response = await _httpClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Authentication.Register), request);
             response.EnsureSuccessStatusCode();
@@ -24,7 +24,7 @@ namespace CCSystem.Presentation.Services
         }
 
         //login
-        public async Task<AccountResponse> LoginAsync(AccountLoginRequest request)
+        public async Task<AccountResponse?> LoginAsync(AccountLoginRequest request)
         {
             var response = await _httpClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Authentication.Login), request);
             return response.IsSuccessStatusCode ? await response.Content.ReadFromJsonAsync<AccountResponse>() : null;
