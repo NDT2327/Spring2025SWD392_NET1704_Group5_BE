@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Text;
 using System.Text.Json;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CCSystem.Presentation.Services
 {
@@ -28,7 +29,7 @@ namespace CCSystem.Presentation.Services
         }
 
         //get detail
-        public async Task<GetAccountResponse?> GetAccountByIdAsync(string id)
+        public async Task<GetAccountResponse?> GetAccountByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.GetAccountDetailsUrl(id)));
             if (response.IsSuccessStatusCode)
@@ -41,8 +42,14 @@ namespace CCSystem.Presentation.Services
 
         //create account
 
+        public async Task<bool> CeateAccountAsync(CreateAccountRequest newAccount)
+        {
+            var response = await _httpClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.CreateAccount), newAccount);
+            return response.IsSuccessStatusCode;
+        }
+
         //update account
-        public async Task<bool> UpdateAccountAsync(string id, UpdateAccountRequest request)
+        public async Task<bool> UpdateAccountAsync(int id, UpdateAccountRequest request)
         {
             using var content = new MultipartFormDataContent();
 
@@ -78,7 +85,17 @@ namespace CCSystem.Presentation.Services
         }
 
         //lock
-
+        public async Task<bool> LockAccountAsync(int id)
+        {
+            var response = await _httpClient.PutAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.LockAccountUrl(id)), null);
+            return response.IsSuccessStatusCode;
+        }
         //unlock
+        public async Task<bool> UnlockAccountAsync(int id)
+        {
+            var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Account.UnlockAccountUrl(id));
+            var response = await _httpClient.PutAsync(url, null);
+            return response.IsSuccessStatusCode;
+        }
     }
 }
