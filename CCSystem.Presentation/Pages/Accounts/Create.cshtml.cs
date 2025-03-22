@@ -7,16 +7,22 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
+using CCSystem.Presentation.Services;
+using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Presentation.Helpers;
+using CCSystem.Presentation.Constants;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {
     public class CreateModel : PageModel
     {
-        private readonly CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext _context;
+        private readonly AccountService _accountService;
 
-        public CreateModel(CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext context)
+
+
+        public CreateModel(AccountService accountService)
         {
-            _context = context;
+            _accountService = accountService;
         }
 
         public IActionResult OnGet()
@@ -25,7 +31,7 @@ namespace CCSystem.Presentation.Pages.Accounts
         }
 
         [BindProperty]
-        public Account Account { get; set; } = default!;
+        public CreateAccountRequest Account { get; set; } = new();
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -34,10 +40,13 @@ namespace CCSystem.Presentation.Pages.Accounts
             {
                 return Page();
             }
-
-            _context.Accounts.Add(Account);
-            await _context.SaveChangesAsync();
-
+            var success = await _accountService.CeateAccountAsync(Account);
+            if (!success)
+            {
+                ToastHelper.ShowError(TempData, Message.AccountMessage.AccountCreatedFailed);
+                return Page();
+            }
+            ToastHelper.ShowSuccess(TempData, Message.AccountMessage.AccountCreatedSuccessfully);
             return RedirectToPage("./Index");
         }
     }

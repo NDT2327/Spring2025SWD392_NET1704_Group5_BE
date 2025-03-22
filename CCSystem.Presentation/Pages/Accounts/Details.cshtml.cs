@@ -24,12 +24,8 @@ namespace CCSystem.Presentation.Pages.Accounts
 
         public GetAccountResponse Account { get; set; } 
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return RedirectToPage("Index");
-            }
             Account = await _accountService.GetAccountByIdAsync(id);
             if (Account == null) { 
             
