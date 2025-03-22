@@ -20,6 +20,15 @@
             public const string LogoutSuccess = "Logout Successfully!";
         }
 
+        public static class Category
+        {
+            public const string CreatedSuccessfully = "Category has been created successfully";
+            public const string CreatedFailed = "Category created failed, try again!";
+            public const string LockSuccessfully = "Category has been locked";
+            public const string LockFailed = "Category locked failed";
+            public const string UpdateSuccessfully = "Category has been updated successfully";
+            public const string UpdateFailed = "Category updated failed, try again!";
+        }
 
         public static class CommonMessage
         {

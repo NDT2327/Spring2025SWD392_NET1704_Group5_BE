@@ -34,7 +34,7 @@ builder.Services.AddHttpClient("AuthenticationAPI", (serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
-builder.Services.AddScoped<AuthenticationService>();
+
 
 builder.Services.AddHttpClient<AccountService>("AccountAPI", (serviceProvider, client) =>
 {
@@ -42,11 +42,22 @@ builder.Services.AddHttpClient<AccountService>("AccountAPI", (serviceProvider, c
     client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
     client.Timeout = TimeSpan.FromSeconds(30);
+
 }).AddHttpMessageHandler<BearerTokenHandler>();
+
+builder.Services.AddHttpClient<CategoryService>("CategoryAPI",(serviceProvider, client) =>
+{
+    var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
+    client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
+	client.DefaultRequestHeaders.Add("Accept", "application/json");
+	client.Timeout = TimeSpan.FromSeconds(30);
+
+}).AddHttpMessageHandler<BearerTokenHandler>();    
+
+//Inject service
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AccountService>();
-
-
-
+builder.Services.AddScoped<CategoryService>();
 
 var app = builder.Build();
 
@@ -62,9 +73,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.MapRazorPages();
+
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapRazorPages();
 
 app.Run();
