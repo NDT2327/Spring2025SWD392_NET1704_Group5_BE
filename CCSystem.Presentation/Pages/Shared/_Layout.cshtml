@@ -29,27 +29,27 @@
 
 							@switch (userRole)
 							{
-								case "Admin":
+								case "ADMIN":
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Accounts/Index">Accounts</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Service/Index">Service</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Booking/Index">Booking</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Promotion/Index">Promotion</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Dashboard/Index">Dashboard</a></li>
 									break;
-								case "Housekeeper":
+								case "HOUSEKEEPER":
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Task/Index">Task</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Schedule/Index">Schedule</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="CompletedTask/Index">Completed Task</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Support/Index">Support</a></li>
 									break;
-								case "Staff":
+								case "STAFF":
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Task/Index">Task</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Request/Index">Request</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Support/Index">Support</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Review/Index">Review</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Assign/Index">Assign</a></li>
 									break;
-								case "Customer":
+								case "CUSTOMER":
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Service/Index">Service</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="Profile/Index">Profile</a></li>
 									<li class="nav-item"><a class="nav-link text-dark" asp-page="BookingHistory/Index">Booking History</a></li>
