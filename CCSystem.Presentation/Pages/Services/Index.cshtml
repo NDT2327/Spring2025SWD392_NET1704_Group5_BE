@@ -1,0 +1,115 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Services.IndexModel
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-page="Create">Create New</a>
+</p>
+
+@if (Model.Services == null || !Model.Services.Any())
+{
+	<p>No Services</p>
+}
+else
+{
+	<table id="servicesTable" class="display">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].ServiceName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].Description)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].Image)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].Price)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].Duration)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].IsActive)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].CreatedDate)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].UpdatedDate)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Services[0].CategoryName)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.Services)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.ServiceName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Description)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Image)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Price)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Duration)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IsActive)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.CreatedDate)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UpdatedDate)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.CategoryName)
+					</td>
+					<td>
+						<a asp-page="./Edit" asp-route-id="@item.ServiceId">Edit</a> |
+						<a asp-page="./Details" asp-route-id="@item.ServiceId">Details</a> |
+						<a asp-page="./Delete" asp-route-id="@item.ServiceId">Delete</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+<script>
+	$(document).ready(function () {
+		$('#servicesTable').DataTable({
+			"paging": true,         // Enable pagination
+			"pageLength": 5,        // Default to 5 rows per page
+			"ordering": true,       // Enable column sorting
+			"info": false,          // Hide "Showing X to Y of Z entries"
+			"searching": true,     // Disable search
+			"lengthChange": false,  // Hide "Entries per page" dropdown
+			"language": {
+				"infoEmpty": "No data available",
+				"search": "Search:",
+				"paginate": {
+					"first": "First",
+					"last": "Last",
+					"next": "Next",
+					"previous": "Previous"
+				}
+			}
+		});
+	});
+</script>

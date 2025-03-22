@@ -26,7 +26,11 @@ namespace CCSystem.Presentation.Pages.Accounts
         {
             try
             {
-                Accounts = await _accountService.GetAccountsAsync();
+                var accounts = await _accountService.GetAccountsAsync();
+                if (accounts == null)
+                {
+                    Accounts = accounts;
+                }
             }
             catch (Exception ex) { 
                 Console.WriteLine(ex);

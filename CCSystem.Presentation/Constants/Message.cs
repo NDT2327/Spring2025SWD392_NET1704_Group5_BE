@@ -16,5 +16,10 @@
             public const string LoginFailed = "Login Failure, please check your email and password!";
             public const string LogoutSuccess = "Logout Successfully!";
         }
+
+        public static class ServiceMessage
+        {
+            
+        }
     }
 }
