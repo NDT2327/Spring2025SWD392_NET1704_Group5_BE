@@ -20,7 +20,9 @@
             public const string LogoutSuccess = "Logout Successfully!";
         }
 
-
+        public static class ServiceMessage
+        {
+        }    
         public static class CommonMessage
         {
             public const string IdNotFound = "ID is required";

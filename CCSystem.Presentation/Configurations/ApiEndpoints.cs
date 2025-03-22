@@ -6,11 +6,14 @@
         public AccountEndpoints Account { get; set; }
         public AuthenticationEndpoints Authentication { get; set; }
 
+        public ServiceEndpoints Service { get; set; }
+
         public ApiEndpoints()
         {
             BaseUrl = "https://localhost:7207/api/v1/";
             Account = new AccountEndpoints();
             Authentication = new AuthenticationEndpoints();
+            Service = new ServiceEndpoints();
         }
 
         // Chuẩn hóa URL để tránh lỗi đường dẫn
@@ -43,6 +46,11 @@
             public string OtpVerification { get; } = "authentications/otp-verification";
             public string ResetPassword { get; } = "authentications/password-resetation";
             public string RegenerationTokens { get; } = "authentications/regeneration-tokens";
+        }
+
+        public class ServiceEndpoints
+        {
+            public string GetServices { get; } = "services";
         }
     }
 }

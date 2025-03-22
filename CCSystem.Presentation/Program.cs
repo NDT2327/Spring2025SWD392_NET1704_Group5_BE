@@ -35,6 +35,7 @@ builder.Services.AddHttpClient("AuthenticationAPI", (serviceProvider, client) =>
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<ServiceService>();
 
 builder.Services.AddHttpClient<AccountService>("AccountAPI", (serviceProvider, client) =>
 {

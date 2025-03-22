@@ -19,7 +19,7 @@
 }
 else
 {
-    <table class="table">
+    <table id="accountTable" class="display">
         <thead>
             <tr>
                 <th>
@@ -96,3 +96,25 @@ else
         </tbody>
     </table>
 }
+<script>
+    $(document).ready(function () {
+        $('#servicesTable').DataTable({
+            "paging": true,         // Enable pagination
+            "pageLength": 5,        // Default to 5 rows per page
+            "ordering": true,       // Enable column sorting
+            "info": false,          // Hide "Showing X to Y of Z entries"
+            "searching": false,     // Disable search
+            "lengthChange": false,  // Hide "Entries per page" dropdown
+            "language": {
+                "infoEmpty": "No data available",
+                "search": "Search:",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
+                }
+            }
+        });
+    });
+</script>
