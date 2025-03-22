@@ -46,23 +46,16 @@ namespace CCSystem.Presentation.Services
                 var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Category.CreateCategory);
 
                 using var content = new MultipartFormDataContent();
-
-                // Thêm tên category
                 content.Add(new StringContent(categoryRequest.CategoryName), "CategoryName");
-
-                // Thêm mô tả
                 content.Add(new StringContent(categoryRequest.Description), "Description");
-
-                // Thêm trạng thái (true/false)
                 content.Add(new StringContent(categoryRequest.IsActive.ToString()), "IsActive");
 
-                // Nếu có ảnh, thêm ảnh vào form-data
                 if (categoryRequest.Image != null)
                 {
-                    using var stream = categoryRequest.Image.OpenReadStream();
-                    var imageContent = new StreamContent(stream);
-                    imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(categoryRequest.Image.ContentType);
-                    content.Add(imageContent, "Image", categoryRequest.Image.FileName);
+                    var stream = categoryRequest.Image.OpenReadStream();
+                    var fileContent = new StreamContent(stream);
+                    fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(categoryRequest.Image.ContentType);
+                    content.Add(fileContent, "Image", categoryRequest.Image.FileName);
                 }
 
                 var response = await _httpClient.PostAsync(url, content);

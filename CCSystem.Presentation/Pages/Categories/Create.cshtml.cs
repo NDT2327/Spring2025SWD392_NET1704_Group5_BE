@@ -43,16 +43,11 @@ namespace CCSystem.Presentation.Pages.Categories
                 var success = await _categoryService.CreateCategoryAsync(Category);
                 if (!success)
                 {
-                    // Ghi log lỗi vào Console
-                    Console.WriteLine("❌ [ERROR] Failed to create category: " + Category.CategoryName);
 
                     // Hiển thị lỗi trên giao diện
                     ToastHelper.ShowError(TempData, Message.Category.CreatedFailed);
                     return Page();
                 }
-
-                // Ghi log thành công
-                Console.WriteLine("✅ [SUCCESS] Category created: " + Category.CategoryName);
 
                 ToastHelper.ShowSuccess(TempData, Message.Category.CreatedSuccessfully);
                 return RedirectToPage("./Index");
