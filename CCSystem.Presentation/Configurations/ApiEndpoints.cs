@@ -7,9 +7,14 @@
         public AuthenticationEndpoints Authentication { get; set; }
         public CategoryEndpoints Category { get; set; }
         public ServiceDetailEndpoints ServiceDetail { get; set; }
-        
-
+        public BookingDetailEndpoints BookingDetail { get; set; }
+        public BookingEndpoints Booking { get; set; }
+        public ReviewEndpoints Review { get; set; }
+        public ReportEndpoints Report { get; set; }
+        public AssignEndpoints Assign { get; set; }
         public ServiceEndpoints Service { get; set; }
+        public PaymentEndpoints Payment { get; set; }
+        public PromotionEndpoints Promotion { get; set; }
 
         public ApiEndpoints()
         {
@@ -19,6 +24,13 @@
             Category = new CategoryEndpoints();
             ServiceDetail = new ServiceDetailEndpoints();
             Service = new ServiceEndpoints();
+            Payment = new PaymentEndpoints();
+            Review = new ReviewEndpoints();
+            Booking = new BookingEndpoints();
+            BookingDetail = new BookingDetailEndpoints();
+            Report = new ReportEndpoints();
+            Assign = new AssignEndpoints();
+            Promotion = new PromotionEndpoints();
 
         }
 
@@ -63,8 +75,6 @@
 
         }
 
-        //service
-
         //service detail
         public class ServiceDetailEndpoints
         {
@@ -85,9 +95,87 @@
             public string DeletePromotion(string code) => $"promotions/delete/{code}";
         }
 
+        //assigns
+        public class AssignEndpoints
+        {
+            public string GetAllScheduleAssigns { get; } = "scheduleassigns";
+            public string CreateScheduleAssign { get; } = "scheduleassigns";
+            public string UpdateScheduleAssign { get; } = "scheduleassigns/status";
+            public string CompleteScheduleAssign { get; } = "scheduleassigns/complete";
+            public string ConfirmScheduleAssign { get; } = "scheduleassigns/confirm";
+            public string CancelScheduleAssign { get; } = "scheduleassignshousekeeper-request-cancel";
+            public string GetCancelScheduleAssign { get; } = "scheduleassignscancel-requests";
+            public string ConfirmCancelScheduleAssign { get; } = "scheduleassignsconfirm-housekeeper-cancel";
+
+            public string GetAssign(int id) => $"scheduleassigns/{id}";
+            public string GetAssingByHousekeeper(int id) => $"scheduleassigns/housekeeper/{id}";
+        }
+
+        //Booking
+        public class BookingEndpoints
+        {
+            public string CreateBooking { get; } = "bookings";
+            public string GetAllBookings { get; } = "bookings/getallbookings";
+            public string CancelBooking { get; } = "bookings/request-cancel";
+            public string Refund { get; } = "bookings/process-refund";
+            public string GetCancelBookings { get; } = "bookings/cancel-booking";
+
+            public string GetBooking(int id) => $"bookings/{id}";
+            public string GetBookingByCustomer(int id) => $"bookings/customer/{id}";
+            public string GetBookingByPromotionCode(string code) => $"bookings/promotion/{code}";
+
+        }
+
+        //Booking Detail
+        public class BookingDetailEndpoints
+        {
+            public string GetActiveBookingDetail { get; } = "bookingdetails/active";
+            public string GetAllBookingDetails { get; } = "bookingdetails/getallbookingdetail";
+
+            public string GetBookingDetail(int id) => $"bookingdetails/{id}";
+            public string GetBookingDetailByBooking(int id) => $"bookingdetails/booking/{id}";
+            public string GetDetailByService(int id) => $"bookingdetails/service/{id}";
+            public string GetDetailByServiceDetail(int id) => $"bookingdetails/servicedetail/{id}";
+            public string Reschedule(int id) => $"bookingdetails/reschedule/{id}";
+            public string ConfirmBookingDetail(int id) => $"bookingdetails/confirm/{id}";
+        }
+
+        //Payment
+        public class PaymentEndpoints {
+            public string CreatePaymentUrl { get; } = "payments";
+            public string UpdatePayment { get; } = "payments";
+            public string IpnAction { get; } = "ipnaction";
+            public string CallBackVnPay { get; } = "payments/paymentcallbackvnpay";
+            public string GetByCustomer(int id) => $"customer/{id}";
+        }
+
+
+
         //review
+        public class ReviewEndpoints
+        {
+            public string GetAllReviews { get; } = "reviews/getallreviews";
+            public string CreateReview { get; } = "reviews/createreview";
+            public string GetByCustomer(int id) => $"reviews/customer/{id}";
+            public string GetReview(int id) => $"reviews/{id}";
+            public string GetByBookingDetail(int id) => $"reviews/detail/{id}";
+            public string UpdateReview(int id) => $"reviews/updatereview/{id}";
+            public string DeleteReview(int id) => $"reviews/deletereview{id}";
+        }
 
         //reports
+        public class ReportEndpoints
+        {
+            public string CreateReport { get; } = "reports/createreport";
+            public string GetAllReports { get; } = "reports/getallreports";
+            public string UpdateReport(int id) => $"reports/updatereport/{id}";
+            public string DeleteReport(int id) => $"reports/deletereport/{id}";
+            public string GetReport(int id) => $"reports/{id}";
+            public string GetByHousekeeper(int id) => $"reports/housekeeper/{id}";
+            public string GetByAssign(int id) => $"reports/assign/{id}";
+        }
+
+        //services
         public class ServiceEndpoints
         {
             public string GetServices { get; } = "services";
