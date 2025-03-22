@@ -59,6 +59,7 @@ namespace CCSystem.Presentation.Pages.Authentications
             }
             catch (HttpRequestException ex)
             {
+                Console.WriteLine(ex.ToString());
                 ToastHelper.ShowError(TempData, Message.AuthenMessage.LoginFailed, 3000);
                 TempData.Keep();
                 return Page();
