@@ -9,6 +9,8 @@
         public ServiceDetailEndpoints ServiceDetail { get; set; }
         
 
+        public ServiceEndpoints Service { get; set; }
+
         public ApiEndpoints()
         {
             BaseUrl = "https://localhost:7207/api/v1/";
@@ -16,6 +18,8 @@
             Authentication = new AuthenticationEndpoints();
             Category = new CategoryEndpoints();
             ServiceDetail = new ServiceDetailEndpoints();
+            Service = new ServiceEndpoints();
+
         }
 
         // Chuẩn hóa URL để tránh lỗi đường dẫn
@@ -84,5 +88,15 @@
         //review
 
         //reports
+        public class ServiceEndpoints
+        {
+            public string GetServices { get; } = "services";
+            public string GetServiceById(int id) => $"services/{id}";
+            public string GetServicesByCategory(int categoryId) => $"services/category/{categoryId}";
+            public string CreateService { get; } = "services";
+            public string UpdateService(int id) => $"services/update/{id}";
+            public string DeleteService(int id) => $"services/delete/{id}";
+            public string SearchServices { get; } = "services/search";
+        }
     }
 }

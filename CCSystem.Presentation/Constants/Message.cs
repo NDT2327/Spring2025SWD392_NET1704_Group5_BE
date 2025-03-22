@@ -30,6 +30,11 @@
             public const string UpdateFailed = "Category updated failed, try again!";
         }
 
+
+        public static class ServiceMessage
+        {
+        }    
+
         public static class CommonMessage
         {
             public const string IdNotFound = "ID is required";
