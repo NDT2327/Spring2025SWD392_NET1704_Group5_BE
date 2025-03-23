@@ -1,5 +1,6 @@
 ﻿using CCSystem.Infrastructure.DTOs.Category;
 using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Helpers;
 using System.Text.Json;
 
 namespace CCSystem.Presentation.Services
@@ -15,27 +16,29 @@ namespace CCSystem.Presentation.Services
             _apiEndpoints = apiEndpoints;
         }
 
-        public async Task<List<CategoryResponse>> GetAllCategoriesAsync()
+        public async Task<(bool Success, List<CategoryResponse> Data, string ErrorMessage)> GetAllCategoriesAsync()
         {
             var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Category.GetAllCategories);
-            var response = await _httpClient.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return new List<CategoryResponse>();
-            }
-
-            var jsonString = await response.Content.ReadAsStringAsync();
-
             try
             {
-                var apiResponse = JsonSerializer.Deserialize<ApiResponse<CategoryResponse>>(jsonString);
-                return apiResponse?.Data ?? new List<CategoryResponse>();
+                var response = await _httpClient.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return (false, null, $"{response.StatusCode}");
+                }
+
+                var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<CategoryResponse>>>();
+
+                if (apiResponse != null || apiResponse.StatusCode != 0) {
+                    var errorMessage = apiResponse?.Messages?.FirstOrDefault()?.DescriptionErrors?.FirstOrDefault();
+                    return (false, null, errorMessage);
+                }
+                return (true, apiResponse.Data ?? new List<CategoryResponse>(), null);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) { 
                 Console.WriteLine(ex);
-                return new List<CategoryResponse>();
+                return (false, null, $"{ex.Message}");
             }
         }
 

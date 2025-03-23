@@ -1,0 +1,70 @@
+﻿@page
+@model CCSystem.Presentation.Pages.ServiceDetails.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>ServiceDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ServiceDetail.ServiceDetailId" />
+            <div class="form-group">
+                <label asp-for="ServiceDetail.ServiceId" class="control-label"></label>
+                <select asp-for="ServiceDetail.ServiceId" class="form-control" asp-items="ViewBag.ServiceId"></select>
+                <span asp-validation-for="ServiceDetail.ServiceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDetail.OptionName" class="control-label"></label>
+                <input asp-for="ServiceDetail.OptionName" class="form-control" />
+                <span asp-validation-for="ServiceDetail.OptionName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDetail.OptionType" class="control-label"></label>
+                <input asp-for="ServiceDetail.OptionType" class="form-control" />
+                <span asp-validation-for="ServiceDetail.OptionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDetail.BasePrice" class="control-label"></label>
+                <input asp-for="ServiceDetail.BasePrice" class="form-control" />
+                <span asp-validation-for="ServiceDetail.BasePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDetail.Unit" class="control-label"></label>
+                <input asp-for="ServiceDetail.Unit" class="form-control" />
+                <span asp-validation-for="ServiceDetail.Unit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDetail.Duration" class="control-label"></label>
+                <input asp-for="ServiceDetail.Duration" class="form-control" />
+                <span asp-validation-for="ServiceDetail.Duration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDetail.Description" class="control-label"></label>
+                <input asp-for="ServiceDetail.Description" class="form-control" />
+                <span asp-validation-for="ServiceDetail.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDetail.IsActive" class="control-label"></label>
+                <input asp-for="ServiceDetail.IsActive" class="form-control" />
+                <span asp-validation-for="ServiceDetail.IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
