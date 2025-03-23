@@ -2,14 +2,41 @@
 @model CCSystem.Presentation.Pages.Services.FilterModel
 
 @{
-	ViewData["Title"] = "Filt";
+	ViewData["Title"] = "Filter";
 }
 
 <h1>Filter</h1>
 
-<p>
-	<a asp-page="Create">Create New</a>
-</p>
+<div class="container p-4 shadow-lg mb-4" style="border: none; border-radius: 20px;">
+	<form method="get" action="/Books/Filter">
+		<div class="row align-items-end g-3">
+			<!-- Category -->
+			<div class="col-md-3">
+				<label for="SelectedCategory" class="form-label">Category</label>
+				<select id="SelectedCategory" name="SelectedCategory" asp-for="SelectedCategory" asp-items="Model.CategoryList" class="form-control">
+				</select>
+			</div>
+
+			<!-- Service Name -->
+			<div class="col-md-3">
+				<label for="SearchServiceName" class="form-label">Service Name</label>
+				<input type="text" id="SearchServiceName" name="SearchServiceName" asp-for="SearchServiceName" class="form-control" placeholder="Enter service name">
+			</div>
+
+			<!-- Price -->
+			<div class="col-md-3">
+				<label for="SearchPrice" class="form-label">Price</label>
+				<input type="number" id="SearchPrice" name="SearchPrice" asp-for="SearchPrice" class="form-control" placeholder="Enter max price">
+			</div>
+
+			<!-- Search Button -->
+			<div class="col-md-3 d-grid">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
+		</div>
+	</form>
+</div>
+
 
 @if (Model.Services == null || !Model.Services.Any())
 {
@@ -17,99 +44,73 @@
 }
 else
 {
-	<table id="servicesTable" class="display">
-		<thead>
-			<tr>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].ServiceName)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].Description)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].Image)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].Price)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].Duration)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].IsActive)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].CreatedDate)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].UpdatedDate)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Services[0].CategoryName)
-				</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
+	<div class="container p-3 shadow-lg" style="border: none; border-radius: 20px;">
+		<div class="row row-cols-1 row-cols-md-3 g-4">
 			@foreach (var item in Model.Services)
 			{
-				<tr>
-					<td>
-						@Html.DisplayFor(modelItem => item.ServiceName)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Description)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Image)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Price)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Duration)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.IsActive)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.CreatedDate)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.UpdatedDate)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.CategoryName)
-					</td>
-					<td>
-						<a asp-page="./Edit" asp-route-id="@item.ServiceId">Edit</a> |
-						<a asp-page="./Details" asp-route-id="@item.ServiceId">Details</a> |
-						<a asp-page="./Delete" asp-route-id="@item.ServiceId">Delete</a>
-					</td>
-				</tr>
+				<div class="col">
+					<div class="card h-100 shadow-sm">
+						<!-- Ảnh dịch vụ -->
+						<img src="@item.Image" class="card-img-top" alt="@item.ServiceName" style="height: 180px; object-fit: cover;">
+
+						<div class="card-body">
+							<h5 class="card-title">@item.ServiceName</h5>
+							<p class="card-text text-muted">@item.CategoryName</p>
+							<p class="card-text">@item.Description</p>
+							<p class="fw-bold text-primary">$@item.Price</p>
+							<p class="text-muted">Duration: @item.Duration mins</p>
+							<p class="text-muted">Active: @(item.IsActive ?? false ? "Active" : "Inactive")</p>
+						</div>
+
+						<div class="card-footer d-flex justify-content-between">
+							<small class="text-muted">Created: @(item.CreatedDate?.ToShortDateString() ?? "N/A")</small>
+							<div>
+								<a asp-page="./Edit" asp-route-id="@item.ServiceId" class="btn btn-sm btn-warning">Book</a>
+							</div>
+						</div>
+					</div>
+				</div>
 			}
-		</tbody>
-	</table>
+		</div>
+		<nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-page="./Filter" asp-route-currentPage="@(Model.CurrentPage - 1)">Previous</a>
+            </li>
+            
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" asp-page="./Filter" asp-route-currentPage="@i">@i</a>
+                </li>
+            }
+            
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                <a class="page-link" asp-page="./Filter" asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+	</div>
 }
-<script>
-	$(document).ready(function () {
-		$('#servicesTable').DataTable({
-			"paging": true,         // Enable pagination
-			"pageLength": 5,        // Default to 5 rows per page
-			"ordering": true,       // Enable column sorting
-			"info": false,          // Hide "Showing X to Y of Z entries"
-			"searching": false,     // Disable search
-			"lengthChange": false,  // Hide "Entries per page" dropdown
-			"language": {
-				"infoEmpty": "No data available",
-				"search": "Search:",
-				"paginate": {
-					"first": "First",
-					"last": "Last",
-					"next": "Next",
-					"previous": "Previous"
-				}
-			}
-		});
-	});
-</script>
+@* <script> *@
+@* 	$(document).ready(function () { *@
+@* 		$('#servicesTable').DataTable({ *@
+@* 			"paging": true,         // Enable pagination *@
+@* 			"pageLength": 5,        // Default to 5 rows per page *@
+@* 			"ordering": true,       // Enable column sorting *@
+@* 			"info": false,          // Hide "Showing X to Y of Z entries" *@
+@* 			"searching": false,     // Disable search *@
+@* 			"lengthChange": false,  // Hide "Entries per page" dropdown *@
+@* 			"language": { *@
+@* 				"infoEmpty": "No data available", *@
+@* 				"search": "Search:", *@
+@* 				"paginate": { *@
+@* 					"first": "First", *@
+@* 					"last": "Last", *@
+@* 					"next": "Next", *@
+@* 					"previous": "Previous" *@
+@* 				} *@
+@* 			} *@
+@* 		}); *@
+@* 	}); *@
+@* </script> *@
