@@ -26,7 +26,7 @@ namespace CCSystem.Presentation.Pages.Services
         }
 
         public ServiceResponse Service { get; set; } = new();
-        public List<GetServiceDetailResponse> Details { get; set; }
+        public List<GetServiceDetailResponse> Details { get; set; } = new();
         [BindProperty]
         public PostServiceDetailRequest NewDetail { get; set; } = new();
 
@@ -36,19 +36,27 @@ namespace CCSystem.Presentation.Pages.Services
             {
                 return NotFound();
             }
-
-            var service = await _serviceService.GetServiceAsync(id.Value);
-            if (service == null)
+            try
             {
+
+                var service = await _serviceService.GetServiceAsync(id.Value);
+                if (service == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    Service = service;
+                    Details = await _serviceDetailService.GetServiceDetailByServiceAsync(id.Value) ?? new List<GetServiceDetailResponse>();
+
+                }
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 return NotFound();
             }
-            else
-            {
-                Service = service;
-                var (detailSuccess, detailsData, detailsError) = await _serviceDetailService.GetServiceDetailByServiceAsync(id.Value);
-                Details = detailSuccess ? detailsData : new List<GetServiceDetailResponse>();
-            }
-            return Page();
         }
 
         //create new service detail
@@ -56,15 +64,22 @@ namespace CCSystem.Presentation.Pages.Services
         {
             if (!ModelState.IsValid)
             {
+                await LoadServiceData(id);
                 //back to page
                 return Page();
             }
 
-            NewDetail.ServiceId = id;
-            var (createSuccess, createError) = await _serviceDetailService.CreateServiceDetailAsync(NewDetail);
-            if (!createSuccess)
+            try
             {
-                ToastHelper.ShowError(TempData, createError);
+                NewDetail.ServiceId = id;
+                await _serviceDetailService.CreateServiceDetailAsync(NewDetail);
+                ToastHelper.ShowSuccess(TempData, "Create Service Detail successfully");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ToastHelper.ShowError(TempData, ex.Message);
             }
 
             await LoadServiceData(id);
@@ -73,15 +88,16 @@ namespace CCSystem.Presentation.Pages.Services
 
         private async Task LoadServiceData(int id)
         {
-            var serviceData = await _serviceService.GetServiceAsync(id);
-            if (serviceData == null)
+            try
             {
-                serviceData = new ServiceResponse();
+                Service = await _serviceService.GetServiceAsync(id) ?? new ServiceResponse();
+                Details = await _serviceDetailService.GetServiceDetailByServiceAsync(id) ?? new List<GetServiceDetailResponse>();
             }
-            Service = serviceData;
-
-            var (detailSuccess, detailData, errors) = await _serviceDetailService.GetServiceDetailByServiceAsync(id);
-            Details = detailSuccess ? detailData : new List<GetServiceDetailResponse>();
+            catch (Exception ex) { 
+                Console.Write(ex.Message);
+                Service = new ServiceResponse();
+                Details = new List<GetServiceDetailResponse>();
+            }
         }
     }
 }

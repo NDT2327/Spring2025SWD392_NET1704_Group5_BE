@@ -82,7 +82,7 @@
             public string GetServiceDetail(int id) => $"servicedetail/{id}";
             public string UpdateServiceDetail(int id) => $"servicedetail/update/{id}";
             public string DeleteServiceDetail(int id) => $"servicedetail/delete/{id}";
-            public string CreateServiceDetail { get; } = "categories/create";
+            public string CreateServiceDetail { get; } = "servicedetail/create";
         }
 
         //promotion

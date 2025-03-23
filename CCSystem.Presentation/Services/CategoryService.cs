@@ -16,29 +16,26 @@ namespace CCSystem.Presentation.Services
             _apiEndpoints = apiEndpoints;
         }
 
-        public async Task<(bool Success, List<CategoryResponse> Data, string ErrorMessage)> GetAllCategoriesAsync()
+        public async Task<List<CategoryResponse>> GetAllCategoriesAsync()
         {
+            //get url
             var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Category.GetAllCategories);
             try
             {
+                //send HTTP request
                 var response = await _httpClient.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return (false, null, $"{response.StatusCode}");
-                }
+                //HTTP status not success => return null
+                if(!response.IsSuccessStatusCode) return null;
 
                 var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<CategoryResponse>>>();
-
-                if (apiResponse != null || apiResponse.StatusCode != 0) {
-                    var errorMessage = apiResponse?.Messages?.FirstOrDefault()?.DescriptionErrors?.FirstOrDefault();
-                    return (false, null, errorMessage);
-                }
-                return (true, apiResponse.Data ?? new List<CategoryResponse>(), null);
+                //if apiResponse differ from null or status code == 0
+                //show data
+                //else will show new ListCategoryResponse>()
+                return (apiResponse != null && apiResponse.StatusCode == 0) ? apiResponse.Data ?? new List<CategoryResponse>() : null;
             }
             catch (Exception ex) { 
                 Console.WriteLine(ex);
-                return (false, null, $"{ex.Message}");
+                return new List<CategoryResponse>();
             }
         }
 

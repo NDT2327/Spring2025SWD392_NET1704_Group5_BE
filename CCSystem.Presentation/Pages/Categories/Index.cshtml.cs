@@ -25,10 +25,10 @@ namespace CCSystem.Presentation.Pages.Categories
 
         public async Task OnGetAsync()
         {
-            var (success, data, errorMessage) = await _categoryService.GetAllCategoriesAsync();
-            if (!success)
+            var data = await _categoryService.GetAllCategoriesAsync();
+            if (data == null)
             {
-                ToastHelper.ShowError(TempData, errorMessage);
+                ToastHelper.ShowError(TempData, "cannot load category");
                 Category = new List<CategoryResponse>();
             }
             else
