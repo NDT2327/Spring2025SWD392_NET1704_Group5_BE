@@ -5,6 +5,8 @@ using CCSystem.Infrastructure.DTOs.Accounts;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using CCSystem.Infrastructure.DTOs.ServiceDetails;
+using System.Security.Policy;
+using CCSystem.Infrastructure.DTOs.Category;
 
 namespace CCSystem.Presentation.Services
 {
@@ -72,6 +74,7 @@ namespace CCSystem.Presentation.Services
         // Update a service
         public async Task<bool> UpdateServiceAsync(int serviceId, PostServiceRequest request)
         {
+            var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Service.UpdateService(serviceId));
             var formData = new MultipartFormDataContent
             {
                 { new StringContent(request.CategoryId.ToString()), "CategoryId" },
@@ -88,14 +91,47 @@ namespace CCSystem.Presentation.Services
 
             if (request.Image != null && request.Image.Length > 0)
             {
-                using var stream = request.Image.OpenReadStream();
-                var imageContent = new StreamContent(stream);
-                imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(request.Image.ContentType);
-                formData.Add(imageContent, "Image", request.Image.FileName);
+                try
+                {
+                    Console.WriteLine($"Uploading file: Name={request.Image.FileName}, Size={request.Image.Length}, ContentType={request.Image.ContentType}");
+                    var stream = request.Image.OpenReadStream();
+                    var fileContent = new StreamContent(stream);
+                    fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(request.Image.ContentType);
+                    formData.Add(fileContent, "Image", request.Image.FileName);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error preparing image stream: {ex.Message}");
+                    throw; // Ném lỗi để tầng trên xử lý
+                }
+            }
+            Console.WriteLine("🔹 Sending FormData:");
+            foreach (var content in formData)
+            {
+                if (content is StringContent stringContent)
+                {
+                    Console.WriteLine($"  ➤ {content.Headers.ContentDisposition?.Name}: {await stringContent.ReadAsStringAsync()}");
+                }
+                else if (content is StreamContent)
+                {
+                    Console.WriteLine($"  ➤ {content.Headers.ContentDisposition?.Name}: (Binary File)");
+                }
             }
 
-            var response = await _httpClient.PutAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.UpdateService(serviceId)), formData);
-            return response.IsSuccessStatusCode;
+            try
+            {
+                Console.WriteLine($"Sending PUT to: {url}");
+                var response = await _httpClient.PutAsync(url, formData);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Response: Status {response.StatusCode}, Content: {responseContent}");
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending request: {ex.Message}");
+                throw; // Ném lỗi để tầng trên xử lý
+            }
         }
         // Delete (Deactivate) a service
         public async Task<bool> DeleteServiceAsync(int id)

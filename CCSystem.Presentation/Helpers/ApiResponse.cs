@@ -8,6 +8,8 @@ namespace CCSystem.Presentation.Helpers
         public List<ErrorMessage> Messages { get; set; }
         public string SuccessMessage { get; set; }
         public T Data { get; set; }
+
+        public string GetError() => Messages?.FirstOrDefault()?.DescriptionErrors?.FirstOrDefault() ?? "Unknown error";
     }
 
     public class ErrorMessage

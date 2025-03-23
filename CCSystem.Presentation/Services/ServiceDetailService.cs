@@ -17,17 +17,25 @@ namespace CCSystem.Presentation.Services
         }
 
         //get service detail by service
-        public async Task<(bool Success, List<GetServiceDetailResponse> Data, string ErrorMessage)> GetServiceDetailByServiceAsync(int serviceId)
+        public async Task<List<GetServiceDetailResponse>> GetServiceDetailByServiceAsync(int serviceId)
         {
+            //get url
             var url = _apiEndpoints.GetFullUrl(_apiEndpoints.ServiceDetail.GetServiceDetailByService(serviceId));
-            var response = await _httpClient.GetAsync(url);
-            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<GetServiceDetailResponse>>>();
-            if (!response.IsSuccessStatusCode || apiResponse.StatusCode != 0)
-            {
-                var errorMessage = apiResponse.Messages?.FirstOrDefault()?.DescriptionErrors?.FirstOrDefault();
-                return (false, null, errorMessage);
+            //send request
+
+            try {
+                var response = await _httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode) {
+                    return null;
+                }
+                var apiResponse = await response.Content.ReadFromJsonAsync<List<GetServiceDetailResponse>>();
+                return (apiResponse != null ) ? apiResponse ?? new List<GetServiceDetailResponse>() : null;
+
+            } catch (Exception ex) {
+                Console.WriteLine(ex);
+                return null;
             }
-            return (true, apiResponse.Data, null);
+
 
         }
 
@@ -55,24 +63,26 @@ namespace CCSystem.Presentation.Services
         }
 
         //create service detail
-        public async Task<(bool Success, string ErrorMessage)> CreateServiceDetailAsync(PostServiceDetailRequest request)
+        public async Task CreateServiceDetailAsync(PostServiceDetailRequest request)
         {
             var url = _apiEndpoints.GetFullUrl(_apiEndpoints.ServiceDetail.CreateServiceDetail);
             try
             {
                 var response = await _httpClient.PostAsJsonAsync(url, request);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode) throw new HttpRequestException($"Status: {response.StatusCode}, Response: {responseContent}");
                 var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<PostServiceDetailResponse>>();
-
-                if (!response.IsSuccessStatusCode || apiResponse?.StatusCode != 0)
+                if (apiResponse == null || apiResponse.StatusCode != 0)
                 {
-                    var errorMessage = apiResponse?.Messages?.FirstOrDefault()?.DescriptionErrors?.FirstOrDefault();
-                    return (false, errorMessage);
+                    var errorMessage = apiResponse?.Messages?.FirstOrDefault()?.DescriptionErrors?.FirstOrDefault()
+                        ?? "Unknown error from API";
+                    throw new HttpRequestException(errorMessage);
                 }
-                return (true, null);
             }
             catch (Exception ex)
             {
-                return (false, $"{ex.Message}");
+                Console.WriteLine(ex);
+                throw;
             }
         }
 
