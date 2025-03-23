@@ -1,0 +1,81 @@
+﻿@page
+@model CCSystem.Presentation.Pages.BookingModel
+@{
+	ViewData["Title"] = "Bookings";
+	var services = ViewData["Services"] as List<(CCSystem.Infrastructure.DTOs.Services.ServiceResponse service, List<CCSystem.Infrastructure.DTOs.ServiceDetails.GetServiceDetailResponse> details)>;
+}
+
+<h3>Create a New Booking</h3>
+<div class="container p-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+	<form method="post" asp-page="/Books/Booking">
+		<input type="hidden" name="SelectedServices" value="@string.Join(",", Model.SelectedServices)" />
+
+		<div class="form-group">
+			<label>Promotion Code</label>
+			<input asp-for="BookingRequest.PromotionCode" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Notes</label>
+			<textarea asp-for="BookingRequest.Notes" class="form-control"></textarea>
+		</div>
+		<div class="form-group">
+			<label>Payment Method</label>
+			<input asp-for="BookingRequest.PaymentMethod" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Address</label>
+			<input asp-for="BookingRequest.Address" class="form-control" />
+		</div>
+
+		<h4>Selected Services</h4>
+		<ul class="list-unstyled">
+			@if (services != null)
+			{
+				@for (int i = 0; i < Model.SelectedServices.Count; i++)
+				{
+					var serviceId = Model.BookingRequest.BookingDetails[i].ServiceId;
+					<li>
+						<div class="p-3 mb-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+							<p>Service: @services[i].service.ServiceName</p>
+
+							<input type="hidden" asp-for="BookingRequest.BookingDetails[i].ServiceId" value="@serviceId" />
+
+							<input asp-for="BookingRequest.BookingDetails[i].ScheduleDate"
+								   class="form-control"
+								   type="date"
+								   asp-format="{0:yyyy-MM-dd}"
+								   placeholder="YYYY-MM-DD"
+								   pattern="\d{4}-\d{2}-\d{2}"
+								   required />
+
+							<input asp-for="BookingRequest.BookingDetails[i].ScheduleTime"
+								   class="form-control"
+								   type="time"
+								   step="1"
+								   placeholder="HH:mm:ss"
+								   pattern="\d{2}:\d{2}:\d{2}"
+								   required />
+							<div class="form-group">
+								<label>Quantity</label>
+								<input asp-for="BookingRequest.BookingDetails[i].Quantity" class="form-control" required />
+							</div>
+							<div class="form-group">
+								<label>Service Detail</label>
+								<select asp-for="BookingRequest.BookingDetails[i].ServiceDetailId" class="form-control">
+									@foreach (var detail in services[i].details)
+									{
+										<option value="@detail.ServiceDetailId">@detail.OptionName</option>
+									}
+								</select>
+							</div>
+						</div>
+					</li>
+				}
+			}
+		</ul>
+
+		<!-- Nút quay lại chọn thêm dịch vụ -->
+		<a href="/Books/Filter?selectedServices=@string.Join(",", Model.SelectedServices)" class="btn btn-warning">Choose More Services</a>
+		<button type="submit" class="btn btn-primary">Create Booking</button>
+	</form>
+</div>

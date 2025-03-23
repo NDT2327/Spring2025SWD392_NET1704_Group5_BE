@@ -16,7 +16,7 @@ namespace CCSystem.Presentation.Services
             _apiEndpoints = apiEndpoints;
         }
 
-        public async Task<List<BookingDetailResponse>> getAllBookingDetails()
+        public async Task<List<BookingDetailResponse>> GetAllBookingDetails()
         {
             var response = await _httpClient.GetFromJsonAsync<List<BookingDetailResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetAllBookingDetails));
             return response ?? new List<BookingDetailResponse>();

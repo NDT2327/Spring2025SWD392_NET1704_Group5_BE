@@ -15,9 +15,9 @@ namespace CCSystem.Presentation.Services
             _apiEndpoints = apiEndpoints;
         }
 
-        public async Task<List<GetServiceDetailResponse>> getAllBookingDetails()
+        public async Task<List<GetServiceDetailResponse>> GetServiceDetailsByServiceId(int id)
         {
-            var response = await _httpClient.GetFromJsonAsync<List<GetServiceDetailResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetAllBookingDetails));
+            var response = await _httpClient.GetFromJsonAsync<List<GetServiceDetailResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.ServiceDetail.GetServiceDetailByService(id)));
             return response?.Where(x => x.IsActive == true).ToList() ?? new List<GetServiceDetailResponse>();
         }
     }

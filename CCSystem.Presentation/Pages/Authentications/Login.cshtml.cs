@@ -43,7 +43,8 @@ namespace CCSystem.Presentation.Pages.Authentications
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, LoginRequest.Email),
-                    new Claim(ClaimTypes.Role, response.Role)
+                    new Claim(ClaimTypes.Role, response.Role),
+                    new Claim(ClaimTypes.NameIdentifier, response.AccountId.ToString()),
                 };
                 //create identity vs principal
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
