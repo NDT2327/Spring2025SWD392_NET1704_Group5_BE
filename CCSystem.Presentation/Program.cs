@@ -63,6 +63,7 @@ builder.Services.AddHttpClient<ServiceService>("ServiceAPI", (serviceProvider, c
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ServiceDetailService>();
 builder.Services.AddScoped<ServiceService>();
 
 var app = builder.Build();
