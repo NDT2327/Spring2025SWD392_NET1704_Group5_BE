@@ -3,6 +3,8 @@ using CCSystem.Infrastructure.DTOs.Services;
 using Azure;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using CCSystem.Infrastructure.DTOs.ServiceDetails;
 
 namespace CCSystem.Presentation.Services
 {
@@ -25,7 +27,7 @@ namespace CCSystem.Presentation.Services
         public async Task<List<ServiceResponse>?> GetServicesAsync()
         {
             var response = await _httpClient.GetFromJsonAsync<List<ServiceResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.GetServices));
-            return response ?? new List<ServiceResponse>();
+            return response?.Where(x => x.IsActive == true).ToList() ?? new List<ServiceResponse>();
         }
 
         // Get a service by ID
@@ -103,9 +105,10 @@ namespace CCSystem.Presentation.Services
         }
 
         // Search services
-        public async Task<List<ServiceResponse>> SearchServicesAsync(SearchServiceRequest request)
+        public async Task<List<ServiceResponse>> SearchServicesAsync([FromQuery] SearchServiceRequest request)
         {
             var queryParams = new List<string>();
+            Console.WriteLine($"🔍 Received: {JsonSerializer.Serialize(request)}");
 
             if (!string.IsNullOrEmpty(request.ServiceName)) queryParams.Add($"ServiceName={Uri.EscapeDataString(request.ServiceName)}");
             if (!string.IsNullOrEmpty(request.Description)) queryParams.Add($"Description={Uri.EscapeDataString(request.Description)}");
@@ -116,7 +119,7 @@ namespace CCSystem.Presentation.Services
 
             var queryString = queryParams.Any() ? "?" + string.Join("&", queryParams) : "";
             var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Service.SearchServices) + queryString;
-
+            Console.WriteLine($"🔍 Search URL: {url}");
             var response = await _httpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode) return new List<ServiceResponse>();
 
