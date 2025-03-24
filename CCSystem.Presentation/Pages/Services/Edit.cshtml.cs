@@ -85,7 +85,7 @@ namespace CCSystem.Presentation.Pages.Services
                 bool updatedSuccess = await _serviceService.UpdateServiceAsync(ServiceId, Service);
                 if (updatedSuccess) {
                     ToastHelper.ShowSuccess(TempData, "Service updated successfully!");
-                    return RedirectToPage("./Details", new { id = ServiceId });
+                    return RedirectToPage("./Index");
                 }
                 else
                 {
