@@ -2,6 +2,8 @@ using CCSystem.Infrastructure.DTOs.BookingDetails;
 using CCSystem.Infrastructure.DTOs.Bookings;
 using CCSystem.Infrastructure.DTOs.ServiceDetails;
 using CCSystem.Infrastructure.DTOs.Services;
+using CCSystem.Presentation.Constants;
+using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -75,11 +77,11 @@ namespace CCSystem.Presentation.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                Console.WriteLine($"Result1: {ModelState.IsValid}");
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    Console.WriteLine($"Result1: {ModelState.IsValid}");
+            //    return Page();
+            //}
             Console.WriteLine($"BookingRequest: {JsonSerializer.Serialize(BookingRequest)}");
 
             string userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -93,13 +95,34 @@ namespace CCSystem.Presentation.Pages
             var result = await _bookingService.CreateBooking(BookingRequest);
             if (result == null)
             {
-                Console.WriteLine("CreateBooking returned null (HTTP 400?)");
+                ToastHelper.ShowError(TempData, Message.Bookig.CreatedSuccessfully);
                 ModelState.AddModelError("", "Failed to create booking");
-                return Page();
+                return await ReloadPage();
+            }
+            ToastHelper.ShowSuccess(TempData, Message.Bookig.CreatedFailed);
+            return RedirectToPage("/Index");
+        }
+
+
+        private async Task<IActionResult> ReloadPage()
+        {
+            ModelState.Clear(); 
+
+            var services = new List<(ServiceResponse service, List<GetServiceDetailResponse> details)>();
+
+            foreach (var serviceId in SelectedServices)
+            {
+                var service = await _serviceService.GetServiceAsync(serviceId);
+                if (service != null)
+                {
+                    var details = await _serviceDetailService.GetServiceDetailByServiceAsync(serviceId);
+                    services.Add((service, details));
+                }
             }
 
-            Console.WriteLine($"Result2: {result.ToString()}");
-            return RedirectToPage("/Index");
+            ViewData["Services"] = services;
+
+            return Page();
         }
     }
 }

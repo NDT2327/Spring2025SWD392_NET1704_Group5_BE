@@ -65,9 +65,8 @@ body {
         text-align: center;
         margin-bottom: 20px;
         font-weight: bold;
-        color: #333;
+        color: black;
     }
-
     /* Input fields */
     .authen-container .form-control {
         border: 2px solid #ddd;
@@ -75,16 +74,17 @@ body {
     }
 
         .authen-container .form-control:focus {
-            border-color: #FF6B81;
+            border-color: grey;
             box-shadow: 0 0 5px rgba(255, 107, 129, 0.5);
         }
 
     /* Button */
-    .authen-container button {
+    /*.authen-container button {
         text-align: center;
         color: white;
-        background-color: #FF6B81;
-        border: none;
+        background-color: #007bff;*/ /* Primary color */
+   
+     /*border: none;
         border-radius: 25px;
         padding: 12px 15px;
         font-size: 16px;
@@ -95,14 +95,14 @@ body {
     }
 
         .authen-container button:hover {
-            background-color: #E04B5A; 
-            transform: scale(1.05);
+            background-color: #0056b3;*/ /* Darker shade of primary */
+            /*transform: scale(1.05);
         }
 
         .authen-container button:active {
-            background-color: #C93E50;
-            transform: scale(0.98);
-        }
+            background-color: #004085;*/ /* Even darker primary */
+            /*transform: scale(0.98);
+        }*/
 
 /* Footer links */
 .authen-footer {
@@ -110,17 +110,17 @@ body {
     margin-top: 15px;
 }
 
-    .authen-footer a {
+    /*.authen-footer a {
         text-decoration: none;
         margin: 0 10px;
-        color: #FF6B81;
-        font-weight: 500;
+        color: #007bff;*/ /* Primary color */
+        /*font-weight: 500;
         transition: color 0.3s ease-in-out;
     }
 
         .authen-footer a:hover {
-            color: #E04B5A;
-            text-decoration: underline;
-        }
+            color: #0056b3;*/ /* Darker primary */
+            /*text-decoration: underline;
+        }*/
 
 

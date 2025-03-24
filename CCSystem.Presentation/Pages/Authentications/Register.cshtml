@@ -10,17 +10,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/CCSystem.Presentation.styles.css" asp-append-version="true" />
 </head>
 <body class="d-flex align-items-center justify-content-center vh-100 bg-light">
 
-    <div class="authen-container">
-        <h2>Register</h2>
+    <div class="p-4 bg-white shadow rounded" style="width: 380px;">
+        <h2 class="text-center mb-4">Register</h2>
 
         @if (!string.IsNullOrEmpty(Model.Message))
         {
-            <div class="alert alert-info">@Model.Message</div>
+            <div class="alert alert-info text-center">@Model.Message</div>
         }
 
         <form method="post">
@@ -52,8 +52,8 @@
             <button type="submit" class="btn btn-primary w-100">Register</button>
         </form>
 
-        <div class="authen-footer">
-            <a asp-page="/Authentications/Login">Already have an account? Login</a>
+        <div class="text-center mt-3">
+            <a class="text-decoration-none text-primary" asp-page="/Authentications/Login">Already have an account? Login</a>
         </div>
     </div>
 
