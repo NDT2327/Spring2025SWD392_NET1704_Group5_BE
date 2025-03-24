@@ -1,5 +1,6 @@
 ﻿using CCSystem.Infrastructure.DTOs.Category;
 using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Helpers;
 using System.Text.Json;
 
 namespace CCSystem.Presentation.Services
@@ -17,23 +18,22 @@ namespace CCSystem.Presentation.Services
 
         public async Task<List<CategoryResponse>> GetAllCategoriesAsync()
         {
+            //get url
             var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Category.GetAllCategories);
-            var response = await _httpClient.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return new List<CategoryResponse>();
-            }
-
-            var jsonString = await response.Content.ReadAsStringAsync();
-
             try
             {
-                var apiResponse = JsonSerializer.Deserialize<ApiResponse<CategoryResponse>>(jsonString);
-                return apiResponse?.Data ?? new List<CategoryResponse>();
+                //send HTTP request
+                var response = await _httpClient.GetAsync(url);
+                //HTTP status not success => return null
+                if(!response.IsSuccessStatusCode) return null;
+
+                var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<CategoryResponse>>>();
+                //if apiResponse differ from null or status code == 0
+                //show data
+                //else will show new ListCategoryResponse>()
+                return (apiResponse != null && apiResponse.StatusCode == 0) ? apiResponse.Data ?? new List<CategoryResponse>() : null;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) { 
                 Console.WriteLine(ex);
                 return new List<CategoryResponse>();
             }

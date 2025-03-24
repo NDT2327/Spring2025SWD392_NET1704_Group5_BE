@@ -27,7 +27,7 @@
             @Html.DisplayNameFor(model => model.Service.Image)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Service.Image)
+            <img src="model.Service.Image" alt="Service image" class="img-thumbnai" width="150" height="150" />
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Service.Price)
@@ -60,13 +60,114 @@
             @Html.DisplayFor(model => model.Service.UpdatedDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Service.Category)
+            @Html.DisplayNameFor(model => model.Service.CategoryName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Service.Category.CategoryName)
+            @Html.DisplayFor(model => model.Service.CategoryName)
         </dd>
     </dl>
 </div>
+
+<h3>Service Detail</h3>
+<div class="mb-3">
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#adddDetailModal">
+        Add new service detail
+    </button>
+</div>
+@if (Model.Details.Any())
+{
+    <table class="table table-hover table-primary">
+        <thead>
+            <tr>
+                <th scope="col">Option Name</th>
+                <th scope="col">Option type</th>
+                <th scope="col">Base Price</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Description</th>
+                <th scope="col">Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.Details)
+            {
+                <tr>
+                    <td>@detail.OptionName</td>
+                    <td>@detail.OptionType</td>
+                    <td>@detail.BasePrice?.ToString("C")</td>
+                    <td>@detail.Unit</td>
+                    <td>@detail.Duration</td>
+                    <td>@detail.Description</td>
+                    <td>@(detail.IsActive.HasValue && detail.IsActive.Value ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No Availabel Service detail</p>
+}
+
+<div class="modal fade" id="adddDetailModal" tabindex="-1" aria-labelledby="adddDetailModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDetaiModalLabel">Add New Service Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="Create" asp-route-id="@Model.Service.ServiceId">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="NewDetail.OptionName" class="forrm-label">Option name</label>
+                            <input asp-for="NewDetail.OptionName" class="form-control" />
+                            <span asp-validation-for="NewDetail.OptionName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewDetail.OptionType" class="forrm-label">Option Type</label>
+                            <input asp-for="NewDetail.OptionType" class="form-control" />
+                            <span asp-validation-for="NewDetail.OptionType" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewDetail.BasePrice" class="forrm-label">Base Price</label>
+                            <input asp-for="NewDetail.BasePrice" class="form-control" />
+                            <span asp-validation-for="NewDetail.BasePrice" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewDetail.Unit" class="forrm-label">Unit</label>
+                            <input asp-for="NewDetail.Unit" class="form-control" />
+                            <span asp-validation-for="NewDetail.Unit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="NewDetail.Duration" class="form-label">Duration (minutes)</label>
+                            <input asp-for="NewDetail.Duration" class="form-control" type="number" />
+                            <span asp-validation-for="NewDetail.Duration" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewDetail.Description" class="form-label">Description</label>
+                            <textarea asp-for="NewDetail.Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="NewDetail.Description" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewDetail.IsActive" class="form-label">Active</label>
+                            <input asp-for="NewDetail.IsActive" class="form-check-input" type="checkbox" />
+                            <span asp-validation-for="NewDetail.IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Create" />
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Service.ServiceId">Edit</a> |
     <a asp-page="./Index">Back to List</a>

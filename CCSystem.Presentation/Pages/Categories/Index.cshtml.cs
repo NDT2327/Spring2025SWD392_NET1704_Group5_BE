@@ -14,18 +14,27 @@ namespace CCSystem.Presentation.Pages.Categories
 {
     public class IndexModel : PageModel
     {
-        private readonly CategoryService _categoryService;        
+        private readonly CategoryService _categoryService;
 
         public IndexModel(CategoryService categoryService)
         {
             _categoryService = categoryService;
         }
 
-        public List<CategoryResponse> Category { get;set; } = new List<CategoryResponse>();
+        public List<CategoryResponse> Category { get; set; } = new List<CategoryResponse>();
 
         public async Task OnGetAsync()
         {
-            Category = await _categoryService.GetAllCategoriesAsync();
+            var data = await _categoryService.GetAllCategoriesAsync();
+            if (data == null)
+            {
+                ToastHelper.ShowError(TempData, "cannot load category");
+                Category = new List<CategoryResponse>();
+            }
+            else
+            {
+                Category = data;
+            }
         }
 
         public async Task<IActionResult> OnPostLockAsync(int id)
