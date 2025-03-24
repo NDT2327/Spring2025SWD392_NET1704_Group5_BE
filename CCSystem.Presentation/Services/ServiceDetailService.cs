@@ -1,4 +1,5 @@
 
+
 ﻿using CCSystem.Infrastructure.DTOs.ServiceDetails;
 using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Helpers;
@@ -91,4 +92,5 @@ namespace CCSystem.Presentation.Services
         //delete service detail
     }
 }
+
 

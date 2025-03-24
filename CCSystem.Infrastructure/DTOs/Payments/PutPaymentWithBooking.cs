@@ -9,13 +9,10 @@ namespace CCSystem.Infrastructure.DTOs.Payments
 {
     public class PutPaymentWithBooking
     {
-
         public string PaymentMethod { get; set; }
 
         public string Status { get; set; }
 
         public string TransactionId { get; set; }
-
-
     }
 }
