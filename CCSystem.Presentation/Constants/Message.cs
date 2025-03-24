@@ -30,6 +30,16 @@
             public const string UpdateFailed = "Category updated failed, try again!";
         }
 
+        public static class Bookig
+        {
+            public const string CreatedSuccessfully = "Booking has been created successfully";
+            public const string CreatedFailed = "Booking created failed, try again!";
+            //public const string LockSuccessfully = "Category has been locked";
+            //public const string LockFailed = "Category locked failed";
+            //public const string UpdateSuccessfully = "Category has been updated successfully";
+            //public const string UpdateFailed = "Category updated failed, try again!";
+        }
+
 
         public static class ServiceMessage
         {

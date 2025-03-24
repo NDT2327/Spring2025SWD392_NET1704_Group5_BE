@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body class="d-flex align-items-center justify-content-center vh-100 bg-light">
-    <div class="authen-container">
-        <h2>Login</h2>
+    <div class="p-4 bg-white shadow rounded" style="width: 350px;">
+        <h2 class="text-center mb-4">Login</h2>
         <form method="post">
             <div class="mb-3">
                 <label class="form-label">Email</label>
@@ -25,12 +25,12 @@
                 <label class="form-label">Password</label>
                 <input type="password" asp-for="LoginRequest.Password" class="form-control" required />
             </div>
-            <button type="submit" class="w-100">Login</button>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
 
-        <div class="authen-footer">
-            <a asp-page="/Authentications/Register">Sign up</a>
-            <a href="/forgotpassword">Forgot password?</a>
+        <div class="text-center mt-3">
+            <a class="text-decoration-none text-primary" asp-page="/Authentications/Register">Sign up</a> |
+            <a class="text-decoration-none text-danger" href="/forgotpassword">Forgot password?</a>
         </div>
     </div>
 </body>
