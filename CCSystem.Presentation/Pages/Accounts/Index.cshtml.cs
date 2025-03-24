@@ -12,6 +12,7 @@ using CCSystem.Presentation.Services;
 using System.Security.Cryptography.X509Certificates;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
+using CCSystem.BLL.Constants;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {
@@ -19,7 +20,7 @@ namespace CCSystem.Presentation.Pages.Accounts
     {
         private readonly AccountService _accountService;
 
-        public List<GetAccountResponse>? Accounts { get; set; } = new List<GetAccountResponse>();
+        public List<GetAccountResponse>? Accounts { get; set; } = new();
         public IndexModel(AccountService accountService)
         {
             _accountService = accountService;
@@ -30,14 +31,13 @@ namespace CCSystem.Presentation.Pages.Accounts
             try
             {
                 var accounts = await _accountService.GetAccountsAsync();
-                if (accounts == null)
-                {
-                    Accounts = accounts;
-                }
+                //filter account
+                Accounts = accounts?.Where(a => a.Role != RoleConstant.Admin).ToList();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                Accounts = new List<GetAccountResponse>();
             }
         }
 

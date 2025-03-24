@@ -52,7 +52,7 @@ namespace CCSystem.Presentation.Pages
                 var service = await _serviceService.GetServiceAsync(serviceId);
                 if (service != null)
                 {
-                    var details = await _serviceDetailService.GetServiceDetailsByServiceId(serviceId);
+                    var details = await _serviceDetailService.GetServiceDetailByServiceAsync(serviceId);
                     services.Add((service, details));
                 }
             }

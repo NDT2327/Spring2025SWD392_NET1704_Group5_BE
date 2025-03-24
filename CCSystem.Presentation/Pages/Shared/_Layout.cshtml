@@ -1,117 +1,119 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - CCSystem.Presentation</title>
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/CCSystem.Presentation.styles.css" asp-append-version="true" />
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<!-- DataTables CSS -->
-	<link rel="stylesheet" href="~/css/datatables.css">
-	<!-- DataTables JS -->
-	<script src="~/js/datatables.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CCSystem.Presentation</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CCSystem.Presentation.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="~/css/datatables.css">
+    <!-- DataTables JS -->
+    <script src="~/js/datatables.js"></script>
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-page="/Index">Cozy Care</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-						</li>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Cozy Care</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
 
-						@if (User.Identity?.IsAuthenticated ?? false)
-						{
-							var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
 
-							@switch (userRole)
-							{
-								case "ADMIN":
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Accounts/Index">Accounts</a></li>
+                            @switch (userRole)
+                            {
+                                case "ADMIN":
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-page="/Accounts/Index">Accounts</a>
+                                        </li>
 
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Categories/Index">Categories</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Services/Index">Service</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Booking/Index">Booking</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Promotion/Index">Promotion</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Categories/Index">Categories</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Services/Index">Service</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Booking/Index">Booking</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Promotion/Index">Promotion</a></li>
 
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Dashboard/Index">Dashboard</a></li>
-									break;
-								case "HOUSEKEEPER":
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Task/Index">Task</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Schedule/Index">Schedule</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="CompletedTask/Index">Completed Task</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Support/Index">Support</a></li>
-									break;
-								case "STAFF":
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Task/Index">Task</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Request/Index">Request</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Support/Index">Support</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Review/Index">Review</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Assign/Index">Assign</a></li>
-									break;
-								case "CUSTOMER":
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Books/Filter">Services</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="Profile/Index">Profile</a></li>
-									<li class="nav-item"><a class="nav-link text-dark" asp-page="BookingHistory/Index">Booking History</a></li>
-									break;
-							}
-						}
-						else
-						{
-							// Menu cho Guest (chưa đăng nhập)
-							<li class="nav-item"><a class="nav-link text-dark" asp-page="Books/Filter">Services</a></li>
-							<li class="nav-item"><a class="nav-link text-dark" asp-page="Profile/Index">Profile</a></li>
-							<li class="nav-item"><a class="nav-link text-dark" asp-page="BookingHistory/Index">Booking History</a></li>
-						}
-					</ul>
-					<ul class="navbar-nav ms-auto">
-						@if (User.Identity?.IsAuthenticated ?? false)
-						{
-							<li class="nav-item">
-								<a class="nav-link text-white">Hello, @User.Identity.Name</a>
-							</li>
-							<li class="nav-item">
-								<form method="post" asp-page="/Authentications/Login" asp-page-handler="Logout">
-									<button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
-								</form>
-							</li>
-						}
-						else
-						{
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-page="Authentications/Login">Login</a>
-							</li>
-						}
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Dashboard/Index">Dashboard</a></li>
+                                    break;
+                                case "HOUSEKEEPER":
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Task/Index">Task</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Schedule/Index">Schedule</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/CompletedTask/Index">Completed Task</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Support/Index">Support</a></li>
+                                    break;
+                                case "STAFF":
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Task/Index">Task</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Request/Index">Request</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Support/Index">Support</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Review/Index">Review</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Assign/Index">Assign</a></li>
+                                    break;
+                                case "CUSTOMER":
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Books/Filter">Services</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Profile/Index">Profile</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/BookingHistory/Index">Booking History</a></li>
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            // Menu cho Guest (chưa đăng nhập)
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Books/Filter">Services</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Profile/Index">Profile</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/BookingHistory/Index">Booking History</a></li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white">Hello, @User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-page="/Authentications/Login" asp-page-handler="Logout">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="Authentications/Login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
-	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; 2025 - CCSystem.Presentation - <a asp-area="" asp-page="/Privacy">Privacy</a>
-		</div>
-	</footer>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - CCSystem.Presentation - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
 
-	
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
 
-	@await RenderSectionAsync("Scripts", required: false)
-	@await Html.PartialAsync("_ToastPartial")
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Html.PartialAsync("_ToastPartial")
 </body>
 </html>

@@ -67,8 +67,6 @@ builder.Services.AddHttpClient<BookingService>("BookingAPI", (serviceProvider, c
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
 builder.Services.AddHttpClient<ServiceDetailService>("ServiceDetailAPI", (serviceProvider, client) =>
-builder.Services.AddHttpClient<ServiceService>("ServiceDetailAPI", (serviceProvider, client) =>
-
 {
     var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
     client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
