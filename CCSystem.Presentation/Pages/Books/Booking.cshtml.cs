@@ -95,11 +95,11 @@ namespace CCSystem.Presentation.Pages
             var result = await _bookingService.CreateBooking(BookingRequest);
             if (result == null)
             {
-                ToastHelper.ShowError(TempData, Message.Bookig.CreatedSuccessfully);
+                ToastHelper.ShowError(TempData, Message.Bookig.CreatedFailed);
                 ModelState.AddModelError("", "Failed to create booking");
                 return await ReloadPage();
             }
-            ToastHelper.ShowSuccess(TempData, Message.Bookig.CreatedFailed);
+            ToastHelper.ShowSuccess(TempData, Message.Bookig.CreatedSuccessfully);
             return RedirectToPage("/Index");
         }
 

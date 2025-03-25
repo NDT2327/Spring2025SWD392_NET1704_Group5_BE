@@ -11,27 +11,23 @@ using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
+using CCSystem.Presentation.Configurations;
+using System.Security.Principal;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {
     public class CreateModel : PageModel
     {
-        private readonly AccountService _accountService;
-
-
-
-        public CreateModel(AccountService accountService)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public CreateModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _accountService = accountService;
-        }
-
-        public IActionResult OnGet()
-        {
-            return Page();
+            _httpClient = httpClientFactory.CreateClient("AccountAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         [BindProperty]
-        public CreateAccountRequest Account { get; set; } = new();
+        public CreateAccountRequest Account { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -40,8 +36,8 @@ namespace CCSystem.Presentation.Pages.Accounts
             {
                 return Page();
             }
-            var success = await _accountService.CeateAccountAsync(Account);
-            if (!success)
+            var result = await _httpClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.CreateAccount), Account);
+            if (!result.IsSuccessStatusCode)
             {
                 ToastHelper.ShowError(TempData, Message.AccountMessage.AccountCreatedFailed);
                 return Page();

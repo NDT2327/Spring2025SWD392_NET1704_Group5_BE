@@ -10,27 +10,44 @@ using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.Presentation.Services;
+using CCSystem.Presentation.Configurations;
+using Azure;
+using System.Text.Json;
+using Azure.Core;
+using System.Net.Http.Headers;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {
     public class EditModel : PageModel
     {
-        private readonly AccountService _accountService;
-        public EditModel(AccountService accountService)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public EditModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _accountService = accountService;
+            _httpClient = httpClientFactory.CreateClient("AccountAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         [BindProperty]
-        public UpdateAccountRequest Account { get; set; } = new();
+        public UpdateAccountRequest Account { get; set; } = default!;
 
         [BindProperty]
         public IFormFile? AvatarFile { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var account = await _accountService.GetAccountByIdAsync(id);
-            if(account == null) return NotFound();
+            string json = string.Empty;
+            var response = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.GetAccountDetailsUrl(id)));
+            if (response.IsSuccessStatusCode)
+            {
+                json = await response.Content.ReadAsStringAsync();
+            }
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return NotFound();
+            }
+            var account = JsonSerializer.Deserialize<GetAccountResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                 ?? new GetAccountResponse();
 
             Account = new UpdateAccountRequest
             {
@@ -50,27 +67,42 @@ namespace CCSystem.Presentation.Pages.Accounts
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(Account.Address ?? ""), "Address");
+            content.Add(new StringContent(Account.Phone ?? ""), "Phone");
+            content.Add(new StringContent(Account.FullName ?? ""), "FullName");
+            content.Add(new StringContent(Account.Gender ?? ""), "Gender");
+            content.Add(new StringContent(Account.Status ?? ""), "Status");
 
-            if(AvatarFile != null)
+            if (Account.Rating.HasValue) content.Add(new StringContent(Account.Rating.Value.ToString()), "Rating");
+            if (Account.Experience.HasValue) content.Add(new StringContent(Account.Experience.Value.ToString()), "Experience");
+            if (Account.Year.HasValue) content.Add(new StringContent(Account.Year.Value.ToString()), "Year");
+            if (Account.Month.HasValue) content.Add(new StringContent(Account.Month.Value.ToString()), "Month");
+            if (Account.Day.HasValue) content.Add(new StringContent(Account.Day.Value.ToString()), "Day");
+
+            // Process Avatar
+            if (AvatarFile != null)
             {
-                Account.Avatar = AvatarFile;
+                var stream = AvatarFile.OpenReadStream();
+                var fileContent = new StreamContent(stream);
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(AvatarFile.ContentType);
+                content.Add(fileContent, "Avatar", AvatarFile.FileName);
             }
 
-            var success = await _accountService.UpdateAccountAsync(id, Account);
+            var response = await _httpClient.PutAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.UpdateAccountUrl(id)), content);
 
-            if (success)
+            if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessMessage"] = "Update Account Successfully!";
                 return RedirectToPage("./Index");
             }
+
             ModelState.AddModelError(string.Empty, "Failed to update account");
             return Page();
         }
