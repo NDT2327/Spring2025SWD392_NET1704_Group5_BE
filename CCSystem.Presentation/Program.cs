@@ -82,6 +82,7 @@ builder.Services.AddScoped<ServiceService>();
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<ServiceDetailService>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipelidotnne.

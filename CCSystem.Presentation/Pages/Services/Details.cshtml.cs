@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
-using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Services;
 using CCSystem.Infrastructure.DTOs.ServiceDetails;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Configurations;
-using System.Net.Http;
-using static CCSystem.API.Constants.APIEndPointConstant;
 using System.Text.Json;
-using System.Security.Policy;
 
 namespace CCSystem.Presentation.Pages.Services
 {
@@ -43,14 +32,14 @@ namespace CCSystem.Presentation.Pages.Services
                 var response = await _serviceApiClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.GetServiceById(id)));
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"Service API Not Found for ID: {id}");
+                    ToastHelper.ShowError(TempData, "Failed to load service");
                     return NotFound();
                 }
                 var json = await response.Content.ReadAsStringAsync();
                 var service = JsonSerializer.Deserialize<ServiceResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (service == null)
                 {
-                    service = new ServiceResponse();
+                    throw new Exception("Failed to deserialize service response.");
                 }
                 else
                 {
@@ -59,16 +48,16 @@ namespace CCSystem.Presentation.Pages.Services
                     var apiResponse = await _serviceDetailApiClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.ServiceDetail.GetServiceDetailByService(id)));
                     if (!apiResponse.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("API Response: Service Detail Not Found!!!");
-                        return Page(); // Return early if API call fails
+                        Details = new List<GetServiceDetailResponse>();
                     }
+                    else
+                    {
+                        var jsonResponse = await apiResponse.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Received JSON: {jsonResponse}"); // Log the response for debugging
 
-                    var jsonResponse = await apiResponse.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Received JSON: {jsonResponse}"); // Log the response for debugging
-
-                    var serviceDetailResponses = await apiResponse.Content.ReadFromJsonAsync<List<GetServiceDetailResponse>>(new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<GetServiceDetailResponse>();
-
-                    Details = serviceDetailResponses;
+                        var serviceDetailResponses = await apiResponse.Content.ReadFromJsonAsync<List<GetServiceDetailResponse>>(new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<GetServiceDetailResponse>();
+                        Details = serviceDetailResponses;
+                    }                    
                 }
                 return Page();
             }
@@ -118,10 +107,16 @@ namespace CCSystem.Presentation.Pages.Services
                 {
                     var json = await response.Content.ReadAsStringAsync();
                     Service = JsonSerializer.Deserialize<ServiceResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new ServiceResponse();
+                    if (Service == null)
+                    {
+                        ToastHelper.ShowError(TempData, "Failed to load service");
+                        return;
+                    }
                 }
                 else
                 {
-                    Service = new ServiceResponse();
+                    ToastHelper.ShowError(TempData, "Failed to load service");
+                    return;
                 }
 
                 // Gọi API để lấy danh sách ServiceDetail

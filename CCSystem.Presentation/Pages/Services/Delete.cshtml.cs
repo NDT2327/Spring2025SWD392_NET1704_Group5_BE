@@ -7,29 +7,41 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
+using CCSystem.Presentation.Configurations;
+using Firebase.Storage;
+using CCSystem.Infrastructure.DTOs.Services;
+using CCSystem.Presentation.Helpers;
+using System.Text.Json;
+using System.Net.Http;
 
 namespace CCSystem.Presentation.Pages.Services
 {
     public class DeleteModel : PageModel
     {
-        private readonly CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext _context;
+        private readonly HttpClient _serviceApiClient;
+        private readonly HttpClient _categoryApiClient;
+        private readonly ApiEndpoints _apiEndpoints;
 
-        public DeleteModel(CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext context)
+        public DeleteModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _context = context;
+            _serviceApiClient = httpClientFactory.CreateClient("ServiceAPI");
+            _categoryApiClient = httpClientFactory.CreateClient("CategoryAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         [BindProperty]
-        public Service Service { get; set; } = default!;
+        public ServiceResponse Service { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
+            var response = await _serviceApiClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.GetServiceById(id)));
+            if (!response.IsSuccessStatusCode)
             {
+                ToastHelper.ShowError(TempData, "Failed to load service");
                 return NotFound();
             }
-
-            var service = await _context.Services.FirstOrDefaultAsync(m => m.ServiceId == id);
+            var json = await response.Content.ReadAsStringAsync();
+            var service = JsonSerializer.Deserialize<ServiceResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (service == null)
             {
@@ -42,22 +54,17 @@ namespace CCSystem.Presentation.Pages.Services
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (id == null)
+            var response = await _serviceApiClient.PutAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.DeleteService(id)), null);
+            if (!response.IsSuccessStatusCode)
             {
-                return NotFound();
+                ToastHelper.ShowError(TempData, "Failed to delete service");
+                return Page();
             }
-
-            var service = await _context.Services.FindAsync(id);
-            if (service != null)
-            {
-                Service = service;
-                _context.Services.Remove(Service);
-                await _context.SaveChangesAsync();
-            }
-
+            ToastHelper.ShowSuccess(TempData, "Delete Service successfully");
             return RedirectToPage("./Index");
+
         }
     }
 }
