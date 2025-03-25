@@ -42,7 +42,7 @@ namespace CCSystem.Presentation.Pages.Authentications
                 //create claims
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, LoginRequest.Email),
+                    new Claim(ClaimTypes.Name, response.FullName),
                     new Claim(ClaimTypes.Role, response.Role),
                     new Claim(ClaimTypes.NameIdentifier, response.AccountId.ToString()),
                 };
@@ -54,8 +54,8 @@ namespace CCSystem.Presentation.Pages.Authentications
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                 _cookieHelper.SetCookie("accessToken", response.Tokens.AccessToken, 60);
                 _cookieHelper.SetCookie("refreshToken", response.Tokens.RefreshToken, 60);
+
                 ToastHelper.ShowSuccess(TempData, Message.AuthenMessage.LoginSuccess, 3000);
-                TempData.Keep();
                 return RedirectToPage("/Index");
             }
             catch (HttpRequestException ex)

@@ -11,6 +11,7 @@ using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {
