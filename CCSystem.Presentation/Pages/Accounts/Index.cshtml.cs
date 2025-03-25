@@ -13,24 +13,26 @@ using System.Security.Cryptography.X509Certificates;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
 using CCSystem.BLL.Constants;
+using Firebase.Storage;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {
     public class IndexModel : PageModel
     {
-        private readonly AccountService _accountService;
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
 
         public List<GetAccountResponse>? Accounts { get; set; } = new();
-        public IndexModel(AccountService accountService)
+        public IndexModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _accountService = accountService;
+            _httpClient = httpClientFactory.CreateClient("AccountAPI");
+            _apiEndpoints = apiEndpoints;
         }
-
         public async Task OnGetAsync()
         {
             try
             {
-                var accounts = await _accountService.GetAccountsAsync();
+                var accounts =  await _httpClient.GetFromJsonAsync<List<GetAccountResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.GetAccounts));
                 //filter account
                 Accounts = accounts?.Where(a => a.Role != RoleConstant.Admin).ToList();
             }
@@ -43,8 +45,8 @@ namespace CCSystem.Presentation.Pages.Accounts
 
         public async Task<IActionResult> OnPostLockAsync(int id)
         {
-            var success = await _accountService.LockAccountAsync(id);
-            if (success)
+            var success = await _httpClient.PutAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.LockAccountUrl(id)), null);
+            if (success.IsSuccessStatusCode)
             {
                 ToastHelper.ShowSuccess(TempData, Message.AccountMessage.AccountLockedSuccessfully);
             }
@@ -57,8 +59,9 @@ namespace CCSystem.Presentation.Pages.Accounts
 
         public async Task<IActionResult> OnPostUnLockAsync(int id)
         {
-            var success = await _accountService.UnlockAccountAsync(id);
-            if (success)
+            var url = _apiEndpoints.GetFullUrl(_apiEndpoints.Account.UnlockAccountUrl(id));
+            var success = await _httpClient.PutAsync(url, null);
+            if (success.IsSuccessStatusCode)
             {
                 ToastHelper.ShowSuccess(TempData, Message.AccountMessage.AccountUnlockedSuccessfully);
             }
