@@ -39,7 +39,7 @@ namespace CCSystem.Presentation.Services
             if (!response.IsSuccessStatusCode) return null;
 
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<ServiceResponse>(json, _jsonOptions);
+            return JsonSerializer.Deserialize<ServiceResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
         // Create a new service
