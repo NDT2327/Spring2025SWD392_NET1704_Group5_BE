@@ -9,28 +9,37 @@ using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.Presentation.Services;
+using CCSystem.Presentation.Configurations;
+using System.Text.Json;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {
     public class DetailsModel : PageModel
     {
-        //private readonly CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext _context;
-        private readonly AccountService _accountService;
-
-        public DetailsModel(AccountService accountSerivce)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public DetailsModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _accountService = accountSerivce;
+            _httpClient = httpClientFactory.CreateClient("AccountAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
-        public GetAccountResponse Account { get; set; } 
+        public GetAccountResponse Account { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Account = await _accountService.GetAccountByIdAsync(id);
-            if (Account == null) { 
-            
+            var response = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.GetAccountDetailsUrl(id)));
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                Account = JsonSerializer.Deserialize<GetAccountResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new GetAccountResponse();
+            }
+
+            if (Account == null)
+            {
                 return RedirectToPage("Index");
             }
+
             return Page();
         }
     }
