@@ -1,4 +1,6 @@
+using Azure.Core;
 using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,16 +9,18 @@ namespace CCSystem.Presentation.Pages.Authentications
 {
     public class RegisterModel : PageModel
     {
-        private readonly AuthenticationService _authService;
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
 
         [BindProperty]
-        public AccountRegisterRequest AccountRegisterRequest { get; set; } = new();
+        public AccountRegisterRequest AccountRegisterRequest { get; set; } = default!;
 
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
-        public RegisterModel(AuthenticationService autService)
+        public RegisterModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _authService = autService;
+            _httpClient = httpClientFactory.CreateClient("AuthenticationAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -28,7 +32,9 @@ namespace CCSystem.Presentation.Pages.Authentications
             }
             try
             {
-                var response = await _authService.RegisterAsync(AccountRegisterRequest);
+                var response = await _httpClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Authentication.Register), AccountRegisterRequest);
+                response.EnsureSuccessStatusCode();
+                var registerAccount = await response.Content.ReadFromJsonAsync<AccountResponse>();
                 Message = "Registration Successfully";
                 return RedirectToPage("/Login");
 

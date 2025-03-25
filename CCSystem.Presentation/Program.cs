@@ -74,7 +74,7 @@ builder.Services.AddHttpClient<ServiceDetailService>("ServiceDetailAPI", (servic
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
 //Inject service
-builder.Services.AddScoped<AuthenticationService>();
+//builder.Services.AddScoped<AuthenticationService>();
 //builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ServiceDetailService>();

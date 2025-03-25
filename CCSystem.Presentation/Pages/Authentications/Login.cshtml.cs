@@ -1,5 +1,4 @@
 using CCSystem.Infrastructure.DTOs.Accounts;
-using CCSystemAuthenticationService = CCSystem.Presentation.Services.AuthenticationService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -7,32 +6,36 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
+using CCSystem.Presentation.Configurations;
+using Azure.Core;
 
 namespace CCSystem.Presentation.Pages.Authentications
 {
     public class LoginModel : PageModel
     {
-        private readonly CCSystemAuthenticationService _authenticationService;
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
         private readonly CookieHelper _cookieHelper;
 
         //login request
         [BindProperty]
-        public AccountLoginRequest LoginRequest { get; set; } = new();
+        public AccountLoginRequest LoginRequest { get; set; } = default!;
 
-        public LoginModel(CCSystemAuthenticationService authenticationService, CookieHelper cookieHelper)
+        public LoginModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints, CookieHelper cookieHelper)
         {
-            _authenticationService = authenticationService;
+            _httpClient = httpClientFactory.CreateClient("AuthenticationAPI");
+            _apiEndpoints = apiEndpoints;
             _cookieHelper = cookieHelper;
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid) return Page();
+            if (!ModelState.IsValid) return  Page();
             try
             {
                 //save user's token into cookie
-                var response = await _authenticationService.LoginAsync(LoginRequest);
-
-                if (response == null || response.Tokens == null)
+                var response =  await _httpClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Authentication.Login), LoginRequest);
+                var accountResponse = await response.Content.ReadFromJsonAsync<AccountResponse>();
+                if (!response.IsSuccessStatusCode || accountResponse?.Tokens == null)
                 {
 
                     ToastHelper.ShowError(TempData, Message.AuthenMessage.LoginFailed, 3000);
@@ -43,8 +46,8 @@ namespace CCSystem.Presentation.Pages.Authentications
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, LoginRequest.Email),
-                    new Claim(ClaimTypes.Role, response.Role),
-                    new Claim(ClaimTypes.NameIdentifier, response.AccountId.ToString()),
+                    new Claim(ClaimTypes.Role, accountResponse.Role),
+                    new Claim(ClaimTypes.NameIdentifier, accountResponse.AccountId.ToString()),
                 };
                 //create identity vs principal
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -52,8 +55,8 @@ namespace CCSystem.Presentation.Pages.Authentications
 
                 //save into cookies
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-                _cookieHelper.SetCookie("accessToken", response.Tokens.AccessToken, 60);
-                _cookieHelper.SetCookie("refreshToken", response.Tokens.RefreshToken, 60);
+                _cookieHelper.SetCookie("accessToken", accountResponse.Tokens.AccessToken, 60);
+                _cookieHelper.SetCookie("refreshToken", accountResponse.Tokens.RefreshToken, 60);
                 ToastHelper.ShowSuccess(TempData, Message.AuthenMessage.LoginSuccess, 3000);
                 TempData.Keep();
                 return RedirectToPage("/Index");
