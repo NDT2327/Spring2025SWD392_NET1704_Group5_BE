@@ -34,13 +34,12 @@ builder.Services.AddHttpClient("AuthenticationAPI", (serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
-builder.Services.AddHttpClient<AccountService>("AccountAPI", (serviceProvider, client) =>
+builder.Services.AddHttpClient("AccountAPI", (serviceProvider, client) =>
 {
     var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
     client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
     client.Timeout = TimeSpan.FromSeconds(30);
-
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
 builder.Services.AddHttpClient<CategoryService>("CategoryAPI",(serviceProvider, client) =>
@@ -76,7 +75,7 @@ builder.Services.AddHttpClient<ServiceDetailService>("ServiceDetailAPI", (servic
 
 //Inject service
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<AccountService>();
+//builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ServiceDetailService>();
 builder.Services.AddScoped<ServiceService>();

@@ -22,7 +22,7 @@ namespace CCSystem.Presentation.Pages.Accounts
         private readonly HttpClient _httpClient;
         private readonly ApiEndpoints _apiEndpoints;
 
-        public List<GetAccountResponse>? Accounts { get; set; } = new();
+        public List<GetAccountResponse> Accounts { get; set; } = default!;
         public IndexModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
             _httpClient = httpClientFactory.CreateClient("AccountAPI");
@@ -33,8 +33,12 @@ namespace CCSystem.Presentation.Pages.Accounts
             try
             {
                 var accounts =  await _httpClient.GetFromJsonAsync<List<GetAccountResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.Account.GetAccounts));
+                if (accounts == null)
+                {
+                    accounts = new List<GetAccountResponse>();
+                }
                 //filter account
-                Accounts = accounts?.Where(a => a.Role != RoleConstant.Admin).ToList();
+                Accounts = accounts.Where(a => a.Role != RoleConstant.Admin).ToList();
             }
             catch (Exception ex)
             {
