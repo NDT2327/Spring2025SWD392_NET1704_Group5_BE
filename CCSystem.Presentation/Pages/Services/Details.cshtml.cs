@@ -11,53 +11,75 @@ using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Services;
 using CCSystem.Infrastructure.DTOs.ServiceDetails;
 using CCSystem.Presentation.Helpers;
+using CCSystem.Presentation.Configurations;
+using System.Net.Http;
+using static CCSystem.API.Constants.APIEndPointConstant;
+using System.Text.Json;
+using System.Security.Policy;
 
 namespace CCSystem.Presentation.Pages.Services
 {
     public class DetailsModel : PageModel
     {
-        private readonly ServiceService _serviceService;
-        private readonly ServiceDetailService _serviceDetailService;
-        public DetailsModel(ServiceService serviceService, ServiceDetailService serviceDetailService)
+        private readonly HttpClient _serviceApiClient;
+        private readonly HttpClient _serviceDetailApiClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public DetailsModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-
-            _serviceService = serviceService;
-            _serviceDetailService = serviceDetailService;
+            _serviceApiClient = httpClientFactory.CreateClient("ServiceAPI");
+            _serviceDetailApiClient = httpClientFactory.CreateClient("ServiceDetailAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
-        public ServiceResponse Service { get; set; } = new();
-        public List<GetServiceDetailResponse> Details { get; set; } = new();
+        public ServiceResponse Service { get; set; } = default!;
+        public IList<GetServiceDetailResponse> Details { get; set; } = default!;
         [BindProperty]
         public PostServiceDetailRequest NewDetail { get; set; } = new();
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             try
             {
-
-                var service = await _serviceService.GetServiceAsync(id.Value);
+                var response = await _serviceApiClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.GetServiceById(id)));
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"Service API Not Found for ID: {id}");
+                    return NotFound();
+                }
+                var json = await response.Content.ReadAsStringAsync();
+                var service = JsonSerializer.Deserialize<ServiceResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (service == null)
                 {
-                    return NotFound();
+                    service = new ServiceResponse();
                 }
                 else
                 {
                     Service = service;
-                    Details = await _serviceDetailService.GetServiceDetailByServiceAsync(id.Value) ?? new List<GetServiceDetailResponse>();
 
+                    var apiResponse = await _serviceDetailApiClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.ServiceDetail.GetServiceDetailByService(id)));
+                    if (!apiResponse.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("API Response: Service Detail Not Found!!!");
+                        return Page(); // Return early if API call fails
+                    }
+
+                    var jsonResponse = await apiResponse.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Received JSON: {jsonResponse}"); // Log the response for debugging
+
+                    var serviceDetailResponses = await apiResponse.Content.ReadFromJsonAsync<List<GetServiceDetailResponse>>(new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<GetServiceDetailResponse>();
+
+                    Details = serviceDetailResponses;
                 }
                 return Page();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Exception: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
                 return NotFound();
             }
         }
+
 
         //create new service detail
         public async Task<IActionResult> OnPostCreateAsync(int id)
@@ -72,7 +94,7 @@ namespace CCSystem.Presentation.Pages.Services
             try
             {
                 NewDetail.ServiceId = id;
-                await _serviceDetailService.CreateServiceDetailAsync(NewDetail);
+                await _serviceDetailApiClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.ServiceDetail.CreateServiceDetail), NewDetail);
                 ToastHelper.ShowSuccess(TempData, "Create Service Detail successfully");
 
             }
@@ -90,14 +112,37 @@ namespace CCSystem.Presentation.Pages.Services
         {
             try
             {
-                Service = await _serviceService.GetServiceAsync(id) ?? new ServiceResponse();
-                Details = await _serviceDetailService.GetServiceDetailByServiceAsync(id) ?? new List<GetServiceDetailResponse>();
+                // Gọi API để lấy thông tin Service
+                var response = await _serviceApiClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.GetServiceById(id)));
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    Service = JsonSerializer.Deserialize<ServiceResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new ServiceResponse();
+                }
+                else
+                {
+                    Service = new ServiceResponse();
+                }
+
+                // Gọi API để lấy danh sách ServiceDetail
+                var responseDetail = await _serviceDetailApiClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.ServiceDetail.GetServiceDetailByService(id)));
+                if (responseDetail.IsSuccessStatusCode)
+                {
+                    var jsonDetail = await responseDetail.Content.ReadAsStringAsync();
+                    Details = JsonSerializer.Deserialize<List<GetServiceDetailResponse>>(jsonDetail, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<GetServiceDetailResponse>();
+                }
+                else
+                {
+                    Details = new List<GetServiceDetailResponse>();
+                }
             }
-            catch (Exception ex) { 
-                Console.Write(ex.Message);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 Service = new ServiceResponse();
                 Details = new List<GetServiceDetailResponse>();
             }
         }
+
     }
 }
