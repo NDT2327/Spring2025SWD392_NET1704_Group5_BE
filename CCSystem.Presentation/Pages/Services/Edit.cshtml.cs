@@ -1,24 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
-using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Services;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Configurations;
-using System.Net.Http;
 using System.Text.Json;
-using System.Security.Policy;
-using Azure;
 using CCSystem.Infrastructure.DTOs.Category;
-using static CCSystem.API.Constants.APIEndPointConstant;
-using Azure.Core;
 
 namespace CCSystem.Presentation.Pages.Services
 {
@@ -69,6 +56,7 @@ namespace CCSystem.Presentation.Pages.Services
                     throw new Exception($"{service.CategoryName} not found");
 
                 }
+
                 Service = new PostServiceRequest
                 {
                     CategoryId = selectedCategory.CategoryId,
@@ -77,8 +65,11 @@ namespace CCSystem.Presentation.Pages.Services
                     Price = service.Price,
                     Duration = service.Duration,
                     IsActive = service.IsActive,
+                    Image = string.IsNullOrEmpty(service.Image) ? null : await ConvertImageUrlToIFormFile(service.Image)
                 };
                 ServiceId = service.ServiceId;
+                Service.Image = string.IsNullOrEmpty(service.Image) ? null : await ConvertImageUrlToIFormFile(service.Image) ?? new FormFile(new MemoryStream(), 0, 0, "Image", "empty.jpg");
+
                 ViewData["CategoryId"] = new SelectList(categories.Data, "CategoryId", "CategoryName", Service.CategoryId);
                 return Page();
             }
@@ -89,6 +80,37 @@ namespace CCSystem.Presentation.Pages.Services
                 return Page();
             }
         }
+        public async Task<IFormFile?> ConvertImageUrlToIFormFile(string imageUrl)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetAsync(imageUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Failed to fetch image.");
+                    return null; // Có thể gây lỗi CS8603
+                }
+
+                var stream = await response.Content.ReadAsStreamAsync();
+                if (stream == null || stream.Length == 0)
+                {
+                    Console.WriteLine("Empty image stream.");
+                    return null;
+                }
+
+                var fileName = Path.GetFileName(new Uri(imageUrl).LocalPath);
+                var memoryStream = new MemoryStream();
+                await stream.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+
+                return new FormFile(memoryStream, 0, memoryStream.Length, "Image", fileName)
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = response.Content.Headers.ContentType?.ToString() ?? "application/octet-stream"
+                };
+            }
+        }
+
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.
@@ -148,8 +170,8 @@ namespace CCSystem.Presentation.Pages.Services
                     var fileContent = new StreamContent(stream);
                     fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(Service.Image.ContentType);
                     formData.Add(fileContent, "Image", Service.Image.FileName);
-
                 }
+
                 Console.WriteLine("🔹 Sending FormData:");
                 foreach (var content in formData)
                 {
