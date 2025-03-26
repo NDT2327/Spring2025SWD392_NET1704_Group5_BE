@@ -1,4 +1,4 @@
-using CCSystem.Infrastructure.DTOs.BookingDetails;
+﻿using CCSystem.Infrastructure.DTOs.BookingDetails;
 using CCSystem.Presentation.Configurations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,21 +14,21 @@ namespace CCSystem.Presentation.Pages.ChangeSchedules
         {
             _httpClient = httpClientFactory.CreateClient("BookingDetailAPI");
             _apiEndpoints = apiEndpoints;
-
         }
-        [BindProperty]
-        public DateOnly NewDate { get; set; }
 
         [BindProperty]
-        public TimeOnly NewTime { get; set; }
+        public string NewDate { get; set; } = string.Empty;  // Sử dụng string
+
+        [BindProperty]
+        public string NewTime { get; set; } = string.Empty;  // Sử dụng string
 
         public BookingDetailResponse BookingDetail { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            //var detail = await _httpClient.GetFromJsonAsync<BookingDetailResponse>($"/api/v1/bookingDetails/{id}");
-            var detail = await _httpClient.GetFromJsonAsync<BookingDetailResponse>(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetBookingDetail(id)));
-
+            var detail = await _httpClient.GetFromJsonAsync<BookingDetailResponse>(
+                _apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetBookingDetail(id))
+            );
 
             if (detail == null)
             {
@@ -41,15 +41,21 @@ namespace CCSystem.Presentation.Pages.ChangeSchedules
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
+            // Chuyển đổi sang định dạng chính xác
+            if (!DateOnly.TryParseExact(NewDate, "yyyy-MM-dd", out var parsedDate) ||
+                !TimeOnly.TryParseExact(NewTime, "HH:mm:ss", out var parsedTime))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid date or time format.");
+                return Page();
+            }
+
             var request = new RescheduleRequest
             {
-                NewDate = NewDate,
-                NewTime = NewTime
+                NewDate = parsedDate,
+                NewTime = parsedTime
             };
 
-            //var response = await _httpClient.PutAsJsonAsync($"/api/v1/bookingDetails/reschedule/{id}", request);
             var response = await _httpClient.PutAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.Reschedule(id)), request);
-
 
             if (!response.IsSuccessStatusCode)
             {
@@ -60,5 +66,6 @@ namespace CCSystem.Presentation.Pages.ChangeSchedules
             return RedirectToPage("/BookingDetails/Index");
         }
     }
+
 }
 
