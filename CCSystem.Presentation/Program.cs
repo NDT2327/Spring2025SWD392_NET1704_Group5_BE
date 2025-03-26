@@ -42,6 +42,14 @@ builder.Services.AddHttpClient("AccountAPI", (serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
+builder.Services.AddHttpClient("PromotionAPI", (serviceProvider, client) =>
+{
+    var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
+    client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.Timeout = TimeSpan.FromSeconds(30);
+}).AddHttpMessageHandler<BearerTokenHandler>();
+
 builder.Services.AddHttpClient<CategoryService>("CategoryAPI",(serviceProvider, client) =>
 {
     var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
@@ -58,7 +66,7 @@ builder.Services.AddHttpClient<ServiceService>("ServiceAPI", (serviceProvider, c
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
-builder.Services.AddHttpClient<BookingService>("BookingAPI", (serviceProvider, client) =>
+builder.Services.AddHttpClient("BookingAPI", (serviceProvider, client) =>
 {
     var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
     client.BaseAddress = new Uri(apiEndpoints.BaseUrl);

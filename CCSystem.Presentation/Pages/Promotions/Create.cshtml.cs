@@ -7,25 +7,28 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
+using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Helpers;
+using CCSystem.Infrastructure.DTOs.Promotions;
 
 namespace CCSystem.Presentation.Pages.Promotions
 {
     public class CreateModel : PageModel
     {
-        private readonly CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext _context;
-
-        public CreateModel(CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext context)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public CreateModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("PromotionAPI");
+            _apiEndpoints = apiEndpoints;
         }
-
         public IActionResult OnGet()
         {
             return Page();
         }
 
         [BindProperty]
-        public Promotion Promotion { get; set; } = default!;
+        public PostPromotionRequest Promotion { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -34,10 +37,13 @@ namespace CCSystem.Presentation.Pages.Promotions
             {
                 return Page();
             }
-
-            _context.Promotions.Add(Promotion);
-            await _context.SaveChangesAsync();
-
+            var result = await _httpClient.PostAsJsonAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Promotion.CreatePromotion), Promotion);
+            if (!result.IsSuccessStatusCode)
+            {
+                ToastHelper.ShowError(TempData, "Promotion is created failure!");
+                return Page();
+            }
+            ToastHelper.ShowSuccess(TempData, "Promotion is created successfully");
             return RedirectToPage("./Index");
         }
     }

@@ -8,34 +8,55 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
+using CCSystem.Presentation.Configurations;
+using CCSystem.Infrastructure.DTOs.Promotions;
+using System.Text.Json;
+using CCSystem.Infrastructure.DTOs.Accounts;
+using System.Net.Http;
 
 namespace CCSystem.Presentation.Pages.Promotions
 {
     public class EditModel : PageModel
     {
-        private readonly CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext _context;
-
-        public EditModel(CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext context)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public EditModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("PromotionAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         [BindProperty]
-        public Promotion Promotion { get; set; } = default!;
+        public PostPromotionRequest Promotion { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            if (id == null)
+            string json = string.Empty;
+            var response = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Promotion.GetPromtion(id)));
+            if (response.IsSuccessStatusCode)
+            {
+                json = await response.Content.ReadAsStringAsync();
+            }
+            if (string.IsNullOrWhiteSpace(json))
             {
                 return NotFound();
             }
-
-            var promotion =  await _context.Promotions.FirstOrDefaultAsync(m => m.Code == id);
+            var promotion = JsonSerializer.Deserialize<GetPromotionResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                 ?? new GetPromotionResponse();
             if (promotion == null)
             {
                 return NotFound();
             }
-            Promotion = promotion;
+            Promotion = new PostPromotionRequest
+            {
+                Code = promotion.Code,
+                DiscountAmount = promotion.DiscountAmount,
+                DiscountPercent = promotion.DiscountPercent,
+                EndDate = promotion.EndDate,
+                MaxDiscountAmount = promotion.MaxDiscountAmount,
+                MinOrderAmount = promotion.MinOrderAmount,
+                StartDate = promotion.StartDate,
+            };
             return Page();
         }
 
@@ -43,35 +64,43 @@ namespace CCSystem.Presentation.Pages.Promotions
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            var promotionData = new
             {
-                return Page();
-            }
+                discountAmount = Promotion.DiscountAmount,
+                discountPercent = Promotion.DiscountPercent,
+                startDate = Promotion.StartDate,
+                endDate = Promotion.EndDate,
+                minOrderAmount = Promotion.MinOrderAmount,
+                maxDiscountAmount = Promotion.MaxDiscountAmount
+            };
 
-            _context.Attach(Promotion).State = EntityState.Modified;
+            var jsonContent = new StringContent(
+                JsonSerializer.Serialize(promotionData),
+                System.Text.Encoding.UTF8,
+                "application/json"
+            );
 
             try
             {
-                await _context.SaveChangesAsync();
+                var response = await _httpClient.PutAsync(
+                    _apiEndpoints.GetFullUrl(_apiEndpoints.Promotion.UpdatePromotion(Promotion.Code)),
+                    jsonContent
+                );
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError(string.Empty, "Cập nhật thất bại.");
+                    return Page();
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!PromotionExists(Promotion.Code))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError(string.Empty, "Lỗi hệ thống.");
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool PromotionExists(string id)
-        {
-            return _context.Promotions.Any(e => e.Code == id);
-        }
     }
 }
