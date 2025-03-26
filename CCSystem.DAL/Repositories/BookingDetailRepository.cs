@@ -177,8 +177,7 @@ namespace CCSystem.DAL.Repositories
                     .Include(bd => bd.Booking)
                     .Include(bd => bd.Service)
                     .Include(bd => bd.ServiceDetail)
-                    .Where(bd => bd.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString()
-                              && bd.IsAssign == true)
+                    .Where(bd => bd.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString())
                     .ToListAsync();
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
