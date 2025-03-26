@@ -46,21 +46,22 @@
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/Dashboard/Index">Dashboard</a></li>
                                     break;
                                 case "HOUSEKEEPER":
-                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Task/Index">Task</a></li>
-                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Schedule/Index">Schedule</a></li>
-                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/CompletedTask/Index">Completed Task</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Assigns/Task">Tasks</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Assigns/Schedule">Schedules</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Assigns/CompletedTask">Completed Task</a></li>
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/Support/Index">Support</a></li>
                                     break;
                                 case "STAFF":
-                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Task/Index">Task</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/ChangeSchedules/Index">ChangeSchedules</a></li>
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/Request/Index">Request</a></li>
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/Support/Index">Support</a></li>
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/Review/Index">Review</a></li>
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/Assign/Index">Assign</a></li>
+
                                     break;
                                 case "CUSTOMER":
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/Books/Filter">Services</a></li>
-                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Profile/Index">Profile</a></li>
+                                    <li class="nav-item"><a class="nav-link text-dark" asp-page="/Profiles/AccountProfile">Profile</a></li>
                                     <li class="nav-item"><a class="nav-link text-dark" asp-page="/BookingHistory/Index">Booking History</a></li>
                                     break;
                             }

@@ -1,0 +1,32 @@
+﻿@page "{id:int}"
+@model CCSystem.Presentation.Pages.ChangeSchedules.RescheduleModel
+@{
+    ViewData["Title"] = "Reschedule Booking";
+}
+
+<h2>Reschedule Booking</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Current Date:</label>
+        <input type="text" class="form-control" value="@Model.BookingDetail.ScheduleDate" disabled />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Current Time:</label>
+        <input type="text" class="form-control" value="@Model.BookingDetail.ScheduleTime" disabled />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">New Date:</label>
+        <input type="date" asp-for="NewDate" class="form-control" required pattern="\d{4}-\d{2}-\d{2}" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">New Time:</label>
+        <input type="time" asp-for="NewTime" class="form-control" required step="1" pattern="\d{2}:\d{2}:\d{2}" />
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Confirm Reschedule</button>
+</form>

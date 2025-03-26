@@ -29,7 +29,7 @@
         <h4>Selected Services</h4>
         @if (Model.SelectedServices.Any())
         {
-            <table class="table table-striped">
+            <table class="table table-striped" id="servicesTable">
                 <thead>
                     <tr>
                         <th>Option Name</th>
@@ -50,19 +50,15 @@
                             <td>@(serviceDetail.Duration.HasValue ? $"{serviceDetail.Duration} minutes" : "N/A")</td>
                             <td>
                                 <input asp-for="BookingRequest.BookingDetails[i].ScheduleDate"
-                                       class="form-control"
-                                       type="date"
-                                       asp-format="{0:yyyy-MM-dd}"
-                                       pattern="\d{4}-\d{2}-\d{2}"
-                                       min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                                       required />
+                                       class="form-control datepicker"
+                                       type="text"
+                                       value="@(Model.BookingRequest.BookingDetails[i].ScheduleDate == default(DateOnly) ? DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd") : Model.BookingRequest.BookingDetails[i].ScheduleDate.ToString("yyyy-MM-dd"))" required />
                             </td>
                             <td>
                                 <input asp-for="BookingRequest.BookingDetails[i].ScheduleTime"
-                                       class="form-control"
-                                       type="time"
-                                       step="1"
-                                       pattern="\d{2}:\d{2}"
+                                       class="form-control timepicker"
+                                       type="text"
+                                       value="@(Model.BookingRequest.BookingDetails[i].ScheduleTime != null ? Model.BookingRequest.BookingDetails[i].ScheduleTime.ToString() : "")"
                                        required />
                             </td>
                             <td>
@@ -72,6 +68,11 @@
                                        min="1"
                                        value="1"
                                        required />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm remove-service" data-index="@i">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
                             </td>
                             <input type="hidden" asp-for="BookingRequest.BookingDetails[i].ServiceId" value="@serviceDetail.ServiceId" />
                             <input type="hidden" asp-for="BookingRequest.BookingDetails[i].ServiceDetailId" value="@serviceDetail.ServiceDetailId" />
@@ -92,7 +93,59 @@
     </form>
 </div>
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+
 <script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true
+        }).each(function () {
+            if (!$(this).val()) {
+                $(this).datepicker("setDate", new Date()); // Đặt ngày mặc định là hôm nay nếu trống
+            }
+        });
+
+        $('.timepicker').timepicker({
+            showMeridian: false, // 24h format
+            minuteStep: 1,
+            minTime: '08:00',
+            maxTime: '19:00',
+            defaultTime: '08:00' // Giờ mặc định
+        });
+
+        $('.remove-service').click(function () {
+            var index = $(this).data('index');
+            var serviceDetaildId = $(this).closest('tr').data('service-id');
+
+            //remove row
+            $(this).closest('tr').remove();
+
+            // Cập nhật SelectedServicesJson
+            var currentServices = JSON.parse(document.getElementById('selectedServicesJson').value || '[]');
+            var updatedServices = currentServices.filter(id => id !== serviceDetailId);
+            document.getElementById('selectedServicesJson').value = JSON.stringify(updatedServices);
+
+            // Cập nhật localStorage
+            localStorage.setItem('selectedServices', JSON.stringify(updatedServices));
+
+            // Cập nhật lại index của các input trong BookingDetails
+            $('#servicesTable tbody tr').each(function (newIndex) {
+                $(this).find('input').each(function () {
+                    var name = $(this).attr('name').replace(/\[\d+\]/, '[' + newIndex + ']');
+                    $(this).attr('name', name);
+                });
+            });
+        })
+    })
+
     var storedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
     var serverServices = '@Html.Raw(Model.SelectedServicesJson)';
     var selectedServices = serverServices ? JSON.parse(serverServices) : storedServices;

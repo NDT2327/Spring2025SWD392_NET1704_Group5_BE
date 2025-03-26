@@ -130,9 +130,9 @@
         //Booking Detail
         public class BookingDetailEndpoints
         {
-            public string GetActiveBookingDetail { get; } = "bookingdetails/active";
+            public string GetActiveBookingDetails { get; } = "bookingdetails/active";
             public string GetAllBookingDetails { get; } = "bookingdetails/getallbookingdetail";
-
+            public string GetChangeScheduleEndpoint { get; } = "bookingdetails/change-schedule";
             public string GetBookingDetail(int id) => $"bookingdetails/{id}";
             public string GetBookingDetailByBooking(int id) => $"bookingdetails/booking/{id}";
             public string GetDetailByService(int id) => $"bookingdetails/service/{id}";

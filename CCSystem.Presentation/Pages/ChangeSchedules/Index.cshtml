@@ -1,0 +1,72 @@
+﻿@page
+@model CCSystem.Presentation.Pages.ChangeSchedules.IndexModel
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Change Schedule Index</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].ScheduleDate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].ScheduleTime)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].ServiceName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].ServiceDetailName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].Quantity)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].UnitPrice)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].BookdetailStatus)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.BookingDetails)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.ScheduleDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ScheduleTime)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ServiceName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ServiceDetailName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Quantity)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.UnitPrice)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.BookdetailStatus)
+				</td>
+				<td>
+					<form method="post">
+						<input type="hidden" name="id" value="@item.DetailId" />
+						<button type="submit" asp-page-handler="ConfirmSchedule" asp-route-id="@item.DetailId" asp-route-isAccepted="true" class="btn btn-primary">
+							Confirm
+						</button>
+					</form>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
