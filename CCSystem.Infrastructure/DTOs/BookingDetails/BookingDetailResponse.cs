@@ -17,7 +17,7 @@ namespace CCSystem.Infrastructure.DTOs.BookingDetails
 
         public string ServiceName { get; set; }
 
-        public int? ServiceDetailId { get; set; }
+        public int ServiceDetailId { get; set; }
 
         public string ServiceDetailName { get; set; }
 
