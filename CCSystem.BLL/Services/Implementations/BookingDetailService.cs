@@ -178,7 +178,7 @@ namespace CCSystem.BLL.Services.Implementations
         throw new Exception(MessageConstant.BookingDetailMessage.NewDateEarlierThanCurrent);
     }
 
-    if ((newDateTime - oldDateTime).TotalHours > 24)
+    if ((newDateTime - oldDateTime).TotalHours >= 24)
     {
         throw new Exception(MessageConstant.BookingDetailMessage.RescheduleMustBe24HoursApart);
     }
