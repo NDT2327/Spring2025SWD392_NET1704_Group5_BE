@@ -24,7 +24,7 @@ namespace CCSystem.BLL.Services.Implementations
 
         public BookingDetailService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._unitOfWork = (UnitOfWork) unitOfWork;
+            this._unitOfWork = (UnitOfWork)unitOfWork;
             this._mapper = mapper;
         }
 
@@ -64,7 +64,7 @@ namespace CCSystem.BLL.Services.Implementations
                 await _unitOfWork.CommitAsync();
 
             }
-            catch(BadRequestException ex)
+            catch (BadRequestException ex)
             {
                 string message = ErrorUtil.GetErrorString("BadRequestException", ex.Message);
                 throw new BadRequestException(message);
@@ -87,25 +87,25 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 var bdetails = await _unitOfWork.BookingDetailRepository.GetActiveBookingDetailAsync();
 
-				// Lấy thời gian hiện tại dưới dạng DateTime
-				var currentDateTime = DateTime.UtcNow.AddHours(7);
+                // Lấy thời gian hiện tại dưới dạng DateTime
+                var currentDateTime = DateTime.UtcNow.AddHours(7);
 
-				// Lọc các booking details có thời gian chưa qua
-				var filteredDetails = bdetails.Where(bd =>
-				{
-					// Chuyển ScheduleDate và ScheduleTime thành DateTime để so sánh
-					var scheduleDateTime = bd.ScheduleDate.ToDateTime(bd.ScheduleTime); // Tạo DateTime từ DateOnly và TimeOnly
-					return scheduleDateTime > currentDateTime; // So sánh với thời gian hiện tại
-				}).ToList();
+                // Lọc các booking details có thời gian chưa qua
+                var filteredDetails = bdetails.Where(bd =>
+                {
+                    // Chuyển ScheduleDate và ScheduleTime thành DateTime để so sánh
+                    var scheduleDateTime = bd.ScheduleDate.ToDateTime(bd.ScheduleTime); // Tạo DateTime từ DateOnly và TimeOnly
+                    return scheduleDateTime > currentDateTime; // So sánh với thời gian hiện tại
+                }).ToList();
 
-				var responses = _mapper.Map<List<BookingDetailResponse>>(filteredDetails);
+                var responses = _mapper.Map<List<BookingDetailResponse>>(filteredDetails);
                 return responses;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            
+
         }
 
         public async Task<List<BookingDetailResponse>> GetBookDetailByBooking(int bookingId)
@@ -120,6 +120,13 @@ namespace CCSystem.BLL.Services.Implementations
                 var detailLists = await _unitOfWork.BookingDetailRepository
                     .GetBookingDetailsByBooking(booking.BookingId);
                 var reponses = _mapper.Map<List<BookingDetailResponse>>(detailLists);
+                foreach (var item in reponses)
+                {
+                    var service = await _unitOfWork.ServiceRepository.GetServiceAsync(item.ServiceId);
+                    var serviceDetail = await _unitOfWork.ServiceDetailRepository.GetByIdAsync(item.ServiceDetailId);
+                    item.ServiceName = service.ServiceName;
+                    item.ServiceDetailName = serviceDetail.OptionName;
+                }
                 return reponses;
             }
             catch (Exception ex)
@@ -130,13 +137,28 @@ namespace CCSystem.BLL.Services.Implementations
         public async Task<List<BookingDetailResponse>> GetBookingDetailsByServiceIdAsync(int serviceId)
         {
             var bookingDetails = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByServiceId(serviceId);
-            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+            var respones = _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+            foreach (var item in respones)
+            {
+                var service = await _unitOfWork.ServiceRepository.GetServiceAsync(item.ServiceId);
+                item.ServiceName = service.ServiceName;
+
+            }
+            return respones;
         }
 
         public async Task<List<BookingDetailResponse>> GetBookingDetailsByServiceDetailIdAsync(int serviceDetailId)
         {
             var bookingDetails = await _unitOfWork.BookingDetailRepository.GetBookingDetailsByServiceDetailId(serviceDetailId);
-            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+            var reponses = _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+            foreach (var item in reponses)
+            {
+                //var service = await _unitOfWork.ServiceRepository.GetServiceAsync(item.ServiceId);
+                var serviceDetail = await _unitOfWork.ServiceDetailRepository.GetByIdAsync(item.ServiceDetailId);
+                //item.ServiceName = service.ServiceName;
+                item.ServiceDetailName = serviceDetail.OptionName;
+            }
+            return reponses;
         }
 
         public async Task<BookingDetailResponse> GetBookingDetailById(int id)
@@ -156,55 +178,64 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
-            public async Task<RescheduleResponse> RescheduleBookingDetail(int detailId, RescheduleRequest request)
+        public async Task<RescheduleResponse> RescheduleBookingDetail(int detailId, RescheduleRequest request)
+        {
+            var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(detailId);
+            if (bookingDetail == null)
             {
-    var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(detailId);
-    if (bookingDetail == null)
-    {
-        throw new Exception(MessageConstant.BookingDetailMessage.BookingDetailNotFound);
-    }
+                throw new Exception(MessageConstant.BookingDetailMessage.BookingDetailNotFound);
+            }
 
-    // Nếu không nhập ngày mới, giữ nguyên ngày cũ
-    var newDate = request.NewDate == default ? bookingDetail.ScheduleDate : request.NewDate;
+            // Nếu không nhập ngày mới, giữ nguyên ngày cũ
+            var newDate = request.NewDate == default ? bookingDetail.ScheduleDate : request.NewDate;
 
-    // Nếu không nhập giờ mới, giữ nguyên giờ cũ
-    var newTime = request.NewTime == default ? bookingDetail.ScheduleTime : request.NewTime;
+            // Nếu không nhập giờ mới, giữ nguyên giờ cũ
+            var newTime = request.NewTime == default ? bookingDetail.ScheduleTime : request.NewTime;
 
-    var oldDateTime = bookingDetail.ScheduleDate.ToDateTime(bookingDetail.ScheduleTime);
-    var newDateTime = newDate.ToDateTime(newTime);
+            var oldDateTime = bookingDetail.ScheduleDate.ToDateTime(bookingDetail.ScheduleTime);
+            var newDateTime = newDate.ToDateTime(newTime);
 
-    if (newDateTime < oldDateTime)
-    {
-        throw new Exception(MessageConstant.BookingDetailMessage.NewDateEarlierThanCurrent);
-    }
+            if (newDateTime < oldDateTime)
+            {
+                throw new Exception(MessageConstant.BookingDetailMessage.NewDateEarlierThanCurrent);
+            }
 
-    //if ((newDateTime - oldDateTime).TotalHours >= 24)
-    //{
-    //    throw new Exception(MessageConstant.BookingDetailMessage.RescheduleMustBe24HoursApart);
-    //}
+            //if ((newDateTime - oldDateTime).TotalHours >= 24)
+            //{
+            //    throw new Exception(MessageConstant.BookingDetailMessage.RescheduleMustBe24HoursApart);
+            //}
 
-    // Cập nhật lịch
-    bookingDetail.ScheduleDate = newDate;
-    bookingDetail.ScheduleTime = newTime;
-    bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString();
+            // Cập nhật lịch
+            bookingDetail.ScheduleDate = newDate;
+            bookingDetail.ScheduleTime = newTime;
+            bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString();
 
-    await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
-    await _unitOfWork.CommitAsync();
+            await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
+            await _unitOfWork.CommitAsync();
 
-    return new RescheduleResponse
-    {
-        DetailId = detailId,
-        ScheduleDate = newDate,
-        ScheduleTime = newTime,
-        Status = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString()
-    };
-}
+            return new RescheduleResponse
+            {
+                DetailId = detailId,
+                ScheduleDate = newDate,
+                ScheduleTime = newTime,
+                Status = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString()
+            };
+        }
 
         public async Task<List<BookingDetailResponse>> GetAllAsync()
         {
             var bookingDetails = await _unitOfWork.BookingDetailRepository.GetAllAsync();
 
-            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+            
+            var reponses = _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
+            foreach (var item in reponses)
+            {
+                var service = await _unitOfWork.ServiceRepository.GetServiceAsync(item.ServiceId);
+                var serviceDetail = await _unitOfWork.ServiceDetailRepository.GetByIdAsync(item.ServiceDetailId);
+                item.ServiceName = service.ServiceName;
+                item.ServiceDetailName = serviceDetail.OptionName;
+            }
+            return reponses;
         }
 
         public async Task<ConfirmRescheduleResponse> ConfirmReschedule(int detailId, ConfirmRescheduleRequest request)
@@ -217,7 +248,7 @@ namespace CCSystem.BLL.Services.Implementations
             if (bookingDetail.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString())
             {
                 throw new Exception("Invalid booking status! Must be CHANGESCHEDULEREQUESTED");
-            }    
+            }
             if (request.IsAccepted)
             {
                 var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
@@ -232,7 +263,7 @@ namespace CCSystem.BLL.Services.Implementations
                 bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.PENDING.ToString();
                 bookingDetail.IsAssign = false;
             }
-            
+
 
             await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
             await _unitOfWork.CommitAsync();
