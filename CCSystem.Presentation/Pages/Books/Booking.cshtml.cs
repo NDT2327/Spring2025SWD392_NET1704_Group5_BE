@@ -1,5 +1,6 @@
 ﻿using CCSystem.Infrastructure.DTOs.BookingDetails;
 using CCSystem.Infrastructure.DTOs.Bookings;
+using CCSystem.Infrastructure.DTOs.Payments;
 using CCSystem.Infrastructure.DTOs.ServiceDetails;
 using CCSystem.Infrastructure.DTOs.Services;
 using CCSystem.Presentation.Configurations;
@@ -9,6 +10,7 @@ using CCSystem.Presentation.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -46,6 +48,7 @@ namespace CCSystem.Presentation.Pages
         public async Task OnGetAsync(int? serviceDetailId)
         {
             BookingRequest.BookingDetails = new List<PostBookingDetailRequest>();
+            SelectedServices.Clear();
 
             if (!string.IsNullOrEmpty(SelectedServicesJson))
             {
@@ -119,20 +122,52 @@ namespace CCSystem.Presentation.Pages
                 return Page();
             }
 
-            for (int i=0; i<BookingRequest.BookingDetails.Count; i++)
+            SelectedServices.Clear();
+            if (!string.IsNullOrEmpty(SelectedServicesJson))
+            {
+                try
+                {
+                    var selectedIds = JsonSerializer.Deserialize<List<int>>(SelectedServicesJson);
+                    foreach (var id in selectedIds)
+                    {
+                        var detail = await GetServiceDetailAsync(id);
+                        if (detail != null)
+                        {
+                            SelectedServices.Add(detail);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ToastHelper.ShowError(TempData, $"Error reloading selected services: {ex.Message}");
+                    await OnGetAsync(null);
+                    return Page();
+                }
+            }
+
+            if (BookingRequest.BookingDetails.Count != SelectedServices.Count)
+            {
+                Console.WriteLine($"Mismatch detected: BookingDetails.Count={BookingRequest.BookingDetails.Count}, SelectedServices.Count={SelectedServices.Count}");
+                ToastHelper.ShowError(TempData, "Danh sách dịch vụ không đồng bộ. Vui lòng thử lại.");
+                await OnGetAsync(null);
+                return Page();
+            }
+
+            TotalAmount = 0;
+            for (int i = 0; i < BookingRequest.BookingDetails.Count; i++)
             {
                 var detail = SelectedServices[i];
-                BookingRequest.BookingDetails[i].ServiceId = detail.ServiceId.Value;
+                BookingRequest.BookingDetails[i].ServiceId = detail.ServiceId ?? 0;
                 BookingRequest.BookingDetails[i].ServiceDetailId = detail.ServiceDetailId;
+                TotalAmount += detail.BasePrice.GetValueOrDefault() * BookingRequest.BookingDetails[i].Quantity;
             }
 
             string userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine(userIdString);
+            Console.WriteLine($"UserId: {userIdString}");
             if (int.TryParse(userIdString, out int userId))
             {
-
                 BookingRequest.CustomerId = userId;
-                Console.WriteLine(BookingRequest.CustomerId);
+                Console.WriteLine($"CustomerId set to: {BookingRequest.CustomerId}");
             }
 
             var jsonContent = new StringContent(JsonSerializer.Serialize(BookingRequest), System.Text.Encoding.UTF8, "application/json");
@@ -140,15 +175,63 @@ namespace CCSystem.Presentation.Pages
 
             if (!result.IsSuccessStatusCode)
             {
-                ToastHelper.ShowError(TempData, Message.Bookig.CreatedFailed);
+                var errorContent = await result.Content.ReadAsStringAsync();
+                var errorResponse = JsonSerializer.Deserialize<ApiResponse<object>>(errorContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var errorMessage = errorResponse?.GetError() ?? "Tạo booking thất bại.";
+                Console.WriteLine($"CreateBooking API Error: Status {result.StatusCode}, Response: {errorContent}");
+                ToastHelper.ShowError(TempData, errorMessage);
                 TotalAmount = SelectedServices.Sum(s => s.BasePrice.GetValueOrDefault());
                 return Page();
             }
-            var bookingResponse = JsonSerializer.Deserialize<BookingResponse>(await result.Content.ReadAsStringAsync());
-            ToastHelper.ShowSuccess(TempData, Message.Bookig.CreatedSuccessfully);
 
-            return RedirectToPage("/Payments/VNPay", new { bookingId = bookingResponse.BookingId, amount = TotalAmount });
+            var bookingResponseContent = await result.Content.ReadAsStringAsync();
+            Console.WriteLine($"CreateBooking Response: {bookingResponseContent}");
+
+            // Deserialize với ApiResponse<int> vì "data" là số nguyên
+            var apiResponse = JsonSerializer.Deserialize<ApiResponse<int>>(bookingResponseContent, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (apiResponse == null || apiResponse.Data <= 0)
+            {
+                Console.WriteLine($"Invalid BookingId: {apiResponse?.Data ?? 0}");
+                ToastHelper.ShowError(TempData, "BookingId không hợp lệ.");
+                return Page();
+            }
+
+            Console.WriteLine($"Deserialized BookingId: {apiResponse.Data}");
+            ToastHelper.ShowSuccess(TempData, apiResponse.SuccessMessage ?? Message.Bookig.CreatedSuccessfully);
+
+            var paymentRequest = new CreatePaymentRequest
+            {
+                BookingId = apiResponse.Data, // Lấy BookingId từ Data
+                Description = $"Payment for {apiResponse.Data}"
+            };
+            var paymentJson = new StringContent(JsonSerializer.Serialize(paymentRequest), System.Text.Encoding.UTF8, "application/json");
+            Console.WriteLine($"Sending Payment Request: {JsonSerializer.Serialize(paymentRequest)}");
+            var paymentResult = await _httpClient.PostAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Payment.CreatePaymentUrl), paymentJson);
+
+            if (!paymentResult.IsSuccessStatusCode)
+            {
+                var errorContent = await paymentResult.Content.ReadAsStringAsync();
+                var paymentErrorResponse = JsonSerializer.Deserialize<ApiResponse<object>>(errorContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var errorMessage = paymentErrorResponse?.GetError() ?? "Không thể tạo URL thanh toán VNPay.";
+                Console.WriteLine($"Payment API Error: Status {paymentResult.StatusCode}, Response: {errorContent}");
+                ToastHelper.ShowError(TempData, errorMessage);
+                return Page();
+            }
+
+            var paymentUrl = await paymentResult.Content.ReadAsStringAsync();
+            Console.WriteLine($"Payment URL: {paymentUrl}");
+            SelectedServices.Clear();
+            SelectedServicesJson = JsonSerializer.Serialize(new List<int>());
+
+            return Redirect(paymentUrl);
         }
+
+
+
 
         private async Task<GetServiceDetailResponse> GetServiceDetailAsync(int serviceDetailId)
         {
@@ -206,5 +289,7 @@ namespace CCSystem.Presentation.Pages
                 return null;
             }
         }
+
+
     }
 }
