@@ -231,8 +231,6 @@ namespace CCSystem.Presentation.Pages
         }
 
 
-
-
         private async Task<GetServiceDetailResponse> GetServiceDetailAsync(int serviceDetailId)
         {
             try
