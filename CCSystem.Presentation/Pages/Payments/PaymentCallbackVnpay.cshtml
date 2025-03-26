@@ -1,0 +1,36 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Payments.PaymentCallbackVnpayModel
+@{
+}
+
+<h2>Payment Result</h2>
+<div class="container p-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <div class="alert @(Model.TransactionStatus == "Success" ? "alert-success" : Model.TransactionStatus == "Pending" ? "alert-warning" : "alert-danger")" role="alert">
+        <div class="text-center">
+            @if (Model.TransactionStatus == "Success")
+            {
+                <img src="~/img/transaction-success.png" alt="Success" style="width: 100px; height: 100px;" />
+            }
+            else if (Model.TransactionStatus == "Pending")
+            {
+                <img src="~/img/transaction-failed.png" alt="Failure" style="width: 100px; height: 100px;" />
+            }
+            else
+            {
+                <img src="~/img/cashflow.png" alt="Pending" style="width: 100px; height: 100px;" />
+            }
+        </div>
+        <h4 class="alert-heading text-center mt-3">
+            @(Model.TransactionStatus == "Success" ? "Successful" : Model.TransactionStatus == "Pending" ? "Pending" : "Failure")
+        </h4>
+        <p class="text-center">@Model.Message</p>
+        <hr />
+        <p><strong>Order Code:</strong> @Model.OrderId</p>
+        <p><strong>Amount:</strong> @Model.Amount</p>
+        <p><strong>Transaction Number:</strong> @Model.TransactionNo</p>
+        <p><strong>Payment Date:</strong> @Model.PayDate</p>
+    </div>
+    <div class="text-center">
+        <a asp-page="/Books/Booking" class="btn btn-primary">Back to Booking</a>
+    </div>
+</div>

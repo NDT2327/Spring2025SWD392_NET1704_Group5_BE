@@ -20,10 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Bookings\" />
-    <Folder Include="Pages\BookingDetails\" />
     <Folder Include="Pages\Categories\" />
-    <Folder Include="Pages\Promtions\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

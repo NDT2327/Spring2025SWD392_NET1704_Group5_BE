@@ -159,9 +159,7 @@ namespace CCSystem.DAL.Repositories
                     .Include(bd => bd.Booking)
                     .Include(bd => bd.Service)
                     .Include(bd => bd.ServiceDetail)
-                    .Where(bd => bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.ASSIGNED.ToString() 
-                              && bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.COMPLETED.ToString()
-                              && bd.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.CANCELLED.ToString()
+                    .Where(bd => bd.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.PENDING.ToString()
                               && bd.IsAssign == false)
                     .ToListAsync();
             }
@@ -169,6 +167,21 @@ namespace CCSystem.DAL.Repositories
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<List<BookingDetail>> GetChangeScheduleAsync()
+        {
+            try
+            {
+                return await _context.BookingDetails
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
+                    .Include(bd => bd.ServiceDetail)
+                    .Where(bd => bd.BookdetailStatus == BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString()
+                              && bd.IsAssign == true)
+                    .ToListAsync();
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
         }
 
         public async Task<List<BookingDetail>> GetAllAsync()

@@ -1,84 +1,109 @@
 ﻿@page
 @model CCSystem.Presentation.Pages.BookingModel
 @{
-	ViewData["Title"] = "Bookings";
-	var services = ViewData["Services"] as List<(CCSystem.Infrastructure.DTOs.Services.ServiceResponse service, List<CCSystem.Infrastructure.DTOs.ServiceDetails.GetServiceDetailResponse> details)>;
+    ViewData["Title"] = "Bookings";
 }
 
-<h3>Create a New Booking</h3>
+<h3>Your Booking</h3>
 <div class="container p-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-	<form method="post" asp-page="/Books/Booking">
-		<input type="hidden" name="SelectedServices" value="@string.Join(",", Model.SelectedServices)" />
+    <form method="post" asp-page="/Books/Booking" id="bookingForm">
+        <input type="hidden" id="selectedServicesJson" name="SelectedServicesJson" value="@Model.SelectedServicesJson" />
 
-		<div class="form-group">
-			<label>Promotion Code</label>
-			<input asp-for="BookingRequest.PromotionCode" class="form-control" />
-		</div>
-		<div class="form-group">
-			<label>Notes</label>
-			<textarea asp-for="BookingRequest.Notes" class="form-control"></textarea>
-		</div>
-		<div class="form-group">
-			<label>Payment Method</label>
-			<input asp-for="BookingRequest.PaymentMethod" class="form-control" />
-		</div>
-		<div class="form-group">
-			<label>Address</label>
-			<input asp-for="BookingRequest.Address" class="form-control" />
-		</div>
+        <div class="form-group">
+            <label>Promotion Code</label>
+            <input asp-for="BookingRequest.PromotionCode" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Notes</label>
+            <textarea asp-for="BookingRequest.Notes" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Payment Method</label>
+            <input asp-for="BookingRequest.PaymentMethod" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <input asp-for="BookingRequest.Address" class="form-control" />
+        </div>
 
-		<h4>Selected Services</h4>
-		<ul class="list-unstyled">
-			@if (services != null)
-			{
-				@for (int i = 0; i < Model.SelectedServices.Count; i++)
-				{
-					var serviceId = Model.BookingRequest.BookingDetails[i].ServiceId;
+        <h4>Selected Services</h4>
+        @if (Model.SelectedServices.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Option Name</th>
+                        <th>Price</th>
+                        <th>Duration</th>
+                        <th>Schedule Date</th>
+                        <th>Schedule Time</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.SelectedServices.Count; i++)
+                    {
+                        var serviceDetail = Model.SelectedServices[i];
+                        <tr>
+                            <td>@serviceDetail.OptionName</td>
+                            <td>@(serviceDetail.BasePrice?.ToString("C") ?? "N/A")</td>
+                            <td>@(serviceDetail.Duration.HasValue ? $"{serviceDetail.Duration} minutes" : "N/A")</td>
+                            <td>
+                                <input asp-for="BookingRequest.BookingDetails[i].ScheduleDate"
+                                       class="form-control"
+                                       type="date"
+                                       asp-format="{0:yyyy-MM-dd}"
+                                       pattern="\d{4}-\d{2}-\d{2}"
+                                       min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                                       required />
+                            </td>
+                            <td>
+                                <input asp-for="BookingRequest.BookingDetails[i].ScheduleTime"
+                                       class="form-control"
+                                       type="time"
+                                       step="1"
+                                       pattern="\d{2}:\d{2}"
+                                       required />
+                            </td>
+                            <td>
+                                <input asp-for="BookingRequest.BookingDetails[i].Quantity"
+                                       class="form-control"
+                                       type="number"
+                                       min="1"
+                                       value="1"
+                                       required />
+                            </td>
+                            <input type="hidden" asp-for="BookingRequest.BookingDetails[i].ServiceId" value="@serviceDetail.ServiceId" />
+                            <input type="hidden" asp-for="BookingRequest.BookingDetails[i].ServiceDetailId" value="@serviceDetail.ServiceDetailId" />
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <h5>Total Amount: @Model.TotalAmount.ToString("C")</h5>
+        }
+        else
+        {
+            <p>No services selected yet.</p>
+        }
 
-					<li>
-						<div class="p-3 mb-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-							<p>Service: @services[i].service.ServiceName</p>
-
-							<input type="hidden" asp-for="BookingRequest.BookingDetails[i].ServiceId" value="@serviceId" />
-
-							<input asp-for="BookingRequest.BookingDetails[i].ScheduleDate"
-								   class="form-control"
-								   type="date"
-								   asp-format="{0:yyyy-MM-dd}"
-								   placeholder="YYYY-MM-DD"
-								   pattern="\d{4}-\d{2}-\d{2}"
-								   required />
-
-							<input asp-for="BookingRequest.BookingDetails[i].ScheduleTime"
-								   class="form-control"
-								   type="time"
-								   step="1"
-								   placeholder="HH:mm:ss"
-								   pattern="\d{2}:\d{2}:\d{2}"
-								   required />
-							<div class="form-group">
-								<label>Quantity</label>
-								<input asp-for="BookingRequest.BookingDetails[i].Quantity" class="form-control" required />
-							</div>
-							<div class="form-group">
-								<label>Service Detail</label>
-								<select asp-for="BookingRequest.BookingDetails[i].ServiceDetailId" class="form-control">
-									@foreach (var detail in services[i].details)
-									{
-										<option value="@detail.ServiceDetailId">@detail.OptionName</option>
-									}
-								</select>
-							</div>
-							
-						</div>
-					</li>
-				}
-			}
-		</ul>
-
-		<!-- Nút quay lại chọn thêm dịch vụ -->
-		<a href="/Books/Filter?selectedServices=@string.Join(",", Model.SelectedServices)" class="btn btn-warning">Choose More Services</a>
-		<button type="submit" class="btn btn-primary">Create Booking</button>
-	</form>
+        <!-- Nút quay lại chọn thêm dịch vụ -->
+        <button type="submit" asp-page-handler="AddDetail" class="btn btn-warning" onclick="updateLocalStorage()">Choose More Services</button>
+        <button type="submit" class="btn btn-primary" onclick="updateLocalStorage()">Create Booking</button>
+    </form>
 </div>
 
+<script>
+    var storedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
+    var serverServices = '@Html.Raw(Model.SelectedServicesJson)';
+    var selectedServices = serverServices ? JSON.parse(serverServices) : storedServices;
+    document.getElementById('selectedServicesJson').value = JSON.stringify(selectedServices);
+
+    function updateLocalStorage() {
+        var currentServices = JSON.parse(document.getElementById('selectedServicesJson').value || '[]');
+        localStorage.setItem('selectedServices', JSON.stringify(currentServices));
+    }
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -21,6 +21,8 @@ namespace CCSystem.BLL.Services.Interfaces
         Task<ConfirmRescheduleResponse> ConfirmReschedule(int detailId, ConfirmRescheduleRequest request);
         Task<RescheduleResponse> RescheduleBookingDetail(int detailId, RescheduleRequest request);
 
+        Task<List<BookingDetailResponse>> GetChangeScheduleAsync();
+
 
     }
 }
