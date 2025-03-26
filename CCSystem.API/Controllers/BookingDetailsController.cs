@@ -104,12 +104,36 @@ namespace CCSystem.API.Controllers
 
             return Ok(activeBookingDetails);
         }
-		#endregion
+        #endregion
 
-		/// <summary>
-		/// Get list of BookingDetails by ServicelId
-		/// </summary>
-		[HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceId)]
+        #region Get Change Schedule Booking Detail
+        /// <summary>
+        /// Get booking details with change schedule information.
+        /// </summary>
+        /// <returns>
+        /// List of booking details that have a change schedule.
+        /// </returns>
+        /// <response code="200">Booking details retrieved successfully.</response>
+        /// <response code="404">No booking details with change schedule found.</response>
+        /// <response code="500">An error occurred in the system.</response>
+        [ProducesResponseType(typeof(IEnumerable<BookingDetailResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeConstant.ApplicationJson)]
+        [HttpGet(APIEndPointConstant.BookingDetail.GetChangeScheduleEndpoint)]
+        public async Task<IActionResult> GetChangeScheduleBookingDetail()
+        {
+            var bookingDetails = await _bookingDetailService.GetChangeScheduleAsync();
+
+            return Ok(bookingDetails);
+        }
+        #endregion
+
+
+        /// <summary>
+        /// Get list of BookingDetails by ServicelId
+        /// </summary>
+        [HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceId)]
 
         public async Task<IActionResult> GetBookingDetailsByServiceId(int id)
         {
@@ -117,10 +141,12 @@ namespace CCSystem.API.Controllers
             return bookingDetails.Count > 0 ? Ok(bookingDetails) : NotFound($"Không tìm thấy BookingDetails với ServiceId: {id}");
         }
 
-		/// <summary>
-		/// Get list of BookingDetails by ServiceDetailId
-		/// </summary>
-		[HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceDetailId)]
+
+
+        /// <summary>
+        /// Get list of BookingDetails by ServiceDetailId
+        /// </summary>
+        [HttpGet(APIEndPointConstant.BookingDetail.GetBookingDetailByServiceDetailId)]
         public async Task<IActionResult> GetBookingDetailsByServiceDetailId(int id)
         {
             var bookingDetails = await _bookingDetailService.GetBookingDetailsByServiceDetailIdAsync(id);
@@ -150,13 +176,13 @@ namespace CCSystem.API.Controllers
             return Ok(response);
         }
 
-		/// <summary>
-		/// Confirm rescheduling.
-		/// </summary>
-		/// <param name="id">ID của Booking Detail.</param>
-		/// <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
-		/// <returns>Trả về trạng thái xác nhận.</returns>
-		[HttpPut(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
+        /// <summary>
+        /// Confirm rescheduling.
+        /// </summary>
+        /// <param name="id">ID của Booking Detail.</param>
+        /// <param name="request">Yêu cầu xác nhận đặt lại lịch.</param>
+        /// <returns>Trả về trạng thái xác nhận.</returns>
+        [HttpPut(APIEndPointConstant.BookingDetail.ConfirmReschedule)]
         public async Task<IActionResult> ConfirmReschedule(int id, [FromBody] ConfirmRescheduleRequest request)
         {
             var response = await _bookingDetailService.ConfirmReschedule(id, request);
