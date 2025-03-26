@@ -1,5 +1,6 @@
 ﻿using CCSystem.Infrastructure.DTOs.BookingDetails;
 using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -60,10 +61,13 @@ namespace CCSystem.Presentation.Pages.ChangeSchedules
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, "Error rescheduling booking.");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                ToastHelper.ShowError(TempData, $"Cannot Change Status: {response.StatusCode} - {errorContent}");
                 return Page();
+
             }
 
-            return RedirectToPage("/BookingDetails/Index");
+            return RedirectToPage("/Profiles/AccountProfile");
         }
     }
 

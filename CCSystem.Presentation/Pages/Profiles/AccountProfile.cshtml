@@ -170,6 +170,7 @@
                             '<td>' + detail.quantity + '</td>' +
                             '<td>' + detail.unitPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) + '</td>' +
                             '<td>' + detail.bookdetailStatus + '</td>' +
+                            '<td><a href="/ChangeSchedules/Reschedule/' + detail.detailId + '" class="btn btn-primary btn-sm">Reschedule</a></td>' +
                             '</tr>'
                         );
                     });
