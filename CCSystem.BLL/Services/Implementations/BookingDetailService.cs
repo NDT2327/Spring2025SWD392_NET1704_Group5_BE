@@ -204,19 +204,7 @@ namespace CCSystem.BLL.Services.Implementations
         {
             var bookingDetails = await _unitOfWork.BookingDetailRepository.GetAllAsync();
 
-            return bookingDetails.Select(bd => new BookingDetailResponse
-            {
-                DetailId = bd.DetailId,
-                BookingId = bd.BookingId,
-                ServiceId = bd.ServiceId,
-                ScheduleDate = bd.ScheduleDate,
-                ScheduleTime = bd.ScheduleTime,
-                Quantity = bd.Quantity,
-                UnitPrice = bd.UnitPrice,
-                ServiceDetailId = bd.ServiceDetailId,
-                IsAssign = bd.IsAssign,
-                BookdetailStatus = bd.BookdetailStatus
-            }).ToList();
+            return _mapper.Map<List<BookingDetailResponse>>(bookingDetails);
         }
 
         public async Task<ConfirmRescheduleResponse> ConfirmReschedule(int detailId, ConfirmRescheduleRequest request)
