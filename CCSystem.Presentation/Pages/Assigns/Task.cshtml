@@ -14,7 +14,7 @@
 {
 	<p class="text-danger">No data available.</p>
 }
-else 
+else
 {
 	<table class="table">
 		<thead>
@@ -63,10 +63,11 @@ else
 						@Html.DisplayFor(modelItem => item.BookdetailStatus)
 					</td>
 					<td>
-						@if (!item.IsAssign.GetValueOrDefault()) // Chỉ hiển thị nút Assign nếu chưa được gán
+						@if (!item.IsAssign.GetValueOrDefault())
 						{
 							<form method="post" asp-page-handler="Assign" asp-route-detailId="@item.DetailId">
-								<button type="submit" class="btn btn-primary">Assign</button>
+								<textarea name="notes" class="form-control" placeholder="Enter notes" rows="3"></textarea>
+								<button type="submit" class="btn btn-primary mt-1">Assign</button>
 							</form>
 						}
 						else
@@ -74,6 +75,7 @@ else
 							<span class="text-success">Assigned</span>
 						}
 					</td>
+
 				</tr>
 			}
 		</tbody>

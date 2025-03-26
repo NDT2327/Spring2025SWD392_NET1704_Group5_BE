@@ -1,0 +1,72 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Assigns.ScheduleModel
+
+@{
+	ViewData["Title"] = "Schedule";
+}
+
+<h1>Schedule</h1>
+
+<p>
+	<a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.ScheduleAssignment[0].AssignDate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ScheduleAssignment[0].StartTime)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ScheduleAssignment[0].EndTime)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ScheduleAssignment[0].Status)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ScheduleAssignment[0].Notes)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.ScheduleAssignment)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.AssignDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StartTime)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EndTime)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Status)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Notes)
+				</td>
+				<td>
+					@if (item.Status == "ASSIGNED")
+					{
+						<form method="post">
+							<input type="hidden" name="assignId" value="@item.AssignmentId" />
+							<button type="submit" class="btn btn-primary">Start</button>
+						</form>
+					}
+					else if (item.Status == "INPROGRESS")
+					{
+						<form method="post">
+							<input type="hidden" name="assignId" value="@item.AssignmentId" />
+							<button type="submit" class="btn btn-success">Complete</button>
+						</form>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
