@@ -81,6 +81,13 @@ builder.Services.AddHttpClient<ServiceDetailService>("ServiceDetailAPI", (servic
     client.DefaultRequestHeaders.Add("Accept", "application/json");
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
+builder.Services.AddHttpClient("BookingDetailAPI", (serviceProvider, client) =>
+{
+    var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
+    client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.Timeout = TimeSpan.FromSeconds(30);
+}).AddHttpMessageHandler<BearerTokenHandler>();
 
 //Inject service
 //builder.Services.AddScoped<AuthenticationService>();
