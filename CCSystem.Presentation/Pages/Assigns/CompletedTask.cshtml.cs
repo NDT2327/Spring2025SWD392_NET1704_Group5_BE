@@ -29,7 +29,7 @@ namespace CCSystem.Presentation.Pages.Assigns
 
         public async Task OnGetAsync()
         {
-            string userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdString, out int userId))
             {
                 ToastHelper.ShowError(TempData, "User ID is not valid!");
