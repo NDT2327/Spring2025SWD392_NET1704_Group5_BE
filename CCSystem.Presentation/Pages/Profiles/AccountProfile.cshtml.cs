@@ -74,7 +74,7 @@ namespace CCSystem.Presentation.Pages.Profiles
             {
                 var details = await detailResponse.Content.ReadFromJsonAsync<List<BookingDetail>>() ?? new List<BookingDetail>();
                 BookingDetails = details; // Gán để debug nếu cần
-                return new JsonResult(details);
+                return new JsonResult(details); 
             }
             else
             {
