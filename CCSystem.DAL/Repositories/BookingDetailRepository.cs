@@ -24,9 +24,9 @@ namespace CCSystem.DAL.Repositories
             try
             {
                 return await _context.BookingDetails
-                    //.Include(bd => bd.Booking)
-                    //.Include(bd => bd.Service)
-                    //.Include(bd => bd.ServiceDetail)
+                    .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
+                    .Include(bd => bd.ServiceDetail)
                     .Where(bd => bd.BookingId == id)
                     .ToListAsync();
             }
@@ -70,6 +70,7 @@ namespace CCSystem.DAL.Repositories
             {
                 return await _context.BookingDetails
                     .Include(bd => bd.Booking)
+                    .Include(bd => bd.Service)
                     .Include(bd => bd.ServiceDetail)
                     .Where(bd => bd.ServiceId == serviceId)
                     .ToListAsync();
@@ -87,6 +88,7 @@ namespace CCSystem.DAL.Repositories
                 return await _context.BookingDetails
                     .Include(bd => bd.Booking)
                     .Include(bd => bd.Service)
+                    .Include(bd => bd.ServiceDetail)
                     .Where(bd => bd.ServiceDetailId == serviceDetailId)
                     .ToListAsync();
             }
