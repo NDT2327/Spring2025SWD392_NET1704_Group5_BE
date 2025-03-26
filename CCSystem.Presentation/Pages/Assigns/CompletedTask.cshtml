@@ -1,0 +1,51 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Assigns.CompletedTaskModel
+
+@{
+    ViewData["Title"] = "CompletedTask";
+}
+
+<h1>CompletedTask</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleAssignment[0].AssignDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleAssignment[0].StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleAssignment[0].EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleAssignment[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleAssignment[0].Notes)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ScheduleAssignment) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
