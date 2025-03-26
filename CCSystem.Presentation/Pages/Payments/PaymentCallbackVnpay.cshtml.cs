@@ -1,9 +1,9 @@
-using CCSystem.Infrastructure.DTOs.Payments;
-using CCSystem.Presentation.Configurations;
+﻿using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Helpers;
+using CCSystem.Presentation.Models.Payment;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace CCSystem.Presentation.Pages.Payments
 {
@@ -36,59 +36,85 @@ namespace CCSystem.Presentation.Pages.Payments
                 TransactionId = Request.Query["vnp_TxnRef"].FirstOrDefault(),
                 Amount = long.TryParse(Request.Query["vnp_Amount"].FirstOrDefault(), out long amount) ? amount : 0,
                 OrderInfo = Request.Query["vnp_OrderInfo"].FirstOrDefault(),
-                PayDate = Request.Query["vnp_PayDate"].FirstOrDefault(),
-
+                PayDate = Request.Query["vnp_PayDate"].FirstOrDefault()
             };
 
             OrderId = queryParams.TransactionId;
-
-            //call api CallBackVnPay
-            var callbackUrl = $"{_apiEndpoints.GetFullUrl(_apiEndpoints.Payment.CallBackVnPay)}?{Request.QueryString}";
-            var callbackResult = await _httpClient.GetAsync(callbackUrl);
-
-            //if success
-            if (callbackResult.IsSuccessStatusCode)
+            TransactionNo = queryParams.TransactionNo;
+            Amount = (queryParams.Amount / 100).ToString("C", new System.Globalization.CultureInfo("vi-VN"));
+            if (DateTime.TryParseExact(queryParams.PayDate, "yyyyMMddHHmmss", null, System.Globalization.DateTimeStyles.None, out var payDate))
             {
-                var response = await callbackResult.Content.ReadAsStringAsync();
-                var paymentResponse = JsonConvert.DeserializeObject<PaymentResponse>(response);
-
-                //map data from paymentresponse
-                TransactionStatus = paymentResponse.Status switch
-                {
-                    "Success" => "Success",
-                    "Pending" => "Pending",
-                    _ => "Failed"
-                };
-
-                Message = paymentResponse.Status == "Success" ? "Payment Successfully!" : paymentResponse.Status == "Pending" ? "In Processing..." : "Paymend failed.";
-                Amount = (paymentResponse.Amount).ToString("C", new System.Globalization.CultureInfo("vi-VN"));
-                TransactionNo = paymentResponse.TransactionId;
-                PayDate = paymentResponse.PaymentDate?.ToString("dd/MM/yyyy HH:mm:ss") ?? queryParams.PayDate;
+                PayDate = payDate.ToString("dd/MM/yyyy HH:mm:ss");
             }
             else
             {
-                //fallback if api failed
-                TransactionStatus = queryParams.ResponseCode == "00" ? "Success" : "Fail";
-                Message = queryParams.ResponseCode switch
-                {
-                    "00" => "Payment Successfully!",
-                    "07" => "Suspond",
-                    "09" => "Your account do not have enough balance.",
-                    "24" => "Transaction is canceled by user.",
-                    _ => $"Transaction failed (Error Code:{queryParams.ResponseCode}). Please check again."
-                };
-                Amount = (queryParams.Amount / 100).ToString("C", new System.Globalization.CultureInfo("vi-VN"));
-                TransactionNo = queryParams.TransactionNo;
                 PayDate = queryParams.PayDate;
             }
 
+            Console.WriteLine($"Query String - ResponseCode: {queryParams.ResponseCode}, TransactionStatus: {queryParams.TransactionStatus}, TransactionNo: {queryParams.TransactionNo}");
+            // Gọi API CallBackVnPay
+            var callbackUrl = $"{_apiEndpoints.GetFullUrl(_apiEndpoints.Payment.CallBackVnPay)}?{Request.QueryString}";
+            var callbackResult = await _httpClient.GetAsync(callbackUrl);
+
+            if (callbackResult.IsSuccessStatusCode)
+            {
+                var callbackResponseContent = await callbackResult.Content.ReadAsStringAsync();
+                Console.WriteLine($"Callback Response: {callbackResponseContent}");
+                PaymentResponse callbackResponse;
+                try
+                {
+                    callbackResponse = JsonSerializer.Deserialize<PaymentResponse>(callbackResponseContent, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                }
+                catch (JsonException ex)
+                {
+                    Console.WriteLine($"Deserialize Error: {ex.Message}");
+                    TransactionStatus = "Failed";
+                    Message = $"Lỗi phân tích response từ API: {ex.Message}";
+                    ToastHelper.ShowError(TempData, Message);
+                    return;
+                }
+
+                if (callbackResponse != null)
+                {
+                    if(queryParams.ResponseCode == "00" && queryParams.TransactionStatus == "00")
+                    {
+                        TransactionStatus = "Success";
+                        Message = "Payment Successfully";
+                        Console.WriteLine("Overriding API status with VNPay query string: Success");
+                    }
+                    else
+                    {
+                        TransactionStatus = callbackResponse.Status.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase) ? "Success" : "Failed";
+                        Message = TransactionStatus == "Success" ? "Payment Successfully" : "Payment failure";
+                    }
+                }
+                else
+                {
+                    TransactionStatus = "Failed";
+                    Message = "Unable to confirm payment status from server.";
+                }
+            }
+            else
+            {
+                // Fallback nếu API thất bại
+                TransactionStatus = queryParams.ResponseCode == "00" && queryParams.TransactionStatus == "00" ? "Success" : "Failed";
+                Message = queryParams.ResponseCode switch
+                {
+                    "00" => "Payment Successfully!",
+                    "07" => "Suspicious.",
+                    "09" => "Account does not have enough balance.",
+                    "24" => "Transaction is cancelled by user.",
+                    _ => $"(Error: {queryParams.ResponseCode})."
+                };
+            }
+
+            // Hiển thị thông báo
             if (TransactionStatus == "Success")
             {
                 ToastHelper.ShowSuccess(TempData, Message);
-            }
-            else if (TransactionStatus == "Pending")
-            {
-                ToastHelper.ShowWarning(TempData, Message);
             }
             else
             {
