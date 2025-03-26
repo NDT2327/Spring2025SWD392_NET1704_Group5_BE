@@ -156,53 +156,49 @@ namespace CCSystem.BLL.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<RescheduleResponse> RescheduleBookingDetail(int detailId, RescheduleRequest request)
-        {
-            
-            var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(detailId);
-            if (bookingDetail == null)
+            public async Task<RescheduleResponse> RescheduleBookingDetail(int detailId, RescheduleRequest request)
             {
-                throw new Exception(MessageConstant.BookingDetailMessage.BookingDetailNotFound);
-            }
-            var oldDateTime = bookingDetail.ScheduleDate.ToDateTime(bookingDetail.ScheduleTime);
-            var newDateTime = request.NewDate.ToDateTime(request.NewTime);
-            if (newDateTime < oldDateTime)
-            {
-                throw new Exception(MessageConstant.BookingDetailMessage.NewDateEarlierThanCurrent);
-            }
-            // Kiểm tra nếu thời gian mới trừ thời gian cũ nhỏ hơn 24 giờ
-            if ((newDateTime - oldDateTime).TotalHours > 24)
-            {
-                throw new Exception(MessageConstant.BookingDetailMessage.RescheduleMustBe24HoursApart);
-            }
+    var bookingDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(detailId);
+    if (bookingDetail == null)
+    {
+        throw new Exception(MessageConstant.BookingDetailMessage.BookingDetailNotFound);
+    }
 
-            // Cập nhật lịch
-            bookingDetail.ScheduleDate = request.NewDate;
-            bookingDetail.ScheduleTime = request.NewTime;
-            bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString();
+    // Nếu không nhập ngày mới, giữ nguyên ngày cũ
+    var newDate = request.NewDate == default ? bookingDetail.ScheduleDate : request.NewDate;
 
-            //// Hủy lịch cũ
-            //var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
-            //if (assignments != null && assignments.Any())
-            //{
-            //    foreach (var assignment in assignments)
-            //    {
-            //        assignment.Status = "CANCELLED";
-            //        await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
-            //    }
-            //}
+    // Nếu không nhập giờ mới, giữ nguyên giờ cũ
+    var newTime = request.NewTime == default ? bookingDetail.ScheduleTime : request.NewTime;
 
-            await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
-            await _unitOfWork.CommitAsync();
+    var oldDateTime = bookingDetail.ScheduleDate.ToDateTime(bookingDetail.ScheduleTime);
+    var newDateTime = newDate.ToDateTime(newTime);
 
-            return new RescheduleResponse
-            {
-                DetailId = detailId,
-                ScheduleDate = request.NewDate,
-                ScheduleTime = request.NewTime,
-                Status = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString()
-            };
-        }
+    if (newDateTime < oldDateTime)
+    {
+        throw new Exception(MessageConstant.BookingDetailMessage.NewDateEarlierThanCurrent);
+    }
+
+    //if ((newDateTime - oldDateTime).TotalHours >= 24)
+    //{
+    //    throw new Exception(MessageConstant.BookingDetailMessage.RescheduleMustBe24HoursApart);
+    //}
+
+    // Cập nhật lịch
+    bookingDetail.ScheduleDate = newDate;
+    bookingDetail.ScheduleTime = newTime;
+    bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString();
+
+    await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
+    await _unitOfWork.CommitAsync();
+
+    return new RescheduleResponse
+    {
+        DetailId = detailId,
+        ScheduleDate = newDate,
+        ScheduleTime = newTime,
+        Status = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString()
+    };
+}
 
         public async Task<List<BookingDetailResponse>> GetAllAsync()
         {
