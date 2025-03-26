@@ -15,7 +15,8 @@ namespace CCSystem.DAL.Enums
             COMPLETED,
             ASSIGNED,
             WAITINGCONFIRM,
-            CANCELREQUESTED
+            CANCELREQUESTED,
+            CHANGESCHEDULEREQUESTED
         }
     }
 }

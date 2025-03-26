@@ -58,7 +58,6 @@ namespace CCSystem.Presentation.Pages.Authentications
                 _cookieHelper.SetCookie("accessToken", accountResponse.Tokens.AccessToken, 60);
                 _cookieHelper.SetCookie("refreshToken", accountResponse.Tokens.RefreshToken, 60);
                 ToastHelper.ShowSuccess(TempData, Message.AuthenMessage.LoginSuccess, 3000);
-                TempData.Keep();
                 return RedirectToPage("/Index");
             }
             catch (HttpRequestException ex)

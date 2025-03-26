@@ -33,8 +33,14 @@
                 <label asp-for="Service.Image" class="control-label"></label>
                 <input type="file" asp-for="Service.Image" class="form-control" />
                 <span asp-validation-for="Service.Image" class="text-danger"></span>
-                <small>Current: <img src="@Model.Service.Image" alt="Current Service Image" width="50" height="50"/></small>
+
+                @if (!string.IsNullOrEmpty(Model.Service.Image?.FileName))
+                {
+                    <small>Current:</small>
+                    <img src="@Model.Service.Image" alt="Current Service Image" width="50" height="50" />
+                }
             </div>
+
             <div class="form-group">
                 <label asp-for="Service.Price" class="control-label"></label>
                 <input asp-for="Service.Price" class="form-control" />
@@ -47,7 +53,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Service.IsActive" class="control-label"></label>
-                <input asp-for="Service.IsActive" class="form-control" />
+                <select asp-for="Service.IsActive" class="form-control">
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
                 <span asp-validation-for="Service.IsActive" class="text-danger"></span>
             </div>
             <div class="form-group">

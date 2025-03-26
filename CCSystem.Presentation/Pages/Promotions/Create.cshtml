@@ -1,0 +1,64 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Promotions.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Promotion</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Promotion.Code" class="control-label"></label>
+                <input asp-for="Promotion.Code" class="form-control" />
+                <span asp-validation-for="Promotion.Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Promotion.DiscountAmount" class="control-label"></label>
+                <input asp-for="Promotion.DiscountAmount" class="form-control" />
+                <span asp-validation-for="Promotion.DiscountAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Promotion.DiscountPercent" class="control-label"></label>
+                <input asp-for="Promotion.DiscountPercent" class="form-control" />
+                <span asp-validation-for="Promotion.DiscountPercent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Promotion.StartDate" class="control-label"></label>
+                <input asp-for="Promotion.StartDate" class="form-control" />
+                <span asp-validation-for="Promotion.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Promotion.EndDate" class="control-label"></label>
+                <input asp-for="Promotion.EndDate" class="form-control" />
+                <span asp-validation-for="Promotion.EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Promotion.MinOrderAmount" class="control-label"></label>
+                <input asp-for="Promotion.MinOrderAmount" class="form-control" />
+                <span asp-validation-for="Promotion.MinOrderAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Promotion.MaxDiscountAmount" class="control-label"></label>
+                <input asp-for="Promotion.MaxDiscountAmount" class="form-control" />
+                <span asp-validation-for="Promotion.MaxDiscountAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
