@@ -145,6 +145,8 @@
             public const string GetBookingDetailByServiceDetailId = BookingDetailEndpoint + "/servicedetail" + "/{id}";
             public const string RescheduleBookingDetail = BookingDetailEndpoint + "/reschedule" + "/{id}";
             public const string ConfirmReschedule = BookingDetailEndpoint + "/confirm" + "/{id}";
+            public const string GetChangeScheduleEndpoint = BookingDetailEndpoint + "/change-schedule";
+
         }
 
         public static class ScheduleAssign

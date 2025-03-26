@@ -179,18 +179,18 @@ namespace CCSystem.BLL.Services.Implementations
             // Cập nhật lịch
             bookingDetail.ScheduleDate = request.NewDate;
             bookingDetail.ScheduleTime = request.NewTime;
-            bookingDetail.BookdetailStatus = "WAITINGCONFIRM";
+            bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString();
 
-            // Hủy lịch cũ
-            var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
-            if (assignments != null && assignments.Any())
-            {
-                foreach (var assignment in assignments)
-                {
-                    assignment.Status = "CANCELLED";
-                    await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
-                }
-            }
+            //// Hủy lịch cũ
+            //var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
+            //if (assignments != null && assignments.Any())
+            //{
+            //    foreach (var assignment in assignments)
+            //    {
+            //        assignment.Status = "CANCELLED";
+            //        await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
+            //    }
+            //}
 
             await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
             await _unitOfWork.CommitAsync();
@@ -200,7 +200,7 @@ namespace CCSystem.BLL.Services.Implementations
                 DetailId = detailId,
                 ScheduleDate = request.NewDate,
                 ScheduleTime = request.NewTime,
-                Status = "WAITINGCONFIRM"
+                Status = BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString()
             };
         }
 
@@ -237,31 +237,14 @@ namespace CCSystem.BLL.Services.Implementations
                 {
                     foreach (var assignment in assignments)
                     {
-                        assignment.AssignDate = bookingDetail.ScheduleDate; 
-                        assignment.StartTime = bookingDetail.ScheduleTime;
-                        assignment.EndTime = bookingDetail.ScheduleTime.AddHours(1);
-                        assignment.Status = "WAITINGCONFIRM";
+                        assignment.Status = AssignEnums.Status.CANCELLED.ToString(); // Hủy lịch
                         await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
                     }
                 }
-                bookingDetail.BookdetailStatus = "PENDING";
-            }
-            else
-            {
-
-                bookingDetail.BookdetailStatus = "CANCELLED";
+                bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.PENDING.ToString();
                 bookingDetail.IsAssign = false;
-                var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
-                if (assignments != null && assignments.Any())
-                {
-                    foreach (var assignment in assignments)
-                    {
-                        assignment.Status = "CANCELLED"; // Hủy lịch
-                        await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
-                    }
-                }
+            }
             
-        }
 
             await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
             await _unitOfWork.CommitAsync();
@@ -272,6 +255,32 @@ namespace CCSystem.BLL.Services.Implementations
                 Message = request.IsAccepted ? "Reschedule confirmed" : "Reschedule rejected",
                 Status = bookingDetail.BookdetailStatus
             };
+        }
+
+        public async Task<List<BookingDetailResponse>> GetChangeScheduleAsync()
+        {
+            try
+            {
+                var bdetails = await _unitOfWork.BookingDetailRepository.GetChangeScheduleAsync();
+
+                // Lấy thời gian hiện tại dưới dạng DateTime
+                var currentDateTime = DateTime.UtcNow.AddHours(7);
+
+                // Lọc các booking details có thời gian chưa qua
+                var filteredDetails = bdetails.Where(bd =>
+                {
+                    // Chuyển ScheduleDate và ScheduleTime thành DateTime để so sánh
+                    var scheduleDateTime = bd.ScheduleDate.ToDateTime(bd.ScheduleTime); // Tạo DateTime từ DateOnly và TimeOnly
+                    return scheduleDateTime > currentDateTime; // So sánh với thời gian hiện tại
+                }).ToList();
+
+                var responses = _mapper.Map<List<BookingDetailResponse>>(filteredDetails);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
