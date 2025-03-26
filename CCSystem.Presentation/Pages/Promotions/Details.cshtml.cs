@@ -7,36 +7,39 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
+using CCSystem.Presentation.Configurations;
+using CCSystem.Infrastructure.DTOs.Accounts;
+using System.Text.Json;
+using CCSystem.Infrastructure.DTOs.Promotions;
 
 namespace CCSystem.Presentation.Pages.Promotions
 {
     public class DetailsModel : PageModel
     {
-        private readonly CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext _context;
-
-        public DetailsModel(CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext context)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public DetailsModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient("PromotionAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
-        public Promotion Promotion { get; set; } = default!;
+        public GetPromotionResponse Promotion { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            if (id == null)
+            var response = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Promotion.GetPromtion(id)));
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                var json = await response.Content.ReadAsStringAsync();
+                Promotion = JsonSerializer.Deserialize<GetPromotionResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new GetPromotionResponse();
             }
 
-            var promotion = await _context.Promotions.FirstOrDefaultAsync(m => m.Code == id);
-            if (promotion == null)
+            if (Promotion == null)
             {
-                return NotFound();
+                return RedirectToPage("Index");
             }
-            else
-            {
-                Promotion = promotion;
-            }
+
             return Page();
         }
     }

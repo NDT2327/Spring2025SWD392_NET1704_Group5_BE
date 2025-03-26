@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
 
-namespace CCSystem.Presentation.Pages.Promotions
+namespace CCSystem.Presentation.Pages.Bookings
 {
     public class DeleteModel : PageModel
     {
@@ -20,40 +20,40 @@ namespace CCSystem.Presentation.Pages.Promotions
         }
 
         [BindProperty]
-        public Promotion Promotion { get; set; } = default!;
+        public Booking Booking { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var promotion = await _context.Promotions.FirstOrDefaultAsync(m => m.Code == id);
+            var booking = await _context.Bookings.FirstOrDefaultAsync(m => m.BookingId == id);
 
-            if (promotion == null)
+            if (booking == null)
             {
                 return NotFound();
             }
             else
             {
-                Promotion = promotion;
+                Booking = booking;
             }
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string id)
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var promotion = await _context.Promotions.FindAsync(id);
-            if (promotion != null)
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking != null)
             {
-                Promotion = promotion;
-                _context.Promotions.Remove(Promotion);
+                Booking = booking;
+                _context.Bookings.Remove(Booking);
                 await _context.SaveChangesAsync();
             }
 
