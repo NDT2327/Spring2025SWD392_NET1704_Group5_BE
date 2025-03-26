@@ -150,8 +150,6 @@ namespace CCSystem.Presentation.Pages
             return RedirectToPage("/Payments/VNPay", new { bookingId = bookingResponse.BookingId, amount = TotalAmount });
         }
 
-
-
         private async Task<GetServiceDetailResponse> GetServiceDetailAsync(int serviceDetailId)
         {
             try

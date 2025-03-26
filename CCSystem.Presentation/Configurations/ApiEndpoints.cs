@@ -18,7 +18,7 @@
 
         public ApiEndpoints()
         {
-            //BaseUrl = "https://localhost:7207/api/v1/";
+            BaseUrl = "https://localhost:7207/api/v1/";
             //BaseUrl = "https://ccsystemapi20250305144905.azurewebsites.net/api/v1/";
             Account = new AccountEndpoints();
             Authentication = new AuthenticationEndpoints();
@@ -130,7 +130,7 @@
         //Booking Detail
         public class BookingDetailEndpoints
         {
-            public string GetActiveBookingDetail { get; } = "bookingdetails/active";
+            public string GetActiveBookingDetails { get; } = "bookingdetails/active";
             public string GetAllBookingDetails { get; } = "bookingdetails/getallbookingdetail";
 
             public string GetBookingDetail(int id) => $"bookingdetails/{id}";

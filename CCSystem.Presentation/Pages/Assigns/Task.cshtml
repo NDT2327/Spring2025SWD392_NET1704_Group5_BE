@@ -1,0 +1,82 @@
+﻿@page
+@model CCSystem.Presentation.Pages.Assigns.TaskModel
+
+@{
+	ViewData["Title"] = "Task";
+}
+
+<h1>Task</h1>
+
+<p>
+	<a asp-page="Create">Create New</a>
+</p>
+@if (Model.BookingDetail == null || !Model.BookingDetail.Any())
+{
+	<p class="text-danger">No data available.</p>
+}
+else 
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.BookingDetail[0].ScheduleDate)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.BookingDetail[0].Quantity)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.BookingDetail[0].UnitPrice)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.BookingDetail[0].ScheduleTime)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.BookingDetail[0].IsAssign)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.BookingDetail[0].BookdetailStatus)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.BookingDetail)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.ScheduleDate)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Quantity)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UnitPrice)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.ScheduleTime)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IsAssign)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.BookdetailStatus)
+					</td>
+					<td>
+						@if (!item.IsAssign.GetValueOrDefault()) // Chỉ hiển thị nút Assign nếu chưa được gán
+						{
+							<form method="post" asp-page-handler="Assign" asp-route-detailId="@item.DetailId">
+								<button type="submit" class="btn btn-primary">Assign</button>
+							</form>
+						}
+						else
+						{
+							<span class="text-success">Assigned</span>
+						}
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
