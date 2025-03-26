@@ -19,7 +19,7 @@
         public ApiEndpoints()
         {
             //BaseUrl = "https://localhost:7207/api/v1/";
-            BaseUrl = "https://ccsystemapi20250305144905.azurewebsites.net/api/v1/";
+            //BaseUrl = "https://ccsystemapi20250305144905.azurewebsites.net/api/v1/";
             Account = new AccountEndpoints();
             Authentication = new AuthenticationEndpoints();
             Category = new CategoryEndpoints();

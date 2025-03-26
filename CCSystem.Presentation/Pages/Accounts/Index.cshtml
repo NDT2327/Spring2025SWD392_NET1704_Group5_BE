@@ -1,8 +1,6 @@
 ﻿@page
 @model CCSystem.Presentation.Pages.Accounts.IndexModel
 @using CCSystem.Presentation.Constants;
-
-
 @{
     ViewData["Title"] = "Account Management";
 }
@@ -98,12 +96,12 @@ else
 }
 <script>
     $(document).ready(function () {
-        $('#servicesTable').DataTable({
+        $('#accountTable').DataTable({
             "paging": true,         // Enable pagination
             "pageLength": 5,        // Default to 5 rows per page
             "ordering": true,       // Enable column sorting
             "info": false,          // Hide "Showing X to Y of Z entries"
-            "searching": false,     // Disable search
+            "searching": true,     // Disable search
             "lengthChange": false,  // Hide "Entries per page" dropdown
             "language": {
                 "infoEmpty": "No data available",

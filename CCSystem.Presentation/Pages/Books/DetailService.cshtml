@@ -1,0 +1,46 @@
+﻿@page "{serviceId:int}"
+@model CCSystem.Presentation.Pages.Books.DetailServiceModel
+@{
+    ViewData["Title"] = "Service Details";
+
+    var selectedIds = string.IsNullOrEmpty(Model.SelectedServicesJson)
+        ? new List<int>()
+        : System.Text.Json.JsonSerializer.Deserialize<List<int>>(Model.SelectedServicesJson);
+}
+
+<h3>Service Details for @Model.ServiceName</h3>
+<div class="container p-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    @if (Model.ServiceDetails.Any())
+    {
+        <div class="row">
+            @foreach (var detail in Model.ServiceDetails)
+            {
+                var isSelected = selectedIds.Contains(detail.ServiceDetailId);
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@detail.OptionName</h5>
+                            <p class="card-text">Type: @detail.OptionType</p>
+                            <p class="card-text">Price: @(detail.BasePrice?.ToString("C") ?? "N/A")</p>
+                            <p class="card-text">Unit: @detail.Unit</p>
+                            <p class="card-text">Duration: @(detail.Duration.HasValue ? $"{detail.Duration} minutes" : "N/A")</p>
+                            <p class="card-text">Description: @detail.Description</p>
+                            <p class="card-text">Active: @(detail.IsActive.HasValue ? detail.IsActive.ToString() : "N/A")</p>
+                            <form method="post" asp-page="/Books/DetailService" asp-page-handler="Book">
+                                <input type="hidden" name="serviceDetailId" value="@detail.ServiceDetailId" />
+                                <input type="hidden" name="SelectedServicesJson" value="@Model.SelectedServicesJson" />
+                                <button type="submit" class="btn btn-success" disabled="@(isSelected ? "disabled" : null)">@(isSelected ? "Booked" : "Book")</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No service details available for this service.</p>
+    }
+
+    <a asp-page="/Books/Booking" asp-route-selectedServicesJson="@Model.SelectedServicesJson" class="btn btn-secondary">Back to Booking</a>
+</div>
