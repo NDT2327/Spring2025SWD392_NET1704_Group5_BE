@@ -9,23 +9,28 @@ using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Category;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
+using CCSystem.Presentation.Configurations;
 
 namespace CCSystem.Presentation.Pages.Categories
 {
     public class IndexModel : PageModel
     {
-        private readonly CategoryService _categoryService;
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
 
-        public IndexModel(CategoryService categoryService)
+        public IndexModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _categoryService = categoryService;
+            _httpClient = httpClientFactory.CreateClient("CategoryAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         public List<CategoryResponse> Category { get; set; } = new List<CategoryResponse>();
 
         public async Task OnGetAsync()
         {
-            var data = await _categoryService.GetAllCategoriesAsync();
+            var data = await _httpClient.GetFromJsonAsync<List<CategoryResponse>>(
+                           _apiEndpoints.GetFullUrl(_apiEndpoints.Category.GetAllCategories)
+                       ); 
             if (data == null)
             {
                 ToastHelper.ShowError(TempData, "cannot load category");
@@ -39,8 +44,10 @@ namespace CCSystem.Presentation.Pages.Categories
 
         public async Task<IActionResult> OnPostLockAsync(int id)
         {
-            var success = await _categoryService.LockCategoryAsync(id);
-            if (success)
+            var response = await _httpClient.PutAsync(
+                            _apiEndpoints.GetFullUrl($"{_apiEndpoints.Category.DeleteCategory}/{id}"), null
+                        );
+            if (response.IsSuccessStatusCode)
             {
                 ToastHelper.ShowSuccess(TempData, Message.Category.LockSuccessfully);
             }
@@ -52,3 +59,4 @@ namespace CCSystem.Presentation.Pages.Categories
         }
     }
 }
+    

@@ -9,16 +9,19 @@ using CCSystem.DAL.DBContext;
 using CCSystem.DAL.Models;
 using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Category;
+using CCSystem.Presentation.Configurations;
 
 namespace CCSystem.Presentation.Pages.Categories
 {
     public class DetailsModel : PageModel
     {
-        private readonly CategoryService _categoryService;
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
 
-        public DetailsModel(CategoryService categoryService)
+        public DetailsModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _categoryService = categoryService;
+            _httpClient = httpClientFactory.CreateClient("CategoryAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         public CategoryResponse Category { get; set; } = new CategoryResponse();
@@ -30,15 +33,16 @@ namespace CCSystem.Presentation.Pages.Categories
                 return NotFound();
             }
 
-            var category = await _categoryService.GetCategoryAsync(id.Value);
-            if (category == null)
+            var response = await _httpClient.GetFromJsonAsync<CategoryResponse>(
+                 _apiEndpoints.GetFullUrl($"{_apiEndpoints.Category.GetCategory}/{id}")
+             );
+
+            if (response == null)
             {
                 return NotFound();
             }
-            else
-            {
-                Category = category;
-            }
+
+            Category = response;
             return Page();
         }
     }

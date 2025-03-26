@@ -11,17 +11,20 @@ using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Category;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
+using CCSystem.Presentation.Configurations;
 
 namespace CCSystem.Presentation.Pages.Categories
 {
     public class CreateModel : PageModel
     {
-        private readonly CategoryService _categoryService;
-        public CreateModel(CategoryService categoryService)
-        {
-            _categoryService = categoryService;
-        }
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
 
+        public CreateModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
+        {
+            _httpClient = httpClientFactory.CreateClient("CategoryAPI");
+            _apiEndpoints = apiEndpoints;
+        }
         public IActionResult OnGet()
         {
             return Page();
@@ -40,11 +43,11 @@ namespace CCSystem.Presentation.Pages.Categories
 
             try
             {
-                var success = await _categoryService.CreateCategoryAsync(Category);
-                if (!success)
+                var result = await _httpClient.PostAsJsonAsync(
+                   _apiEndpoints.GetFullUrl(_apiEndpoints.Category.CreateCategory), Category
+               );
+                if (!result.IsSuccessStatusCode)
                 {
-
-                    // Hiển thị lỗi trên giao diện
                     ToastHelper.ShowError(TempData, Message.Category.CreatedFailed);
                     return Page();
                 }

@@ -9,17 +9,22 @@ using CCSystem.Presentation.Services;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
 using CCSystem.BLL.Constants;
+using CCSystem.Presentation.Configurations;
 
 namespace CCSystem.Presentation.Pages.Categories
 {
     public class EditModel : PageModel
     {
-        private readonly CategoryService _categoryService;
 
-        public EditModel(CategoryService categoryService)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+
+        public EditModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _categoryService = categoryService;
+            _httpClient = httpClientFactory.CreateClient("CategoryAPI");
+            _apiEndpoints = apiEndpoints;
         }
+
 
         [BindProperty]
         public CategoryRequest Category { get; set; } = new();
@@ -34,7 +39,9 @@ namespace CCSystem.Presentation.Pages.Categories
                 return NotFound();
             }
 
-            var category =  await _categoryService.GetCategoryAsync(id.Value);
+            var category = await _httpClient.GetFromJsonAsync<CategoryResponse>(
+                            _apiEndpoints.GetFullUrl($"{_apiEndpoints.Category.GetCategory}/{id}")
+                        ); 
             if (category == null)
             {
                 return NotFound();
@@ -63,8 +70,11 @@ namespace CCSystem.Presentation.Pages.Categories
                 ToastHelper.ShowWarning(TempData, "Category ID khong hop le");
                 return Page();
             }
-            var success = await _categoryService.UpdateCategoryAsync(CategoryId, Category);
-            if (!success) {
+            var response = await _httpClient.PutAsJsonAsync(
+                           _apiEndpoints.GetFullUrl($"{_apiEndpoints.Category.UpdateCategory}/{CategoryId}"), Category
+                       );
+            if (!response.IsSuccessStatusCode)
+            {
                 ToastHelper.ShowError(TempData, MessageConstant.CategoryMessage.UpdateCategoryFailed);
                 return Page();
             }
