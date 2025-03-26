@@ -90,7 +90,7 @@ namespace CCSystem.API.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status500InternalServerError)]
         //[Consumes(MediaTypeConstant.MultipartFormData)]
         [Produces(MediaTypeConstant.ApplicationJson)]
-        [PermissionAuthorize(PermissionAuthorizeConstant.Admin, PermissionAuthorizeConstant.Staff, PermissionAuthorizeConstant.Housekeeper)]
+        //[PermissionAuthorize(PermissionAuthorizeConstant.Admin, PermissionAuthorizeConstant.Staff, PermissionAuthorizeConstant.Housekeeper)]
         [HttpPost(APIEndPointConstant.ScheduleAssign.ScheduleAssignEndpoint)]
         public async Task<IActionResult> PostAssignHousekeeper([FromBody] PostScheduleAssignRequest request)
         {
