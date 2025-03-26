@@ -14,7 +14,7 @@ namespace CCSystem.Presentation.Helpers
             Info
         }
 
-        public static void Show(ITempDataDictionary tempData, string message, ToastType type = ToastType.Info, int duration = DefaultDuration, string title = null)
+        public static void Show(ITempDataDictionary tempData, string message, ToastType type = ToastType.Info, int duration = DefaultDuration, string? title = null)
         {
             tempData["ToastMessage"] = message;
             tempData["ToastType"] =     type.ToString().ToLower();

@@ -10,25 +10,28 @@ using CCSystem.DAL.Models;
 using CCSystem.Presentation.Services;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.Infrastructure.DTOs.Services;
+using CCSystem.Presentation.Configurations;
 
 namespace CCSystem.Presentation.Pages.Services
 {
     public class IndexModel : PageModel
     {
-        private readonly ServiceService _serviceService;
-        public IList<ServiceResponse> Services { get; set; } = new List<ServiceResponse>();
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public IList<ServiceResponse> Services { get; set; } = default!;
 
-        public IndexModel(ServiceService serviceService)
+        public IndexModel(IHttpClientFactory httpClientFactory, ApiEndpoints apiEndpoints)
         {
-            _serviceService = serviceService;
+            _httpClient = httpClientFactory.CreateClient("ServiceAPI");
+            _apiEndpoints = apiEndpoints;
         }
 
         public async Task OnGetAsync()
         {
-            var services = await _serviceService.GetServicesAsync();
-            if (services != null)
+            var response = await _httpClient.GetFromJsonAsync<List<ServiceResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.Service.GetServices));
+            if (response != null)
             {
-                Services = services;
+                Services = response.Where(x => x.IsActive == true).ToList() ?? new List<ServiceResponse>();
             }
         }
     }
