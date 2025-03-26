@@ -230,6 +230,10 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 throw new Exception("Booking detail not found");
             }
+            if (bookingDetail.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.CHANGESCHEDULEREQUESTED.ToString())
+            {
+                throw new Exception("Invalid booking status! Must be CHANGESCHEDULEREQUESTED");
+            }    
             if (request.IsAccepted)
             {
                 var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
