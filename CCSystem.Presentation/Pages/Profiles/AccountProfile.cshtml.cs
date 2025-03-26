@@ -97,6 +97,16 @@ namespace CCSystem.Presentation.Pages.Profiles
                 //if cannot get account id -> return to login page
                 RedirectToPage("/Authentications/Login");
             }
+            var detailResponse = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetBookingDetail(id)));
+            if (detailResponse.IsSuccessStatusCode)
+            {
+                var detail = await detailResponse.Content.ReadFromJsonAsync<BookingDetail>();
+                if (detail == null || detail.BookdetailStatus != "WAITINGCONFIRM")
+                {
+                    ToastHelper.ShowError(TempData, $"Status is not WAITINGCONFIRM");
+                    return RedirectToPage();
+                }
+            }
             ConfirmAssignmentRequest = new ConfirmAssignmentRequest 
             { 
                 BookingDetailId = id,
