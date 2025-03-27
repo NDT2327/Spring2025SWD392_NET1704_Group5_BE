@@ -24,7 +24,7 @@ namespace CCSystem.Presentation.Pages.Assigns
 
         public async Task<IActionResult> OnGetAsync()
         {
-            string userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!int.TryParse(userIdString, out int userId))
             {
                 ToastHelper.ShowError(TempData, "User ID is not valid!");
@@ -80,7 +80,7 @@ namespace CCSystem.Presentation.Pages.Assigns
             }
             else if (apiResponse.Status == "INPROGRESS")
             {
-                string userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (!int.TryParse(userIdString, out int userId))
                 {
                     ToastHelper.ShowError(TempData, "User ID is not valid!");

@@ -72,7 +72,7 @@ namespace CCSystem.DAL.Repositories
                     .Include(bd => bd.Booking)
                     .Include(bd => bd.ServiceDetail)
                     .Where(bd => bd.ServiceId == serviceId)
-                    .ToListAsync();
+                    .ToListAsync(); 
             }
             catch (Exception ex)
             {
@@ -87,6 +87,7 @@ namespace CCSystem.DAL.Repositories
                 return await _context.BookingDetails
                     .Include(bd => bd.Booking)
                     .Include(bd => bd.Service)
+                    //.Include(bd => bd.ServiceDetail)
                     .Where(bd => bd.ServiceDetailId == serviceDetailId)
                     .ToListAsync();
             }
