@@ -64,7 +64,7 @@ else
 						<img src="@item.Image" alt="Service image" class="img-thumbnai" width="150" height="150" />
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Price)
+						@Html.DisplayFor(modelItem => item.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫)
 					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.Duration)

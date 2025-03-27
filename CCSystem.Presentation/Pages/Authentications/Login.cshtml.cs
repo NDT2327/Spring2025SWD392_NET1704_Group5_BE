@@ -45,7 +45,7 @@ namespace CCSystem.Presentation.Pages.Authentications
                 //create claims
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, LoginRequest.Email),
+                    new Claim(ClaimTypes.Name, accountResponse.FullName),
                     new Claim(ClaimTypes.Role, accountResponse.Role),
                     new Claim(ClaimTypes.NameIdentifier, accountResponse.AccountId.ToString()),
                 };

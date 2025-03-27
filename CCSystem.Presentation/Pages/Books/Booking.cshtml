@@ -46,7 +46,7 @@
                         var serviceDetail = Model.SelectedServices[i];
                         <tr>
                             <td>@serviceDetail.OptionName</td>
-                            <td>@(serviceDetail.BasePrice?.ToString("C") ?? "N/A")</td>
+                            <td>@(serviceDetail.BasePrice?.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫</td>
                             <td>@(serviceDetail.Duration.HasValue ? $"{serviceDetail.Duration} minutes" : "N/A")</td>
                             <td>
                                 <input asp-for="BookingRequest.BookingDetails[i].ScheduleDate"
@@ -103,6 +103,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
 <script>
+    document.querySelectorAll('input[type="time"]').forEach(input => {
+        input.addEventListener('change', function () {
+            const time = this.value;
+            if (time <= '08:00' || time >= '19:00') {
+                this.setCustomValidity('Please select a time between 8:01 AM and 6:59 PM.');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    });
+
     $(document).ready(function () {
         $('.datepicker').datepicker({
             dateFormat: 'yy-mm-dd',

@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.BookingDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalAmount)
+                    @Html.DisplayFor(modelItem => item.TotalAmount.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BookingStatus)
@@ -56,9 +56,7 @@
                 @Html.DisplayFor(modelItem => item.PaymentMethod)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.BookingId">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.BookingId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.BookingId">Delete</a>
             </td>
         </tr>
 }

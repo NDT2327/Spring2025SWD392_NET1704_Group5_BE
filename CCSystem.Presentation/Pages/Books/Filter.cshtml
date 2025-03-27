@@ -54,7 +54,7 @@ else
                             <h5 class="card-title">@item.ServiceName</h5>
                             <p class="card-text text-muted">@item.CategoryName</p>
                             <p class="card-text">@item.Description</p>
-                            <p class="fw-bold text-primary">$@item.Price</p>
+                            <p class="fw-bold text-primary">$@item.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫</p>
                             <p class="text-muted">Duration: @item.Duration mins</p>
                             <p class="text-muted">Active: @(item.IsActive ?? false ? "Active" : "Inactive")</p>
                             <!-- View detail service -->
