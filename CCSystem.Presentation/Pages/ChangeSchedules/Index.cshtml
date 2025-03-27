@@ -10,6 +10,9 @@
 	<thead>
 		<tr>
 			<th>
+				@Html.DisplayNameFor(model => model.BookingDetails[0].DetailId)
+			</th>
+			<th>
 				@Html.DisplayNameFor(model => model.BookingDetails[0].ScheduleDate)
 			</th>
 			<th>
@@ -38,6 +41,9 @@
 		{
 			<tr>
 				<td>
+					@Html.DisplayFor(modelItem => item.DetailId)
+				</td>
+				<td>
 					@Html.DisplayFor(modelItem => item.ScheduleDate)
 				</td>
 				<td>
@@ -64,9 +70,67 @@
 						<button type="submit" asp-page-handler="ConfirmSchedule" asp-route-id="@item.DetailId" asp-route-isAccepted="true" class="btn btn-primary">
 							Confirm
 						</button>
+						<button type="submit" asp-page-handler="ConfirmSchedule" asp-route-id="@item.DetailId" asp-route-isAccepted="false" class="btn btn-danger">
+							Reject
+						</button>
+						<button type="button" class="btn btn-secondary fetch-assignments" data-id="@item.DetailId">
+							View Assignments
+						</button>
 					</form>
 				</td>
 			</tr>
 		}
 	</tbody>
 </table>
+
+<div class="modal fade" id="assignmentModal" tabindex="-1" role="dialog" aria-labelledby="assignmentModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="assignmentModalLabel">Schedule Assignments</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Dữ liệu từ API sẽ hiển thị ở đây -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+
+		// Xử lý nút View Assignments (Gọi API lấy danh sách nhân viên tư vấn)
+		$(".fetch-assignments").click(function () {
+			var detailId = $(this).data("id");
+
+			$.ajax({
+				url: "https://localhost:7207/api/v1/scheduleAssigns/booking-detail/" + detailId, //
+				type: "GET",
+				success: function (data) {
+					var html = "";
+					if (data.length > 0) {
+						html = "<ul>";
+						data.forEach(function (assign) {
+							html += "<li><strong>Consultant:</strong> " + " (ID: " + assign.assignmentId + ")</li>"
+							        +"<li><strong>Consultant:</strong> " + " (email: " + assign.email + ")</li>"
+									+ "<li><strong>Consultant:</strong> " + " (phone: " + assign.houseKeeperPhone + ")</li>"
+									+ "<li><strong>Consultant:</strong> " + " (status: " + assign.status + ")</li>";
+						});
+						html += "</ul>";
+					} else {
+						html = "<p>No assignments found.</p>";
+					}
+
+					$("#assignmentModal .modal-body").html(html);
+					$("#assignmentModal").modal("show");
+				},
+				error: function (xhr) {
+					alert("Error fetching assignments: " + xhr.responseText);
+				}
+			});
+		});
+	});
+</script>

@@ -21,6 +21,7 @@ namespace CCSystem.BLL.Services.Interfaces
         Task RequestCancel(CancelAssignmentRequest request);
         Task<List<ScheduleAssignmentResponse>> GetCancelRequests();
         Task ConfirmCancelRequest(ConfirmCancelAssignmentRequest request);
+        Task<List<ScheduleAssignmentResponse>> GetAssignByBookingDetail(int bookingDetailId);
 
 	}
 }

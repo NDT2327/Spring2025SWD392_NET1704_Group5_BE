@@ -10,6 +10,9 @@ namespace CCSystem.Infrastructure.DTOs.ScheduleAssign
     {
         public int AssignmentId { get; set; }
         public int HousekeeperId { get; set; }
+        public string HouseKeeperName { get; set; }
+        public string Email { get; set; }
+        public string HouseKeeperPhone { get; set; }
         public int DetailId { get; set; }
         public DateOnly AssignDate { get; set; }
         public TimeOnly StartTime { get; set; }

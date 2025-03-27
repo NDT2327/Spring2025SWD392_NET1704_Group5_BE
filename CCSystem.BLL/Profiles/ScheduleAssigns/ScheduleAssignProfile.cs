@@ -14,7 +14,9 @@ namespace CCSystem.BLL.Profiles.ScheduleAssigns
         public ScheduleAssignProfile()
         {
             CreateMap<ScheduleAssignment, ScheduleAssignmentResponse>()
+                .ForMember(dept => dept.HouseKeeperName, opt => opt.MapFrom(src => src.Housekeeper.FullName))
+                .ForMember(dept => dept.Email, opt => opt.MapFrom(src => src.Housekeeper.Email))
                 .ReverseMap();
         }
-    }
+	}
 }

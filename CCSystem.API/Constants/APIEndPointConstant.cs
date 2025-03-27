@@ -153,7 +153,9 @@
         {
             public const string ScheduleAssignEndpoint = ApiEndpoint + "/scheduleAssigns";
             public const string GetScheduleAssignByIdEndpoint = ScheduleAssignEndpoint + "/{id}";
-            public const string GetScheduleAssignByHousekeeperIdEndpoint = ScheduleAssignEndpoint + "/housekeeper" + "/{id}";
+			public const string GetScheduleAssignByBookingDetailIdEndpoint = ScheduleAssignEndpoint + "/booking-detail" + "/{id}";
+
+			public const string GetScheduleAssignByHousekeeperIdEndpoint = ScheduleAssignEndpoint + "/housekeeper" + "/{id}";
             public const string ChangeStatusEndpoint = ScheduleAssignEndpoint + "/status";
             public const string CompleteAssignmentEndpoint = ScheduleAssignEndpoint + "/complete";
             public const string ConfirmAssignmentEndpoint = ScheduleAssignEndpoint + "/confirm";
