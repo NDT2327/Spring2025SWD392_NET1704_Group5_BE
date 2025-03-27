@@ -14,10 +14,13 @@ using CCSystem.Presentation.Helpers;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using System.Text.Json;
 using CCSystem.Presentation.Pages.Assigns;
-using CCSystem.Infrastructure.DTOs.ScheduleAssign;
+using CCSystem.Presentation.Models.ScheduleAssign;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CCSystem.Presentation.Pages.Profiles
 {
+    [Authorize(Roles = "CUSTOMER")]
+
     public class AccountProfileModel : PageModel
     {
         private readonly HttpClient _httpClient;

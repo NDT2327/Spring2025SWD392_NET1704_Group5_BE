@@ -3,12 +3,14 @@ using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Models.ServiceDetails;
 using CCSystem.Presentation.Models.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 
 namespace CCSystem.Presentation.Pages.Books
 {
+    [Authorize(Roles = "CUSTOMER")]
     public class DetailServiceModel : PageModel
     {
         private readonly HttpClient _httpClient;
