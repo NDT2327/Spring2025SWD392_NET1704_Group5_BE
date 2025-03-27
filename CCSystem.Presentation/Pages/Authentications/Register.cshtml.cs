@@ -34,7 +34,7 @@ namespace CCSystem.Presentation.Pages.Authentications
                 response.EnsureSuccessStatusCode();
                 var registerAccount = await response.Content.ReadFromJsonAsync<AccountResponse>();
                 Message = "Registration Successfully";
-                return RedirectToPage("/Login");
+                return RedirectToPage("./Login");
 
             }
             catch (Exception ex)

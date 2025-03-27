@@ -116,11 +116,11 @@ namespace CCSystem.Presentation.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                await OnGetAsync(null);
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    await OnGetAsync(null);
+            //    return Page();
+            //}
 
             SelectedServices.Clear();
             if (!string.IsNullOrEmpty(SelectedServicesJson))
