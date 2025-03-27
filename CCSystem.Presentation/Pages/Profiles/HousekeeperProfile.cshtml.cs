@@ -2,6 +2,7 @@ using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Constants;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Models.Profiles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -9,6 +10,8 @@ using System.Text.Json;
 
 namespace CCSystem.Presentation.Pages.Profiles
 {
+    [Authorize(Roles = "CUSTOMER")]
+
     public class HousekeeperProfileModel : PageModel
     {
         private readonly HttpClient _httpClient;
