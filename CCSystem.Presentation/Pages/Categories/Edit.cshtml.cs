@@ -4,12 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using CCSystem.Infrastructure.DTOs.Category;
-using CCSystem.Presentation.Services;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
-using CCSystem.BLL.Constants;
 using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Models.Category;
 
 namespace CCSystem.Presentation.Pages.Categories
 {
@@ -75,12 +73,12 @@ namespace CCSystem.Presentation.Pages.Categories
                        );
             if (!response.IsSuccessStatusCode)
             {
-                ToastHelper.ShowError(TempData, MessageConstant.CategoryMessage.UpdateCategoryFailed);
+                ToastHelper.ShowError(TempData, Message.Category.UpdateFailed);
                 return Page();
             }
             else
             {
-                ToastHelper.ShowInfo(TempData, MessageConstant.CategoryMessage.CategoryUpdated);
+                ToastHelper.ShowInfo(TempData, Message.Category.UpdateSuccessfully);
             }
             return RedirectToPage("./Index");
         }

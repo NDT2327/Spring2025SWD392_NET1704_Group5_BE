@@ -1,8 +1,6 @@
-﻿using CCSystem.DAL.Models;
-using CCSystem.Infrastructure.DTOs.BookingDetails;
-using CCSystem.Infrastructure.DTOs.Promotions;
-using CCSystem.Infrastructure.DTOs.Services;
+﻿
 using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Models.BookingDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -19,25 +17,25 @@ namespace CCSystem.Presentation.Pages.ChangeSchedules
             _apiEndpoints = apiEndpoints;
         }
 
-        public IList<BookingDetailResponse> BookingDetails { get; set; } = default!;
+        public IList<BookingDetail> BookingDetails { get; set; } = default!;
 
 
         public async Task OnGetAsync()
         {
             try
             {
-                var bookingDetails = await _httpClient.GetFromJsonAsync<List<BookingDetailResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetChangeScheduleEndpoint));
+                var bookingDetails = await _httpClient.GetFromJsonAsync<List<BookingDetail>>(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetChangeScheduleEndpoint));
 
                 if (bookingDetails == null)
                 {
-                    bookingDetails = new List<BookingDetailResponse>();
+                    bookingDetails = new List<BookingDetail>();
                 }
                 BookingDetails = bookingDetails;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                BookingDetails = new List<BookingDetailResponse>();
+                BookingDetails = new List<BookingDetail>();
             }
         }
 

@@ -1,7 +1,5 @@
-using Azure.Core;
-using CCSystem.Infrastructure.DTOs.Accounts;
+using CCSystem.Presentation.Models.Accounts;
 using CCSystem.Presentation.Configurations;
-using CCSystem.Presentation.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

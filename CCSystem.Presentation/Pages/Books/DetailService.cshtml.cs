@@ -1,7 +1,8 @@
-﻿using CCSystem.Infrastructure.DTOs.ServiceDetails;
-using CCSystem.Infrastructure.DTOs.Services;
+﻿
 using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Helpers;
+using CCSystem.Presentation.Models.ServiceDetails;
+using CCSystem.Presentation.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;

@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Helpers;
+using CCSystem.Presentation.Models.Bookings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
+
 
 namespace CCSystem.Presentation.Pages.Bookings
 {
     public class DetailsModel : PageModel
     {
-        private readonly CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext _context;
-
-        public DetailsModel(CCSystem.DAL.DBContext.SP25_SWD392_CozyCareContext context)
+        private readonly HttpClient _httpClient;
+        private readonly ApiEndpoints _apiEndpoints;
+        public DetailsModel(HttpClient httpClient, ApiEndpoints apiEndpoints)
         {
-            _context = context;
+            _httpClient = httpClient;
+            _apiEndpoints = apiEndpoints;
         }
 
-        public Booking Booking { get; set; } = default!;
+        public Booking Booking { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,16 +29,22 @@ namespace CCSystem.Presentation.Pages.Bookings
             {
                 return NotFound();
             }
-
-            var booking = await _context.Bookings.FirstOrDefaultAsync(m => m.BookingId == id);
-            if (booking == null)
+            var response = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Booking.GetBooking(id.Value)));
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                Booking = await response.Content.ReadFromJsonAsync<Booking>();
+                if (Booking == null)
+                {
+                    ToastHelper.ShowError(TempData, "Booking not found", 3000);
+                    return RedirectToPage("/Bookings/Index");
+                }
             }
             else
             {
-                Booking = booking;
+                ToastHelper.ShowError(TempData, $"Cannot load booking details (Status: {response.StatusCode})", 3000);
+                return RedirectToPage("/Bookings/Index");
             }
+
             return Page();
         }
     }

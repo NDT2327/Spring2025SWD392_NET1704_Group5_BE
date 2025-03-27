@@ -1,12 +1,12 @@
-﻿using CCSystem.Infrastructure.DTOs.BookingDetails;
-using CCSystem.Infrastructure.DTOs.Bookings;
-using CCSystem.Infrastructure.DTOs.Payments;
-using CCSystem.Infrastructure.DTOs.ServiceDetails;
-using CCSystem.Infrastructure.DTOs.Services;
+﻿
 using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Constants;
 using CCSystem.Presentation.Helpers;
-using CCSystem.Presentation.Services;
+using CCSystem.Presentation.Models.BookingDetails;
+using CCSystem.Presentation.Models.Bookings;
+using CCSystem.Presentation.Models.Payments;
+using CCSystem.Presentation.Models.ServiceDetails;
+using CCSystem.Presentation.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -148,7 +148,7 @@ namespace CCSystem.Presentation.Pages
             if (BookingRequest.BookingDetails.Count != SelectedServices.Count)
             {
                 Console.WriteLine($"Mismatch detected: BookingDetails.Count={BookingRequest.BookingDetails.Count}, SelectedServices.Count={SelectedServices.Count}");
-                ToastHelper.ShowError(TempData, "Danh sách dịch vụ không đồng bộ. Vui lòng thử lại.");
+                ToastHelper.ShowError(TempData, "Your booking list do not match. Please try again!");
                 await OnGetAsync(null);
                 return Page();
             }

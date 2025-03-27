@@ -4,17 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
-using CCSystem.Presentation.Services;
-using CCSystem.Infrastructure.DTOs.Accounts;
-using CCSystem.Infrastructure.DTOs.Services;
+using CCSystem.Presentation.Models.Accounts;
+using CCSystem.Presentation.Models.Services;
+using CCSystem.Presentation.Models.Category;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using CCSystem.Presentation.Configurations;
 using System.Text.Json;
-using CCSystem.Infrastructure.DTOs.Category;
 using CCSystem.Presentation.Helpers;
 
 namespace CCSystem.Presentation.Pages.Services

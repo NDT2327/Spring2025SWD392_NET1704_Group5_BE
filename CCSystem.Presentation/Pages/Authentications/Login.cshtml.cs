@@ -7,7 +7,7 @@ using System.Security.Claims;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
 using CCSystem.Presentation.Configurations;
-using Azure.Core;
+using CCSystem.Presentation.Models.Accounts;
 
 namespace CCSystem.Presentation.Pages.Authentications
 {
@@ -64,7 +64,6 @@ namespace CCSystem.Presentation.Pages.Authentications
             {
                 Console.WriteLine(ex.ToString());
                 ToastHelper.ShowError(TempData, Message.AuthenMessage.LoginFailed, 3000);
-                TempData.Keep();
                 return Page();
             }
         }

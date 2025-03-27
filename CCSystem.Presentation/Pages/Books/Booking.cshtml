@@ -56,8 +56,10 @@
                             </td>
                             <td>
                                 <input asp-for="BookingRequest.BookingDetails[i].ScheduleTime"
-                                       class="form-control timepicker"
-                                       type="text"
+                                       class="form-control"
+                                       type="time"
+                                       min="08:01"
+                                       max="17:59"
                                        value="@(Model.BookingRequest.BookingDetails[i].ScheduleTime != null ? Model.BookingRequest.BookingDetails[i].ScheduleTime.ToString() : "")"
                                        required />
                             </td>

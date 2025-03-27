@@ -4,12 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
-using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.Presentation.Configurations;
-using CCSystem.Infrastructure.DTOs.Bookings;
+using CCSystem.Presentation.Models.Bookings;
 
 namespace CCSystem.Presentation.Pages.Bookings
 {
@@ -24,11 +20,11 @@ namespace CCSystem.Presentation.Pages.Bookings
             _apiEndpoints = apiEndpoints;
         }
 
-        public IList<BookingResponse> Booking { get;set; } = default!;
+        public IList<Booking> Booking { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Booking = await _httpClient.GetFromJsonAsync<List<BookingResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.Booking.GetAllBookings)) ?? new List<BookingResponse>();
+            Booking = await _httpClient.GetFromJsonAsync<List<Booking>>(_apiEndpoints.GetFullUrl(_apiEndpoints.Booking.GetAllBookings)) ?? new List<Booking>();
         }
     }
 }

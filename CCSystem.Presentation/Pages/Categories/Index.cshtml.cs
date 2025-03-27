@@ -4,12 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.Presentation.Services;
-using CCSystem.Infrastructure.DTOs.Category;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Constants;
 using CCSystem.Presentation.Configurations;
+using CCSystem.Presentation.Models.Category;
 
 namespace CCSystem.Presentation.Pages.Categories
 {
