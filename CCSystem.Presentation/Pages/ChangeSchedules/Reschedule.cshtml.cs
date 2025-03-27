@@ -1,6 +1,6 @@
-﻿using CCSystem.Infrastructure.DTOs.BookingDetails;
-using CCSystem.Presentation.Configurations;
+﻿using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Helpers;
+using CCSystem.Presentation.Models.BookingDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -23,11 +23,11 @@ namespace CCSystem.Presentation.Pages.ChangeSchedules
         [BindProperty]
         public string NewTime { get; set; } = string.Empty;  // Sử dụng string
 
-        public BookingDetailResponse BookingDetail { get; set; } = new();
+        public BookingDetail BookingDetail { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var detail = await _httpClient.GetFromJsonAsync<BookingDetailResponse>(
+            var detail = await _httpClient.GetFromJsonAsync<BookingDetail>(
                 _apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetBookingDetail(id))
             );
 

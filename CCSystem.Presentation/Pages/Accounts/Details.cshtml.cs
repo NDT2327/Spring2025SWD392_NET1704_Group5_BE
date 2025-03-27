@@ -4,13 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
 using CCSystem.Infrastructure.DTOs.Accounts;
-using CCSystem.Presentation.Services;
 using CCSystem.Presentation.Configurations;
 using System.Text.Json;
+using CCSystem.Presentation.Models.Accounts;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {

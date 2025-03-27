@@ -1,6 +1,5 @@
 ﻿using CCSystem.Presentation.Configurations;
 using CCSystem.Presentation.Helpers;
-using CCSystem.Presentation.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,7 +51,7 @@ builder.Services.AddHttpClient("PromotionAPI", (serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
 
-builder.Services.AddHttpClient<CategoryService>("CategoryAPI",(serviceProvider, client) =>
+builder.Services.AddHttpClient("CategoryAPI",(serviceProvider, client) =>
 
 {
     var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
@@ -61,7 +60,7 @@ builder.Services.AddHttpClient<CategoryService>("CategoryAPI",(serviceProvider, 
     client.Timeout = TimeSpan.FromSeconds(30);
 
 }).AddHttpMessageHandler<BearerTokenHandler>();
-builder.Services.AddHttpClient<ServiceService>("ServiceAPI", (serviceProvider, client) =>
+builder.Services.AddHttpClient("ServiceAPI", (serviceProvider, client) =>
 {
     var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
     client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
@@ -84,7 +83,7 @@ builder.Services.AddHttpClient("AssignAPI", (serviceProvider, client) =>
     client.DefaultRequestHeaders.Add("Accept", "application/json");
     client.Timeout = TimeSpan.FromSeconds(30);
 }).AddHttpMessageHandler<BearerTokenHandler>();
-builder.Services.AddHttpClient<ServiceDetailService>("ServiceDetailAPI", (serviceProvider, client) =>
+builder.Services.AddHttpClient("ServiceDetailAPI", (serviceProvider, client) =>
 {
     var apiEndpoints = serviceProvider.GetRequiredService<ApiEndpoints>();
     client.BaseAddress = new Uri(apiEndpoints.BaseUrl);
@@ -103,10 +102,10 @@ builder.Services.AddHttpClient("BookingDetailAPI", (serviceProvider, client) =>
 //builder.Services.AddScoped<AuthenticationService>();
 //builder.Services.AddScoped<AccountService>();
 //builder.Services.AddScoped<CategoryService>();
-builder.Services.AddScoped<ServiceDetailService>();
-builder.Services.AddScoped<ServiceService>();
-builder.Services.AddScoped<BookingService>();
-builder.Services.AddScoped<ServiceDetailService>();
+//builder.Services.AddScoped<ServiceDetailService>();
+//builder.Services.AddScoped<ServiceService>();
+//builder.Services.AddScoped<BookingService>();
+//builder.Services.AddScoped<ServiceDetailService>();
 
 
 var app = builder.Build();

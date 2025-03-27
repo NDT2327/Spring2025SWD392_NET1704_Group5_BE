@@ -4,17 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
+
 using CCSystem.Presentation.Configurations;
-using CCSystem.Infrastructure.DTOs.BookingDetails;
-using CCSystem.Infrastructure.DTOs.Accounts;
 using CCSystem.Presentation.Helpers;
-using CCSystem.Infrastructure.DTOs.ScheduleAssign;
-using CCSystem.Infrastructure.DTOs.Bookings;
 using System.Security.Claims;
 using System.Text.Json;
+using CCSystem.Presentation.Models.BookingDetails;
+using CCSystem.Presentation.Models.ScheduleAssign;
 
 namespace CCSystem.Presentation.Pages.Assigns
 {
@@ -31,12 +27,12 @@ namespace CCSystem.Presentation.Pages.Assigns
             _apiEndpoints = apiEndpoints;
         }
 
-        public IList<BookingDetailResponse> BookingDetail { get;set; } = default!;
+        public IList<BookingDetail> BookingDetail { get;set; } = default!;
         public PostScheduleAssignRequest PostScheduleAssignRequest { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
-            var response = await _bookingDetailClient.GetFromJsonAsync<List<BookingDetailResponse>>(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetActiveBookingDetails));
+            var response = await _bookingDetailClient.GetFromJsonAsync<List<BookingDetail>>(_apiEndpoints.GetFullUrl(_apiEndpoints.BookingDetail.GetActiveBookingDetails));
             if (response == null)
             {
                 ToastHelper.ShowError(TempData, "Not Found!");

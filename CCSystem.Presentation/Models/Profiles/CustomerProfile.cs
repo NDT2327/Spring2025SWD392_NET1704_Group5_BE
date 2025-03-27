@@ -1,5 +1,4 @@
-﻿using CCSystem.DAL.Models;
-
+﻿
 namespace CCSystem.Presentation.Models.Profiles
 {
     public class CustomerProfile
@@ -14,9 +13,9 @@ namespace CCSystem.Presentation.Models.Profiles
         public string Avatar { get; set; }
         public string Gender { get; set; }
         public DateOnly? DateOfBirth { get; set; }
-
         public string BankAccountNumber { get; set; }
         public string BankName { get; set; }
+        public int? Experience { get; set; }
 
     }
 

@@ -5,16 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
 using CCSystem.Infrastructure.DTOs.Accounts;
-using CCSystem.Presentation.Services;
 using CCSystem.Presentation.Configurations;
-using Azure;
 using System.Text.Json;
-using Azure.Core;
 using System.Net.Http.Headers;
+using CCSystem.Presentation.Models.Accounts;
 
 namespace CCSystem.Presentation.Pages.Accounts
 {

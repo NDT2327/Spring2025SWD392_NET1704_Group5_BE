@@ -1,0 +1,61 @@
+﻿@page "{housekeeperId:int?}"
+@model CCSystem.Presentation.Pages.Profiles.HousekeeperProfileModel
+@{
+    ViewData["Title"] = "Housekeeper profile";
+}
+
+<h2>Housekeeper profile</h2>
+<div class="container p-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1)"> 
+    @if (Model.CustomerProfile != null)
+    {
+        <!--Basic inforamtion-->
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <div class="form-group">
+                    <div>
+                        @if (!string.IsNullOrEmpty(Model.CustomerProfile.Avatar))
+                        {
+                            <img src="@Model.CustomerProfile.Avatar" alt="Avatar" class="img-fluid rounded-circle" style="max-width: 150px; max-height: 150px;" />
+                        }
+                        else
+                        {
+                            <img src="~/img/icons8-user-default-96.png" alt="Default avatar" class="img-fluid rounded-circle" style="max-width: 150px; max-height: 150px;" />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h4>@Model.CustomerProfile.FullName</h4>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" value="@Model.CustomerProfile.Email" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input class="form-control" value="@Model.CustomerProfile.Phone" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea class="form-control" value="@Model.CustomerProfile.Address" readonly> </textarea>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <input class="form-control" value="@Model.CustomerProfile.Gender" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input class="form-control" value="@(Model.CustomerProfile.DateOfBirth.HasValue ? Model.CustomerProfile.DateOfBirth.Value.ToString("yyyy-MM-dd") : "N/A")" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Experience</label>
+                    <input class="form-control" value="@Model.CustomerProfile.Experience years" readonly />
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+    <p>Unable to load housekeeper profile</p>
+    }
+</div>
+

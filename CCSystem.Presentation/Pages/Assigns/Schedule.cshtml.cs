@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using CCSystem.Presentation.Configurations;
-using CCSystem.Infrastructure.DTOs.ScheduleAssign;
 using CCSystem.Presentation.Helpers;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using CCSystem.Presentation.Models.ScheduleAssign;
 
 namespace CCSystem.Presentation.Pages.Assigns
 {

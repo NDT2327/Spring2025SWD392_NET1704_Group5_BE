@@ -4,13 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
 using CCSystem.Presentation.Configurations;
-using CCSystem.Infrastructure.DTOs.ScheduleAssign;
 using CCSystem.Presentation.Helpers;
 using System.Security.Claims;
+using CCSystem.Presentation.Models.ScheduleAssign;
 
 namespace CCSystem.Presentation.Pages.Assigns
 {

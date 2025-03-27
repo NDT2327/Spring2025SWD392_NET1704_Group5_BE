@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using CCSystem.Infrastructure.DTOs.Services;
-using CCSystem.Infrastructure.DTOs.ServiceDetails;
 using CCSystem.Presentation.Helpers;
 using CCSystem.Presentation.Configurations;
 using System.Text.Json;
+using CCSystem.Presentation.Models.Services;
+using CCSystem.Presentation.Models.ServiceDetails;
 
 namespace CCSystem.Presentation.Pages.Services
 {

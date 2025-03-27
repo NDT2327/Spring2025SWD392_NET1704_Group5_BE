@@ -4,13 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CCSystem.DAL.DBContext;
-using CCSystem.DAL.Models;
 using CCSystem.Presentation.Configurations;
 using CCSystem.Infrastructure.DTOs.Accounts;
 using System.Text.Json;
-using CCSystem.Infrastructure.DTOs.Promotions;
+using CCSystem.Presentation.Models.Promotions;
 
 namespace CCSystem.Presentation.Pages.Promotions
 {
