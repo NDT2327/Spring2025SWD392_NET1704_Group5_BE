@@ -1,21 +1,22 @@
-﻿    @page
-    @model CCSystem.Presentation.Pages.Profiles.AccountProfileModel
+@page
+@model CCSystem.Presentation.Pages.Profiles.AccountProfileModel
+@Html.AntiForgeryToken()
 
 @{
-    ViewData["Title"] = "Account Profile";
+	ViewData["Title"] = "Account Profile";
 }
 
 <h1>Account Profile</h1>
 <div class="container p-4" style="border: none; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <!-- Tab Navigation -->
-    <ul class="nav nav-tabs" id="profileTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" role="tab" aria-controls="account" aria-selected="true">Account Information</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="booking-tab" data-toggle="tab" href="#booking" role="tab" aria-controls="booking" aria-selected="false">Booking History</a>
-        </li>
-    </ul>
+	<!-- Tab Navigation -->
+	<ul class="nav nav-tabs" id="profileTabs" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" role="tab" aria-controls="account" aria-selected="true">Account Information</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="booking-tab" data-toggle="tab" href="#booking" role="tab" aria-controls="booking" aria-selected="false">Booking History</a>
+		</li>
+	</ul>
 
     <!-- Tab Content -->
     <div class="tab-content" id="profileTabContent">
@@ -90,82 +91,85 @@
             </div>
         </div>
 
-        <!-- Tab 2: Booking History -->
-        <div class="tab-pane fade" id="booking" role="tabpanel" aria-labelledby="booking-tab">
-            <div class="mt-4">
-                <h4>Your Booking History</h4>
-                @if (Model.BookingHistory.Any())
-                {
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Booking ID</th>
-                                <th>Date</th>
-                                <th>Total Amount</th>
-                                <th>Booking Status</th>
-                                <th>Payment Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var booking in Model.BookingHistory)
-                            {
-                                <tr>
-                                    <td>@booking.BookingId</td>
-                                    <td>@(booking.BookingDate.HasValue ? booking.BookingDate.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")</td>
-                                    <td>@booking.TotalAmount.ToString("C")</td>
-                                    <td>@booking.BookingStatus</td>
-                                    <td>@booking.PaymentStatus</td>
-                                    <td>
-                                        <button type="button" class="btn btn-info btn-sm view-details" data-toggle="modal" data-target="#bookingDetailModal" data-booking-id="@booking.BookingId">View Details</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <p>No booking history available.</p>
-                }
-            </div>
-        </div>
-    </div>
+
+		<!-- Tab 2: Booking History -->
+		<div class="tab-pane fade" id="booking" role="tabpanel" aria-labelledby="booking-tab">
+			<div class="mt-4">
+				<h4>Your Booking History</h4>
+				@if (Model.BookingHistory.Any())
+				{
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Booking ID</th>
+								<th>Date</th>
+								<th>Total Amount</th>
+								<th>Booking Status</th>
+								<th>Payment Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var booking in Model.BookingHistory)
+							{
+								<tr>
+									<td>@booking.BookingId</td>
+									<td>@(booking.BookingDate.HasValue ? booking.BookingDate.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")</td>
+									<td>@booking.TotalAmount.ToString("C")</td>
+									<td>@booking.BookingStatus</td>
+									<td>@booking.PaymentStatus</td>
+									<td>
+										<button type="button" class="btn btn-info btn-sm view-details" data-toggle="modal" data-target="#bookingDetailModal" data-booking-id="@booking.BookingId">View Details</button>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+				else
+				{
+					<p>No booking history available.</p>
+				}
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Modal for Booking Details -->
 <div class="modal fade" id="bookingDetailModal" tabindex="-1" role="dialog" aria-labelledby="bookingDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="bookingDetailModalLabel">Booking Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Detail ID</th>
-                            <th>Service Name</th>
-                            <th>Schedule Date</th>
-                            <th>Schedule Time</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookingDetailTableBody">
-                        <!-- Dữ liệu sẽ được điền bằng JS từ API -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="bookingDetailModalLabel">Booking Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Detail ID</th>
+							<th>Service Name</th>
+							<th>Schedule Date</th>
+							<th>Schedule Time</th>
+							<th>Quantity</th>
+							<th>Unit Price</th>
+							<th>Status</th>
+							<th>ReSchedule Action</th>
+							<th>Confirm Task</th>
+						</tr>
+					</thead>
+					<tbody id="bookingDetailTableBody">
+						<!-- Dữ liệu sẽ được điền bằng JS từ API -->
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Thêm Bootstrap CSS và JS -->
@@ -174,38 +178,45 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $('.view-details').click(function () {
-            var bookingId = $(this).data('booking-id');
+	$(document).ready(function () {
+		$('.view-details').click(function () {
+			var bookingId = $(this).data('booking-id');
 
-            // Gọi API để lấy Booking Details
-            $.get('/Profiles/AccountProfile?handler=BookingDetails&bookingId=' + bookingId, function (data) {
-                $('#bookingDetailTableBody').empty();
-                if (data && data.length > 0) {
-                    data.forEach(function (detail) {
-                        $('#bookingDetailTableBody').append(
-                            '<tr>' +
-                            '<td>' + detail.detailId + '</td>' +
-                            '<td>' + detail.serviceName + '</td>' +
-                            '<td>' + detail.scheduleDate + '</td>' +
-                            '<td>' + detail.scheduleTime + '</td>' +
-                            '<td>' + detail.quantity + '</td>' +
-                            '<td>' + detail.unitPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) + '</td>' +
-                            '<td>' + detail.bookdetailStatus + '</td>' +
-                            '<td><a href="/ChangeSchedules/Reschedule/' + detail.detailId + '" class="btn btn-primary btn-sm">Reschedule</a></td>' +
-                            '</tr>'
-                        );
-                    });
-                } else {
-                    $('#bookingDetailTableBody').append('<tr><td colspan="7">No details available.</td></tr>');
-                }
-            }).fail(function () {
-                $('#bookingDetailTableBody').empty().append('<tr><td colspan="7">Error loading details.</td></tr>');
-            });
-        });
-    });
+			// Gọi API để lấy Booking Details
+			$.get('/Profiles/AccountProfile?handler=BookingDetails&bookingId=' + bookingId, function (data) {
+				$('#bookingDetailTableBody').empty();
+				if (data && data.length > 0) {
+					data.forEach(function (detail) {
+						$('#bookingDetailTableBody').append(
+							'<tr>' +
+							'<td>' + detail.detailId + '</td>' +
+							'<td>' + detail.serviceName + '</td>' +
+							'<td>' + detail.scheduleDate + '</td>' +
+							'<td>' + detail.scheduleTime + '</td>' +
+							'<td>' + detail.quantity + '</td>' +
+							'<td>' + detail.unitPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) + '</td>' +
+							'<td>' + detail.bookdetailStatus + '</td>' +
+							'<td><a href="/ChangeSchedules/Reschedule/' + detail.detailId + '" class="btn btn-primary btn-sm">Reschedule</a></td>' +
+							'<td>' +
+							'<form method="post" action="/Profiles/AccountProfile?handler=ConfirmBookingDetail" style="display:inline;">' +
+							'<input type="hidden" name="__RequestVerificationToken" value="' + $('input[name="__RequestVerificationToken"]').val() + '" />' +
+							'<input type="hidden" name="id" value="' + detail.detailId + '" />' +
+							'<button type="submit" class="btn btn-success btn-sm">Confirm</button>' +
+							'</form>' +
+							'</td>' +
+							'</tr>'
+						);
+					});
+				} else {
+					$('#bookingDetailTableBody').append('<tr><td colspan="7">No details available.</td></tr>');
+				}
+			}).fail(function () {
+				$('#bookingDetailTableBody').empty().append('<tr><td colspan="7">Error loading details.</td></tr>');
+			});
+		});
+	});
 </script>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
 }
