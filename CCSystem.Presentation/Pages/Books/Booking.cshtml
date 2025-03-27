@@ -82,7 +82,7 @@
                     }
                 </tbody>
             </table>
-            <h5>Total Amount: @Model.TotalAmount.ToString("C")</h5>
+            <h5>Total Amount: @Model.TotalAmount.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))</h5>
         }
         else
         {
