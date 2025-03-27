@@ -115,7 +115,7 @@
 								<tr>
 									<td>@booking.BookingId</td>
 									<td>@(booking.BookingDate.HasValue ? booking.BookingDate.Value.ToString("yyyy-MM-dd HH:mm") : "N/A")</td>
-									<td>@booking.TotalAmount.ToString("C")</td>
+									<td>@booking.TotalAmount.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))</td>
 									<td>@booking.BookingStatus</td>
 									<td>@booking.PaymentStatus</td>
 									<td>

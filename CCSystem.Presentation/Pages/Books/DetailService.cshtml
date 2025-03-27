@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <h5 class="card-title">@detail.OptionName</h5>
                             <p class="card-text">Type: @detail.OptionType</p>
-                            <p class="card-text">Price: @(detail.BasePrice?.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫ ?? "N/A")</p>
+                            <p class="card-text">Price: @(detail.BasePrice?.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫</p>
                             <p class="card-text">Unit: @detail.Unit</p>
                             <p class="card-text">Duration: @(detail.Duration.HasValue ? $"{detail.Duration} minutes" : "N/A")</p>
                             <p class="card-text">Description: @detail.Description</p>
