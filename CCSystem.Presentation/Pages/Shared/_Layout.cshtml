@@ -78,7 +78,7 @@
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white">Hello, @User.Identity.Name</a>
+                                <a class="nav-link text-dark">Hello, @User.Identity.Name</a>
                             </li>
                             <li class="nav-item">
                                 <form method="post" asp-page="/Authentications/Login" asp-page-handler="Logout">
@@ -90,6 +90,9 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-page="/Authentications/Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Authentications/Register">Register</a>
                             </li>
                         }
                     </ul>

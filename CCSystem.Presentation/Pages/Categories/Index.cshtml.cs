@@ -26,17 +26,15 @@ namespace CCSystem.Presentation.Pages.Categories
 
         public async Task OnGetAsync()
         {
-            var data = await _httpClient.GetFromJsonAsync<List<CategoryResponse>>(
-                           _apiEndpoints.GetFullUrl(_apiEndpoints.Category.GetAllCategories)
-                       ); 
-            if (data == null)
+            var response = await _httpClient.GetAsync(_apiEndpoints.GetFullUrl(_apiEndpoints.Category.GetAllCategories));
+            if (response.IsSuccessStatusCode)
             {
-                ToastHelper.ShowError(TempData, "cannot load category");
-                Category = new List<CategoryResponse>();
+                var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<CategoryResponse>>>();
+                Category = apiResponse?.Data ?? new List<CategoryResponse>();
             }
             else
             {
-                Category = data;
+                ToastHelper.ShowError(TempData, "Cannot load categories");
             }
         }
 

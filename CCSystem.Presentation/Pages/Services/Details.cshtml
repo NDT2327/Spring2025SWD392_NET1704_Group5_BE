@@ -33,7 +33,7 @@
             @Html.DisplayNameFor(model => model.Service.Price)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Service.Price)
+            @Html.DisplayFor(model => model.Service.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Service.Duration)
@@ -94,7 +94,7 @@
                 <tr>
                     <td>@detail.OptionName</td>
                     <td>@detail.OptionType</td>
-                    <td>@detail.BasePrice?.ToString("C")</td>
+                    <td>@detail.BasePrice?.ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) ₫</td>
                     <td>@detail.Unit</td>
                     <td>@detail.Duration</td>
                     <td>@detail.Description</td>
