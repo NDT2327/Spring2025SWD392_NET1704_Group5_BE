@@ -1,4 +1,5 @@
 ﻿using CCSystem.DAL.DBContext;
+using CCSystem.DAL.Enums;
 using CCSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -81,6 +82,16 @@ namespace CCSystem.DAL.Repositories
 		{
 			return await _context.ScheduleAssignments.Where(sa => sa.Status == status).ToListAsync();
 		}
+
+        public async Task<List<ScheduleAssignment>> GetAssignByBookingDetail(int bookingDetailId)
+        {
+            return await _context.ScheduleAssignments
+                .Include(s => s.Housekeeper)
+                .Include(s => s.Detail)
+                .Where(s => s.DetailId == bookingDetailId 
+                            && s.Status != AssignEnums.Status.CANCELLED.ToString())
+                .ToListAsync();
+        }
 
 
 	}

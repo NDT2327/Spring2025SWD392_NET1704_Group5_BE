@@ -185,6 +185,11 @@ namespace CCSystem.BLL.Services.Implementations
             {
                 throw new Exception(MessageConstant.BookingDetailMessage.BookingDetailNotFound);
             }
+            if (bookingDetail.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.ASSIGNED.ToString()
+                || bookingDetail.BookdetailStatus != BookingDetailEnums.BookingDetailStatus.PENDING.ToString())
+            {
+                throw new Exception("Invalid Status! This Booking Detail would be COMPLETED or CANCELLED");
+            }    
 
             // Nếu không nhập ngày mới, giữ nguyên ngày cũ
             var newDate = request.NewDate == default ? bookingDetail.ScheduleDate : request.NewDate;
@@ -263,9 +268,31 @@ namespace CCSystem.BLL.Services.Implementations
                 bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.PENDING.ToString();
                 bookingDetail.IsAssign = false;
             }
+            else if (!request.IsAccepted)
+            {
+				var assignments = await _unitOfWork.ScheduleAssignRepository.GetAssignmentByDetailId(detailId);
+				if (assignments != null && assignments.Any())
+				{
+					foreach (var assignment in assignments)
+					{
+						if(assignment.Status == AssignEnums.Status.ASSIGNED.ToString() 
+                            || assignment.Status == AssignEnums.Status.INPROGRESS.ToString())
+                        {
+                            bookingDetail.ScheduleDate = assignment.AssignDate;
+                            bookingDetail.ScheduleTime = assignment.StartTime;
+							//await _unitOfWork.ScheduleAssignRepository.UpdateAsync(assignment);
+                            break;
+						}
+					}
+				}
+				bookingDetail.BookdetailStatus = BookingDetailEnums.BookingDetailStatus.PENDING.ToString();
+				bookingDetail.IsAssign = false;
+
+			}
 
 
-            await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
+
+			await _unitOfWork.BookingDetailRepository.UpdateBookingDetail(bookingDetail);
             await _unitOfWork.CommitAsync();
 
             return new ConfirmRescheduleResponse

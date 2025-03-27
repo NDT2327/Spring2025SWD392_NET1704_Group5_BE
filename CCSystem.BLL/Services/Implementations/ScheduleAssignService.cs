@@ -396,5 +396,23 @@ namespace CCSystem.BLL.Services.Implementations
 				throw new Exception(ex.Message);
 			}
 		}
+
+        public async Task<List<ScheduleAssignmentResponse>> GetAssignByBookingDetail(int bookingDetailId)
+        {
+            try
+            {
+                var bDetail = await _unitOfWork.BookingDetailRepository.GetBookingDetailById(bookingDetailId);
+                if (bDetail == null)
+                {
+                    throw new NotFoundException(MessageConstant.CommonMessage.NotExistBookingDetailId);
+                }
+                var assigns = await _unitOfWork.ScheduleAssignRepository.GetAssignByBookingDetail(bDetail.DetailId);
+                return _mapper.Map<List<ScheduleAssignmentResponse>>(assigns);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 	}
 }
